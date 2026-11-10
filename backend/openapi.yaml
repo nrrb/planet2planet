@@ -1114,6 +1114,16 @@ components:
           additionalProperties:
             type: integer
           readOnly: true
+        subspaceLatencyToEarthMs:
+          type: object
+          additionalProperties:
+            type: number
+            format: double
+          readOnly: true
+          description: One-way subspace delay to Earth, closest and farthest approach.
+        solarConjunctionWithEarthEveryDays:
+          type: integer
+          nullable: true
         canonNotes:
           type: array
           items:
@@ -1133,6 +1143,8 @@ components:
       - populationHistory
       - radiusKm
       - region
+      - solarConjunctionWithEarthEveryDays
+      - subspaceLatencyToEarthMs
       - surfaceGravity
       - type
     WorldList:

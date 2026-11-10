@@ -75,6 +75,9 @@ class World(models.Model):
     homeworld = models.BooleanField(default=False)
     passed_one_million = models.PositiveSmallIntegerField(null=True, blank=True)
     population = models.BigIntegerField(null=True, blank=True)
+    latency_to_earth_min_ms = models.FloatField(default=0, help_text="One-way, closest approach.")
+    latency_to_earth_max_ms = models.FloatField(default=0, help_text="One-way, farthest approach.")
+    conjunction_with_earth_every_days = models.PositiveIntegerField(null=True, blank=True)
 
     class Meta:
         ordering = ["slug"]

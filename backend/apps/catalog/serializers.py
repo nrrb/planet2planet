@@ -38,6 +38,12 @@ class CanonNoteSerializer(serializers.ModelSerializer):
 
 class WorldDetailSerializer(WorldListSerializer):
     population_history = serializers.SerializerMethodField()
+    subspace_latency_to_earth_ms = serializers.SerializerMethodField(
+        help_text="One-way subspace delay to Earth, closest and farthest approach."
+    )
+    solar_conjunction_with_earth_every_days = serializers.IntegerField(
+        source="conjunction_with_earth_every_days", allow_null=True
+    )
     canon_notes = CanonNoteSerializer(many=True)
 
     class Meta(WorldListSerializer.Meta):
@@ -59,8 +65,13 @@ class WorldDetailSerializer(WorldListSerializer):
             "passed_one_million",
             "population",
             "population_history",
+            "subspace_latency_to_earth_ms",
+            "solar_conjunction_with_earth_every_days",
             "canon_notes",
         ]
+
+    def get_subspace_latency_to_earth_ms(self, world: World) -> dict[str, float]:
+        return {"min": world.latency_to_earth_min_ms, "max": world.latency_to_earth_max_ms}
 
     def get_population_history(self, world: World) -> dict[str, int]:
         return {str(s.year): s.population for s in world.population_history.all()}

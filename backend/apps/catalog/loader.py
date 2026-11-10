@@ -86,6 +86,11 @@ def _load_worlds(worlds: list[dict[str, Any]]) -> None:
                 "homeworld": hist["homeworld"],
                 "passed_one_million": hist["passedOneMillion"],
                 "population": raw["population"],
+                "latency_to_earth_min_ms": raw["communications"]["subspaceLatencyToEarthMs"]["min"],
+                "latency_to_earth_max_ms": raw["communications"]["subspaceLatencyToEarthMs"]["max"],
+                "conjunction_with_earth_every_days": raw["communications"][
+                    "solarConjunctionWithEarthEveryDays"
+                ],
             },
         )
     # Parents are set once every world exists, so file order does not matter.

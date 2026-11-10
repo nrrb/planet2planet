@@ -31,6 +31,23 @@ def test_world_detail_includes_canon_notes_and_history(client, loaded):
     assert body["radiusKm"] > 0
 
 
+def test_world_detail_has_the_subspace_delay_to_earth(client, loaded):
+    mars = client.get("/api/worlds/mars/").json()
+    assert mars["subspaceLatencyToEarthMs"]["min"] == pytest.approx(5.03, abs=0.01)
+    assert mars["subspaceLatencyToEarthMs"]["max"] == pytest.approx(24.22, abs=0.01)
+    assert mars["solarConjunctionWithEarthEveryDays"] == 780
+    moon = client.get("/api/worlds/moon/").json()
+    assert moon["subspaceLatencyToEarthMs"]["min"] == pytest.approx(0.0247, abs=1e-4)
+    assert moon["solarConjunctionWithEarthEveryDays"] is None
+    eris = client.get("/api/worlds/eris/").json()
+    assert (
+        640
+        < eris["subspaceLatencyToEarthMs"]["min"]
+        < eris["subspaceLatencyToEarthMs"]["max"]
+        < 662
+    )
+
+
 def test_unknown_world_is_404(client, loaded):
     assert client.get("/api/worlds/vulcan/").status_code == 404
 
