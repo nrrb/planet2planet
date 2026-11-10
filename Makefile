@@ -7,6 +7,7 @@ down:
 	docker compose down
 
 test: test-backend
+	node --test tools/*.test.js
 	cd frontend && npm test
 
 test-backend:
@@ -21,7 +22,8 @@ lint: lint-backend
 seed:
 	docker compose run --rm backend sh -c "python manage.py migrate && \
 	  python manage.py load_dataset && python manage.py load_orbital_elements && \
-	  python manage.py build_network && python manage.py generate_plans"
+	  python manage.py build_network && python manage.py generate_plans && \
+	  python manage.py load_canon_facts && python manage.py load_simulation"
 
 schema:
 	docker compose run --rm backend python manage.py spectacular --file openapi.yaml --validate
