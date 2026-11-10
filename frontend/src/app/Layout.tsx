@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Link, NavLink, Outlet } from 'react-router-dom';
 import { useTheme } from './theme';
 import styles from './Layout.module.css';
@@ -20,7 +19,6 @@ const NAV = [
 ];
 
 export function Layout() {
-  const [open, setOpen] = useState(false);
   const { theme, toggle } = useTheme();
 
   return (
@@ -30,10 +28,21 @@ export function Layout() {
       </a>
       <header className={styles.header}>
         <div className={styles.bar}>
-          <Link to="/" className={styles.brand} onClick={() => setOpen(false)}>
+          <Link to="/" className={styles.brand}>
             <Logo />
             Planet2Planet
           </Link>
+          <nav aria-label="Main" className={styles.nav}>
+            <ul>
+              {NAV.map((item) => (
+                <li key={item.to}>
+                  <NavLink to={item.to} end={item.end} className={styles.link}>
+                    {item.label}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          </nav>
           <button
             type="button"
             className={styles.themeButton}
@@ -42,26 +51,6 @@ export function Layout() {
           >
             {theme === 'dark' ? 'Light' : 'Dark'}
           </button>
-          <button
-            type="button"
-            className={styles.menuButton}
-            aria-expanded={open}
-            aria-controls="site-nav"
-            onClick={() => setOpen((value) => !value)}
-          >
-            {open ? 'Close' : 'Menu'}
-          </button>
-          <nav id="site-nav" aria-label="Main" className={`${styles.nav} ${open ? styles.navOpen : ''}`}>
-            <ul>
-              {NAV.map((item) => (
-                <li key={item.to}>
-                  <NavLink to={item.to} end={item.end} className={styles.link} onClick={() => setOpen(false)}>
-                    {item.label}
-                  </NavLink>
-                </li>
-              ))}
-            </ul>
-          </nav>
         </div>
       </header>
       <main id="main" className={styles.main} tabIndex={-1}>

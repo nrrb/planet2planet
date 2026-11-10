@@ -12,13 +12,10 @@ function stored(): Theme | null {
   }
 }
 
-function systemTheme(): Theme {
-  return typeof window.matchMedia === 'function' && window.matchMedia('(prefers-color-scheme: light)').matches
-    ? 'light'
-    : 'dark';
-}
+/** The site is light unless the visitor picks the dark theme. */
+const DEFAULT_THEME: Theme = 'light';
 
-/** A manual light/dark choice that falls back to the system setting. */
+/** A manual light/dark choice, remembered between visits. */
 export function useTheme(): { theme: Theme; toggle: () => void } {
   const [choice, setChoice] = useState<Theme | null>(stored);
 
@@ -27,7 +24,7 @@ export function useTheme(): { theme: Theme; toggle: () => void } {
     else delete document.documentElement.dataset.theme;
   }, [choice]);
 
-  const theme = choice ?? systemTheme();
+  const theme = choice ?? DEFAULT_THEME;
   const toggle = useCallback(() => {
     const next: Theme = theme === 'dark' ? 'light' : 'dark';
     setChoice(next);
