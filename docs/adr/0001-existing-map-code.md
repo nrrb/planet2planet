@@ -26,8 +26,9 @@ PLAN.md section 11.3 requires a review of `frontend/` before UI work. The three 
 
 ## Gaps against the plan
 
-1. Only 30 bodies; the plan has 33 worlds (adds dwarf planets and others) and positions at
-   a fixed site date from the API. The scene must accept API positions instead of its own clock.
+1. Only 30 bodies; the plan has 33 worlds. Positions stay client-side: they are aesthetic,
+   so the scene keeps its own clock and orbit model and the API supplies no map positions
+   (ruling, M1 follow-up). The three missing worlds are added to the client catalog.
 2. No layered links (access, mesh, backbone, cross-link, conjunction), no per-segment
    colour, labels, hover or tap, no dimming, no flow animation.
 3. No year-driven state for the Canon history map.
@@ -35,8 +36,8 @@ PLAN.md section 11.3 requires a review of `frontend/` before UI work. The three 
 
 ## Decision
 
-Keep Pixi and the existing model code. Add `src/map/adapter.ts` (API data to scene input)
-and extend the scene in small commits: a position override, then a multi-layer link
+Keep Pixi and the existing model code. Add `src/map/adapter.ts` (API links and offer segments to scene input; positions are not part of it)
+and extend the scene in small commits: a multi-layer link
 renderer, dimming, flow animation, then hover and tap events. Text alternatives live in
 React outside the canvas. The map moves into the new app shell without a rewrite.
 

@@ -708,7 +708,7 @@ The animated maps use the code already in `frontend/`. Before any UI work, miles
 
 **Gaps:** any missing capabilities (layer styles, dimming, flow animation along a link, text alternatives) are added to the map code in small, separately committed steps.
 
-**Data placement:** the frontend keeps only display configuration: colours per layer, scale, label offsets and sprites. Positions, links and routes come from the API.
+**Data placement:** the frontend keeps display configuration and aesthetic body positions (its own clock and orbit model). Links and routes come from the API. Positions used for latency and conjunction are computed in the backend (section 5).
 
 ## 12. Local development
 
