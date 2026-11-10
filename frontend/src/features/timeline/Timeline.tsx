@@ -107,12 +107,27 @@ export function Timeline() {
           {shownCount} of {events.length} events
         </span>
       </fieldset>
+      <div className={styles.jump}>
+        <span>Jump to</span>
+        {eras.map(({ era }) => (
+          <button
+            key={era.id}
+            type="button"
+            className={styles.jumpButton}
+            onClick={() =>
+              document.getElementById(`era-${era.id}`)?.scrollIntoView?.({ inline: 'start', block: 'nearest' })
+            }
+          >
+            {era.label}
+          </button>
+        ))}
+      </div>
       {/* A scrollable region must be focusable so keyboard users can scroll it. */}
       {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
       <div className={styles.track} role="region" aria-label="Timeline, scrollable" tabIndex={0}>
         <div className={styles.eras}>
           {eras.map(({ era, years }) => (
-            <section key={era.id} className={styles.era} aria-label={era.label}>
+            <section key={era.id} id={`era-${era.id}`} className={styles.era} aria-label={era.label}>
               <header className={styles.eraHead}>
                 <h3>{era.label}</h3>
                 <span>{era.blurb}</span>

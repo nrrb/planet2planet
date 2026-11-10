@@ -90,6 +90,15 @@ describe('Timeline', () => {
     expect(screen.getByText('Earth: network converted to subspace')).toBeInTheDocument();
   });
 
+  it('jumps to an era', async () => {
+    const scroll = vi.fn();
+    Element.prototype.scrollIntoView = scroll;
+    renderTimeline();
+    await screen.findByRole('heading', { name: 'Early subspace' });
+    await userEvent.click(screen.getByRole('button', { name: 'Early subspace' }));
+    expect(scroll).toHaveBeenCalledWith({ inline: 'start', block: 'nearest' });
+  });
+
   it('says when nothing matches', async () => {
     renderTimeline();
     await screen.findByRole('heading', { name: 'Early subspace' });
