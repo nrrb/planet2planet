@@ -1,4 +1,4 @@
-.PHONY: up down test test-backend lint-backend lint
+.PHONY: up down test test-backend lint-backend lint seed
 
 up:
 	docker compose up -d --wait
@@ -17,3 +17,8 @@ lint-backend:
 
 lint: lint-backend
 	cd frontend && npm run lint && npm run format:check && npx tsc --noEmit
+
+seed:
+	docker compose run --rm backend sh -c "python manage.py migrate && \
+	  python manage.py load_dataset && python manage.py load_orbital_elements && \
+	  python manage.py build_network"

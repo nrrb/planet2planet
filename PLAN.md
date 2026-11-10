@@ -587,7 +587,7 @@ Django REST Framework, with an OpenAPI schema from drf-spectacular. The frontend
 | `GET /api/worlds/{id}/` | Full world detail including canon notes |
 | `GET /api/regions/` | Regions and their worlds |
 | `GET /api/companies/?kind=&sector=&world=&status=` | Providers, with lineage |
-| `GET /api/network/?layer=&company=&region=` | Nodes with positions at the site date, and links, for the maps |
+| `GET /api/network/?layer=&company=&region=` | Nodes, links (with a degraded flag at the site date) and orbit data for the maps; nodes carry no positions except the fixed conjunction relays |
 | `GET /api/history/?type=` | Timeline events |
 | `GET /api/canon/facts/?category=` | Canon facts with episodes, sources and, for deadlines, the simulated result |
 | `GET /api/simulation/` | Run metadata (seeds, run count, script commit), market statistics and deadline results |
@@ -708,7 +708,7 @@ The animated maps use the code already in `frontend/`. Before any UI work, miles
 
 **Gaps:** any missing capabilities (layer styles, dimming, flow animation along a link, text alternatives) are added to the map code in small, separately committed steps.
 
-**Data placement:** the frontend keeps display configuration and aesthetic body positions (its own clock and orbit model). Links and routes come from the API. Animation never depends on continuous backend data: the client animates on its own, and the API supplies orbital elements (`/api/worlds/`) and the site date (`/api/meta/`), and the client solves Kepler's equation itself, so it matches the backend. Its logarithmic radial scaling is a display transform only and keeps the true angle. Positions used for latency and conjunction are computed in the backend (section 5).
+**Data placement:** the frontend keeps display configuration and aesthetic body positions (its own clock and orbit model). Links and routes come from the API. Animation never depends on continuous backend data: the client animates on its own, and the API supplies orbital elements (`/api/network/`) and the site date (`/api/meta/`), and the client solves Kepler's equation itself, so it matches the backend. Its logarithmic radial scaling is a display transform only and keeps the true angle. Positions used for latency and conjunction are computed in the backend (section 5).
 
 ## 12. Local development
 
