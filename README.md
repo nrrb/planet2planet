@@ -20,6 +20,17 @@ cp .env.example .env
 make up
 ```
 
+Then load the data and start the frontend:
+
+```sh
+make seed                 # migrate, then load the dataset, network and plans
+cd frontend && npm install && npm run dev
+```
+
+Open the URL Vite prints (usually http://127.0.0.1:5173). The API runs on
+http://127.0.0.1:8000, with Swagger docs at `/api/docs/` and the admin at `/admin/`
+(`docker compose run --rm backend python manage.py createsuperuser` first).
+
 Requires Docker with Compose, and `make`. Node LTS and Python 3.12+ are only needed to run
 tools outside containers.
 
