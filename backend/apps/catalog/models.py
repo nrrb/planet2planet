@@ -147,6 +147,9 @@ class Company(models.Model):
         "self", null=True, blank=True, on_delete=models.PROTECT, related_name="acquisitions"
     )
     acquired_year = models.PositiveSmallIntegerField(null=True, blank=True)
+    price_positioning = models.FloatField(
+        null=True, blank=True, help_text="0.85 cheap to 1.25 premium; set by generate_plans."
+    )
 
     class Meta:
         ordering = ["slug"]

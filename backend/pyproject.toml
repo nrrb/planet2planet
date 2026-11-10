@@ -36,3 +36,5 @@ select = ["E", "W", "F", "I", "B", "UP", "DJ", "SIM"]
 
 [tool.ruff.lint.per-file-ignores]
 "*/migrations/*" = ["E501"]
+"apps/pricing/constants.py" = ["E501"]
+"*/tests/*" = ["E501"]
