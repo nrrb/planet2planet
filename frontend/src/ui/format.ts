@@ -47,3 +47,12 @@ export function formatSpan(min: number, max: number, format: (n: number) => stri
   const close = Math.abs(max - min) <= Math.max(Math.abs(max), Math.abs(min)) * 0.01;
   return close ? `about ${format((min + max) / 2)}` : `${format(min)} to ${format(max)}`;
 }
+
+/** A head count in words: 76 thousand, 54 million, 1.1 billion. */
+export function formatPeople(n: number): string {
+  const trim = (v: number) => (v >= 100 ? v.toFixed(0) : v >= 10 ? v.toFixed(0) : v.toFixed(1)).replace(/\.0$/, '');
+  if (n >= 1e9) return `${trim(n / 1e9)} billion`;
+  if (n >= 1e6) return `${trim(n / 1e6)} million`;
+  if (n >= 1e3) return `${trim(n / 1e3)} thousand`;
+  return String(Math.round(n));
+}

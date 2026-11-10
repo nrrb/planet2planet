@@ -6,6 +6,7 @@ import {
   formatDuration,
   formatLatency,
   formatLatencyRange,
+  formatPeople,
   formatShare,
   formatSpan,
 } from './format';
@@ -51,5 +52,13 @@ describe('formatting', () => {
   it('shows one reading when the ends agree and a range when they do not', () => {
     expect(formatSpan(0.0247, 0.0247, formatLatency)).toBe('about 0.025 ms');
     expect(formatSpan(5.03, 24.22, formatLatency)).toBe('5.0 ms to 24.2 ms');
+  });
+
+  it('writes head counts in words', () => {
+    expect(formatPeople(19_995)).toBe('20 thousand');
+    expect(formatPeople(54_410_117)).toBe('54 million');
+    expect(formatPeople(1_083_186)).toBe('1.1 million');
+    expect(formatPeople(152_255_208)).toBe('152 million');
+    expect(formatPeople(500)).toBe('500');
   });
 });
