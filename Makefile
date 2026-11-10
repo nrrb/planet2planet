@@ -1,4 +1,4 @@
-.PHONY: up down test test-backend lint-backend
+.PHONY: up down test test-backend lint-backend lint
 
 up:
 	docker compose up -d --wait
@@ -14,3 +14,6 @@ test-backend:
 
 lint-backend:
 	docker compose run --rm backend sh -c "ruff check . && ruff format --check ."
+
+lint: lint-backend
+	cd frontend && npm run lint && npm run format:check && npx tsc --noEmit
