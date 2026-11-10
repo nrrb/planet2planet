@@ -127,10 +127,6 @@ export function sortBy(state: CompareState, key: SortKey): CompareState {
   return { ...state, sort: key, dir: defaultDir(key) };
 }
 
-export function swapWorlds(state: CompareState): CompareState {
-  return { ...state, from: state.to, to: state.from, offer: null, compare: [] };
-}
-
 export function toggleCompare(state: CompareState, offerId: string): CompareState {
   if (state.compare.includes(offerId)) return { ...state, compare: state.compare.filter((id) => id !== offerId) };
   if (state.compare.length >= MAX_COMPARE) return state;

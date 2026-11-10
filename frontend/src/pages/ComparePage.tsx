@@ -10,7 +10,6 @@ import {
   MAX_COMPARE,
   quoteParamsFrom,
   sortBy,
-  swapWorlds,
   toggleCompare,
   withoutFilters,
 } from '../features/compare/params';
@@ -82,7 +81,6 @@ export function ComparePage() {
           from={state.from}
           to={state.to}
           onChange={(end, world) => update((s) => chooseWorld(s, end, world))}
-          onSwap={() => update(swapWorlds)}
         />
       ) : worlds.error ? (
         <p role="alert">

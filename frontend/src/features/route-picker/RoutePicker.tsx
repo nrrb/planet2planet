@@ -41,16 +41,12 @@ interface Props {
   from: string | null;
   to: string | null;
   onChange: (end: 'from' | 'to', world: string) => void;
-  onSwap: () => void;
 }
 
-export function RoutePicker({ worlds, from, to, onChange, onSwap }: Props) {
+export function RoutePicker({ worlds, from, to, onChange }: Props) {
   return (
     <div className={styles.picker}>
       <WorldSelect label="From" value={from} worlds={worlds} taken={to} onChange={(id) => onChange('from', id)} />
-      <button type="button" className={styles.swap} onClick={onSwap} aria-label="Swap the two worlds">
-        <span aria-hidden="true">⇄</span>
-      </button>
       <WorldSelect label="To" value={to} worlds={worlds} taken={from} onChange={(id) => onChange('to', id)} />
     </div>
   );

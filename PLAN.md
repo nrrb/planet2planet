@@ -95,7 +95,7 @@ The header has three links (Compare, About, Canon), collapsing into a menu on ph
 - **Two native `<select>` inputs,** labelled "From" and "To".
   - **Contents:** every world with a subspace constellation by 2380, grouped by system with `<optgroup>`: Sun-orbiting worlds first, then each planet with its moons.
   - **Mutual exclusion:** the world chosen in one select is `disabled` in the other, both ways. The URL and state can never hold the same world twice, and the backend rejects it anyway.
-- **A swap button** between the two selects.
+- **No swap button.** The order of the two worlds doesn't matter for plans, so there's nothing to swap.
 - **Route summary,** shown under the selects:
   - distance today
   - one-way latency today, with the year's range
@@ -794,7 +794,7 @@ Target: at least 90% coverage on `network` and `pricing`.
 
 **Frontend unit tests (Vitest with React Testing Library)**
 
-- the selects disable the world chosen in the other, both ways, and the swap button works
+- the selects disable the world chosen in the other, both ways
 - URL parameters round-trip to state and back
 - filters, sorting and badges render from fixture API data
 - number, latency and credit formatting
@@ -885,7 +885,7 @@ Each milestone ends with a working, tested state. Indicative commit sequences ar
 **M5. Compare page**
 
 - App shell, routing, theme tokens
-- Route picker with mutual exclusion and swap
+- Route picker with mutual exclusion
 - Route summary
 - Offer cards, comparison table and sorting
 - Filters with URL state

@@ -26,7 +26,7 @@ function option(select: HTMLElement, name: RegExp) {
 
 describe('RoutePicker', () => {
   it('disables the world chosen at the other end, both ways', () => {
-    render(<RoutePicker worlds={WORLDS} from="earth" to="jupiter" onChange={vi.fn()} onSwap={vi.fn()} />);
+    render(<RoutePicker worlds={WORLDS} from="earth" to="jupiter" onChange={vi.fn()} />);
     const from = screen.getByLabelText('From');
     const to = screen.getByLabelText('To');
     expect(option(from, /^Jupiter$/)).toBeDisabled();
@@ -36,22 +36,20 @@ describe('RoutePicker', () => {
   });
 
   it('disables worlds with no network yet', () => {
-    render(<RoutePicker worlds={WORLDS} from={null} to={null} onChange={vi.fn()} onSwap={vi.fn()} />);
+    render(<RoutePicker worlds={WORLDS} from={null} to={null} onChange={vi.fn()} />);
     expect(option(screen.getByLabelText('From'), /Vulcan \(no network yet\)/)).toBeDisabled();
   });
 
   it('groups moons under their planet', () => {
-    render(<RoutePicker worlds={WORLDS} from={null} to={null} onChange={vi.fn()} onSwap={vi.fn()} />);
+    render(<RoutePicker worlds={WORLDS} from={null} to={null} onChange={vi.fn()} />);
     expect(within(screen.getByLabelText('From')).getByRole('group', { name: 'Moons of Jupiter' })).toBeInTheDocument();
   });
 
-  it('reports a change and a swap', async () => {
+  it('reports a change', async () => {
     const onChange = vi.fn();
-    const onSwap = vi.fn();
-    render(<RoutePicker worlds={WORLDS} from="earth" to="jupiter" onChange={onChange} onSwap={onSwap} />);
+    render(<RoutePicker worlds={WORLDS} from="earth" to="jupiter" onChange={onChange} />);
     await userEvent.selectOptions(screen.getByLabelText('To'), 'io');
     expect(onChange).toHaveBeenCalledWith('to', 'io');
-    await userEvent.click(screen.getByRole('button', { name: 'Swap the two worlds' }));
-    expect(onSwap).toHaveBeenCalled();
+    expect(screen.queryByRole('button', { name: /swap/i })).not.toBeInTheDocument();
   });
 });

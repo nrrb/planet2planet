@@ -27,23 +27,9 @@
   font-weight: 600;
 }
 
-.swap {
-  min-height: var(--tap);
-  min-width: var(--tap);
-  justify-self: center;
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius);
-  background: var(--surface);
-  line-height: 1;
-}
-.swap:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
 @media (min-width: 560px) {
   .picker {
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     max-width: 640px;
   }
 }

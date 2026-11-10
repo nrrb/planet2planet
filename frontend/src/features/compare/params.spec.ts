@@ -6,7 +6,6 @@ import {
   parseCompareParams,
   quoteParamsFrom,
   sortBy,
-  swapWorlds,
   toggleCompare,
   toSearchParams,
   withoutFilters,
@@ -67,11 +66,6 @@ describe('compare params', () => {
     expect(chooseWorld(state, 'from', 'titan')).toMatchObject({ from: 'titan', to: null });
     expect(chooseWorld(state, 'to', 'moon')).toMatchObject({ from: null, to: 'moon' });
     expect(chooseWorld(state, 'to', 'io')).toMatchObject({ from: 'moon', to: 'io' });
-  });
-
-  it('swaps worlds and clears selections that belong to the old pair', () => {
-    const swapped = swapWorlds(parse('from=moon&to=titan&offer=of_1&cmp=of_1'));
-    expect(swapped).toMatchObject({ from: 'titan', to: 'moon', offer: null, compare: [] });
   });
 
   it('limits comparison to three and lets offers be removed', () => {
