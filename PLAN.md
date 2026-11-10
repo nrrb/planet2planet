@@ -334,12 +334,12 @@ Each tier is a plan feature or an add-on. The About page explains each with the 
 | Tier | What it adds | Canon motivation |
 |---|---|---|
 | Standard | Single route, the carrier's normal repair commitments | — |
-| Diverse path | Two routes over different backbones that share no relay hub except the two endpoints; automatic failover | The Borg reached Earth in 2367 (TNG "The Best of Both Worlds, Part II") and again in 2373 (*Star Trek: First Contact*) |
-| Hardened | Shielded, environment-hardened relays and power, with independent power at the endpoints | A Changeling sabotaged Earth's planetary power grid in 2372 (DS9 "Homefront", "Paradise Lost") |
+| Diverse path | Two routes over different backbones that share no relay hub except the two endpoints; automatic failover | A Borg cube came within reach of Earth in 2367, after Wolf 359, and was stopped in Earth orbit (TNG "The Best of Both Worlds, Part II"); the Borg attacked Earth again in 2373 (*Star Trek: First Contact*) |
+| Hardened | Shielded, environment-hardened relays and power, with independent power at the endpoints | Earth's planetary power relay system went down and the Dominion was blamed (DS9 "Homefront", "Paradise Lost"); the sabotage was in fact Admiral Leyton's Red Squad. No year is given here because it was not confirmed |
 | Contingency | Diverse path, plus store-and-forward buffering so no message is lost during an outage, plus a priority lane on the system-wide emergency network | The Breen attacked Earth in 2375 during the Dominion War (DS9 "The Changing Face of Evil") |
 | Terraforming-zone protection | Routing that avoids relays near active terraforming operations on Mars and Venus, with compensation for disruption | Canon has terraforming under way on Mars by 2155 (ENT "Terra Prime") and stations on Venus by 2371 (DS9 "Past Tense, Part I"). The accident risk itself is invented for the product |
 
-The canon references in this table are well known but weren't re-checked against Memory Alpha while writing this plan; confirm each one when writing the About copy (milestone 7).
+The Homefront and Borg references were checked for the About page (M7) against search results, because Memory Alpha blocks automated fetches. The Breen, terraforming and Venus references come from the derivation document.
 
 ## 5. Network and routing model
 
@@ -1010,7 +1010,7 @@ The Compose files and environment-based settings make each of these a configurat
 
 **Accuracy notes**
 
-- The resilience tiers cite canon events from memory (section 4). Confirm each against Memory Alpha when writing the About copy.
+- The resilience tiers' canon events were checked in M7 (section 4). The Changeling-sabotage claim was wrong and is corrected.
 - The solar conjunction rule and all pricing are inventions; the docs and code comments must say so.
 - Stardate to calendar conversion follows a fan convention. Only the stardate is shown on the site.
 

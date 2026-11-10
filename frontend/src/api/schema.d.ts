@@ -504,6 +504,11 @@ export interface components {
             readonly populationHistory: {
                 [key: string]: number;
             };
+            /** @description One-way subspace delay to Earth, closest and farthest approach. */
+            readonly subspaceLatencyToEarthMs: {
+                [key: string]: number;
+            };
+            solarConjunctionWithEarthEveryDays: number | null;
             canonNotes: components["schemas"]["CanonNote"][];
         };
         WorldList: {
