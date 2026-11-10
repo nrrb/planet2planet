@@ -19,6 +19,8 @@ jobs:
           cache: npm
           cache-dependency-path: frontend/package-lock.json
       - run: npm ci
+      - name: API types are up to date
+        run: npm run types && git diff --exit-code src/api/schema.d.ts
       - run: npm run lint
       - run: npm run format:check
       - run: npm test
@@ -54,3 +56,19 @@ jobs:
       - run: ruff check .
       - run: ruff format --check .
       - run: pytest
+      - name: Seed and check data integrity
+        env:
+          DJANGO_SETTINGS_MODULE: config.settings.dev
+        run: |
+          python manage.py migrate
+          python manage.py load_dataset
+          python manage.py load_orbital_elements
+          python manage.py build_network
+          python manage.py generate_plans
+          python manage.py check_data
+      - name: OpenAPI schema is up to date
+        env:
+          DJANGO_SETTINGS_MODULE: config.settings.dev
+        run: |
+          python manage.py spectacular --file /tmp/openapi.yaml --validate
+          diff openapi.yaml /tmp/openapi.yaml
