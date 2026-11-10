@@ -31,6 +31,16 @@ export interface SceneState {
   markers?: ReadonlyMap<string, 'from' | 'to'>;
   /** Draw every moon even when zoomed out, as a small dot. */
   showAllMoons?: boolean;
+  /**
+   * The history map: each world's state in a given year. A solid ring is a subspace constellation,
+   * a dashed ring a conventional one, a filled disk a colony. Worlds not reached yet are faint.
+   */
+  marks?: ReadonlyMap<string, WorldMark>;
+}
+
+export interface WorldMark {
+  constellation: 'none' | 'conventional' | 'subspace';
+  colonized: boolean;
 }
 
 export type Hover =
@@ -295,7 +305,7 @@ export class NetworkScene {
       layer.scale.set(zoom, -zoom);
       layer.position.set(width / 2 - x * zoom, height / 2 + y * zoom);
     }
-    const { highlighted, dimOthers, labelPlanets, animate, markers, showAllMoons } = this.state;
+    const { highlighted, dimOthers, labelPlanets, animate, markers, showAllMoons, marks } = this.state;
     const sunScreen = this.camera.screen({ x: 0, y: 0 });
     this.sunLabel.position.set(sunScreen.x + bodyRadius(SUN_RADIUS_KM) * zoom + 6, sunScreen.y - 7);
     this.sunLabel.visible = zoom >= 0.3;
@@ -323,7 +333,13 @@ export class NetworkScene {
         // However far out the camera is, a world stays at least a few pixels across.
         const minPx = moon ? 2.2 : 3;
         disk.scale.set(Math.max(1, minPx / (bodyRadius(body.radiusKm) * zoom)));
-        disk.alpha = dimOthers && !emphasised ? 0.3 : 1;
+        const mark = marks?.get(body.id);
+        if (marks) {
+          // A colony is drawn solid, a world with only a constellation half faded, and one not yet reached nearly gone.
+          disk.alpha = mark?.colonized ? 1 : mark && mark.constellation !== 'none' ? 0.5 : 0.14;
+        } else {
+          disk.alpha = dimOthers && !emphasised ? 0.3 : 1;
+        }
       }
       const track = this.moonTracks.get(body.id);
       const parent = body.parent ? this.positions.get(body.parent) : null;
@@ -338,12 +354,15 @@ export class NetworkScene {
         const role = markers?.get(body.id);
         const text = role ? `${body.name} (${role})` : body.name;
         if (label.text !== text) label.text = text;
+        const reached =
+          !marks || (marks.get(body.id)?.constellation ?? 'none') !== 'none' || Boolean(marks.get(body.id)?.colonized);
         const wanted =
-          chosen ||
-          Boolean(role) ||
-          body.id === this.hovered ||
-          (labelPlanets && !moon) ||
-          (labelPlanets && moon && zoom >= 2.2);
+          reached &&
+          (chosen ||
+            Boolean(role) ||
+            body.id === this.hovered ||
+            (labelPlanets && !moon) ||
+            (labelPlanets && moon && zoom >= 2.2));
         label.visible = showMoon && wanted;
         label.alpha = dimOthers && !chosen && body.id !== this.hovered ? 0.8 : 1;
         label.position.set(s.x + bodyRadius(body.radiusKm) * zoom + 7, s.y - 7);
@@ -351,6 +370,7 @@ export class NetworkScene {
     }
 
     const g = this.overlay.clear();
+    if (marks) this.drawMarks(g, marks);
     // Highlight rings.
     for (const id of highlighted) {
       const body = this.input.bodies.find((b) => b.id === id);
@@ -366,6 +386,35 @@ export class NetworkScene {
       g.stroke({ color: hex(this.colors.accent), width: 2, alpha: 0.9 });
     }
     this.drawLinks(g, flowClock);
+  }
+
+  /** Rings for the history map. The ring's style, not its colour alone, says which kind it is. */
+  private drawMarks(g: Graphics, marks: ReadonlyMap<string, WorldMark>): void {
+    const { zoom } = this.camera;
+    for (const body of this.input.bodies) {
+      const mark = marks.get(body.id);
+      const p = this.positions.get(body.id);
+      if (!mark || !p || mark.constellation === 'none') continue;
+      const s = this.camera.screen(p);
+      const base = Math.max(bodyRadius(body.radiusKm) * zoom, body.parent ? 2.2 : 3);
+      const r = base + (body.parent ? 3 : 5);
+      if (mark.constellation === 'subspace') {
+        g.circle(s.x, s.y, r).stroke({ color: hex(this.colors.layers.backbone), width: 2, alpha: 0.95 });
+      } else {
+        const segments = 14;
+        for (let i = 0; i < segments; i += 1) {
+          const a0 = (i / segments) * Math.PI * 2;
+          g.moveTo(s.x + r * Math.cos(a0), s.y + r * Math.sin(a0)).arc(
+            s.x,
+            s.y,
+            r,
+            a0,
+            a0 + (Math.PI * 2) / segments / 2,
+          );
+        }
+        g.stroke({ color: hex(this.colors.muted), width: 2, alpha: 0.95 });
+      }
+    }
   }
 
   private drawLinks(g: Graphics, flowClock: number): void {

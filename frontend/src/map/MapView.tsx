@@ -2,7 +2,7 @@ import { type KeyboardEvent, useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from '../ui/useReducedMotion';
 import { useSiteTheme } from '../ui/useSiteTheme';
 import type { MapModel, RenderLink } from './adapter';
-import type { Hover, NetworkScene } from './NetworkScene';
+import type { Hover, NetworkScene, WorldMark } from './NetworkScene';
 import { LAYER_ORDER, LAYER_STYLES, layerColor, MAP_COLORS, type MapTheme } from './palette';
 import styles from './MapView.module.css';
 
@@ -20,6 +20,8 @@ interface Props {
   markers?: ReadonlyMap<string, 'from' | 'to'>;
   /** Show every moon at overview zoom. */
   showAllMoons?: boolean;
+  /** The history map's per-world state. */
+  marks?: ReadonlyMap<string, WorldMark>;
   /** Height of the map frame; defaults to a tall panel for dialogs. */
   compact?: boolean;
 }
@@ -73,6 +75,7 @@ export default function MapView({
   label,
   markers,
   showAllMoons,
+  marks,
   compact,
 }: Props) {
   const host = useRef<HTMLDivElement>(null);
@@ -126,8 +129,8 @@ export default function MapView({
   }, [theme, status]);
 
   useEffect(() => {
-    scene.current?.setState({ links, highlighted, dimOthers, labelPlanets, animate, markers, showAllMoons });
-  }, [links, highlighted, dimOthers, labelPlanets, animate, markers, showAllMoons, status]);
+    scene.current?.setState({ links, highlighted, dimOthers, labelPlanets, animate, markers, showAllMoons, marks });
+  }, [links, highlighted, dimOthers, labelPlanets, animate, markers, showAllMoons, marks, status]);
 
   const fitKey = fitNodes ? fitNodes.join(',') : '';
   useEffect(() => {
