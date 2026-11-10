@@ -9,7 +9,7 @@ export function angleAt(body: Body, timestamp: number): number {
 }
 // Call with validated, parent-first data. Local axes never rotate with the parent.
 export function positionsAt(bodies: Body[], timestamp: number): Map<string, Point> {
-  const byId = new Map(bodies.map(b => [b.id, b]));
+  const byId = new Map(bodies.map((b) => [b.id, b]));
   const positions = new Map<string, Point>();
   for (const body of bodies) {
     const parent = body.parentId ? byId.get(body.parentId)! : null;

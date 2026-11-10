@@ -18,7 +18,10 @@ interface Callbacks {
   time: (time: number) => void;
   view: (following: string | null) => void;
 }
-interface Pointer { x: number; y: number }
+interface Pointer {
+  x: number;
+  y: number;
+}
 
 export class SolarSystemScene {
   readonly camera = new Camera();
@@ -47,12 +50,20 @@ export class SolarSystemScene {
   private mounted = false;
   private overviewRadius: number;
 
-  private constructor(private app: Application, private clock: SimulationClock, private callbacks: Callbacks) {
+  private constructor(
+    private app: Application,
+    private clock: SimulationClock,
+    private callbacks: Callbacks,
+  ) {
     this.positions = positionsAt(bodies, clock.time);
-    this.overviewRadius = Math.max(...bodies.filter(b => b.parentId === 'sun').map(b => {
-      const extent = this.systemRadius(b.id);
-      return orbitRadius(b, bodyById.get('sun')!) + extent;
-    }));
+    this.overviewRadius = Math.max(
+      ...bodies
+        .filter((b) => b.parentId === 'sun')
+        .map((b) => {
+          const extent = this.systemRadius(b.id);
+          return orbitRadius(b, bodyById.get('sun')!) + extent;
+        }),
+    );
     app.stage.addChild(this.orbitLayer, this.bodyLayer, this.connectionLayer, this.labelLayer);
     for (const body of bodies) {
       const r = bodyRadius(body.radiusKm);
@@ -60,7 +71,8 @@ export class SolarSystemScene {
       this.disks.set(body.id, disk);
       this.bodyLayer.addChild(disk);
       if (body.parentId) {
-        const track = new Graphics().circle(0, 0, orbitRadius(body, bodyById.get(body.parentId)!))
+        const track = new Graphics()
+          .circle(0, 0, orbitRadius(body, bodyById.get(body.parentId)!))
           .stroke({ color: 0xffffff, alpha: 0.5, width: 1, pixelLine: true });
         this.tracks.set(body.id, track);
         this.orbitLayer.addChild(track);
@@ -68,11 +80,13 @@ export class SolarSystemScene {
       const label = new Text({ text: body.name, style: { fontFamily: 'monospace', fontSize: 12, fill: '#e8eee9' } });
       this.labels.set(body.id, label);
       const origin = new Graphics().circle(0, 0, r + 7).stroke({ color: '#ffbf64', width: 1.5 });
-      const destination = new Graphics().rect(-r - 7, -r - 7, (r + 7) * 2, (r + 7) * 2).stroke({ color: '#ffbf64', width: 1.5 });
+      const destination = new Graphics()
+        .rect(-r - 7, -r - 7, (r + 7) * 2, (r + 7) * 2)
+        .stroke({ color: '#ffbf64', width: 1.5 });
       this.origins.set(body.id, origin);
       this.destinations.set(body.id, destination);
       this.labelLayer.addChild(origin, destination, label);
-      if (bodies.some(b => b.parentId === body.id)) {
+      if (bodies.some((b) => b.parentId === body.id)) {
         const count = new Text({ text: '', style: { fontFamily: 'monospace', fontSize: 10, fill: '#a6b6ac' } });
         this.counts.set(body.id, count);
         this.labelLayer.addChild(count);
@@ -83,7 +97,14 @@ export class SolarSystemScene {
   static async create(clock: SimulationClock, callbacks: Callbacks) {
     const app = new Application();
     try {
-      await app.init({ backgroundColor: '#000000', antialias: true, autoStart: false, preference: 'webgl', resolution: window.devicePixelRatio || 1, autoDensity: true });
+      await app.init({
+        backgroundColor: '#000000',
+        antialias: true,
+        autoStart: false,
+        preference: 'webgl',
+        resolution: window.devicePixelRatio || 1,
+        autoDensity: true,
+      });
       return new SolarSystemScene(app, clock, callbacks);
     } catch (error) {
       if (app.renderer) app.destroy(true, { children: true, texture: true, textureSource: true });
@@ -99,13 +120,15 @@ export class SolarSystemScene {
     this.observer = new ResizeObserver(() => {
       const { width, height } = host.getBoundingClientRect();
       this.app.renderer.resize(Math.max(1, width), Math.max(1, height));
-      this.camera.width = width; this.camera.height = height;
+      this.camera.width = width;
+      this.camera.height = height;
     });
     this.observer.observe(host);
     // ResizeObserver runs after mount; set the first fit synchronously as well.
     const { width, height } = host.getBoundingClientRect();
     this.app.renderer.resize(width, height);
-    this.camera.width = width; this.camera.height = height;
+    this.camera.width = width;
+    this.camera.height = height;
     this.camera.reset(this.overviewRadius);
     const canvas = this.app.canvas;
     canvas.addEventListener('pointerdown', this.pointerDown);
@@ -121,21 +144,33 @@ export class SolarSystemScene {
 
   private systemRadius(id: string): number {
     const parent = bodyById.get(id)!;
-    return Math.max(bodyRadius(parent.radiusKm) + 24, ...bodies.filter(b => b.parentId === id).map(b => orbitRadius(b, parent) + bodyRadius(b.radiusKm) + 24));
+    return Math.max(
+      bodyRadius(parent.radiusKm) + 24,
+      ...bodies.filter((b) => b.parentId === id).map((b) => orbitRadius(b, parent) + bodyRadius(b.radiusKm) + 24),
+    );
   }
   focus(id: string) {
     const body = bodyById.get(id);
     if (!body) return;
     this.camera.following = id;
-    const extent = body.parentId && body.parentId !== 'sun' ? this.systemRadius(body.parentId) * 2 : this.systemRadius(id);
+    const extent =
+      body.parentId && body.parentId !== 'sun' ? this.systemRadius(body.parentId) * 2 : this.systemRadius(id);
     if (id === 'sun') this.camera.fit(this.overviewRadius);
     else this.camera.fit(extent);
     this.camera.follow(this.positions);
     this.callbacks.view(id);
   }
-  reset() { this.camera.reset(this.overviewRadius); this.callbacks.view(null); }
-  zoom(factor: number) { this.camera.zoomAt(factor, { x: this.camera.width / 2, y: this.camera.height / 2 }); }
-  private visibility = () => { this.clock.rebase(); this.lastFrame = 0; };
+  reset() {
+    this.camera.reset(this.overviewRadius);
+    this.callbacks.view(null);
+  }
+  zoom(factor: number) {
+    this.camera.zoomAt(factor, { x: this.camera.width / 2, y: this.camera.height / 2 });
+  }
+  private visibility = () => {
+    this.clock.rebase();
+    this.lastFrame = 0;
+  };
 
   private frame = () => {
     const now = performance.now();
@@ -153,17 +188,24 @@ export class SolarSystemScene {
     this.orbitLayer.visible = settings.tracks;
     this.visible.clear();
     const focusedBody = this.camera.following ? bodyById.get(this.camera.following) : null;
-    const focusedSystem = focusedBody?.parentId && focusedBody.parentId !== 'sun' ? focusedBody.parentId : focusedBody?.id;
+    const focusedSystem =
+      focusedBody?.parentId && focusedBody.parentId !== 'sun' ? focusedBody.parentId : focusedBody?.id;
     for (const body of bodies) {
       const p = this.positions.get(body.id)!;
       const s = this.camera.screen(p);
       const radius = bodyRadius(body.radiusKm);
       const moon = body.parentId !== null && body.parentId !== 'sun';
       const chosen = body.id === settings.selection.origin || body.id === settings.selection.destination;
-      const show = !moon || chosen || body.id === settings.focusPreview || focusedSystem === body.parentId || (zoom >= 1.6 && radius * zoom >= 3);
+      const show =
+        !moon ||
+        chosen ||
+        body.id === settings.focusPreview ||
+        focusedSystem === body.parentId ||
+        (zoom >= 1.6 && radius * zoom >= 3);
       if (show) this.visible.add(body.id);
       const disk = this.disks.get(body.id)!;
-      disk.visible = show; disk.position.set(p.x, p.y);
+      disk.visible = show;
+      disk.position.set(p.x, p.y);
       const track = this.tracks.get(body.id);
       if (track) {
         const parent = this.positions.get(body.parentId!)!;
@@ -173,14 +215,17 @@ export class SolarSystemScene {
       const label = this.labels.get(body.id)!;
       label.visible = show;
       label.position.set(s.x + radius * zoom + 10, s.y - 7);
-      for (const [highlight, enabled] of [[this.origins.get(body.id)!, body.id === settings.selection.origin], [this.destinations.get(body.id)!, body.id === settings.selection.destination]] as const) {
+      for (const [highlight, enabled] of [
+        [this.origins.get(body.id)!, body.id === settings.selection.origin],
+        [this.destinations.get(body.id)!, body.id === settings.selection.destination],
+      ] as const) {
         highlight.visible = enabled;
         highlight.position.set(s.x, s.y);
         highlight.scale.set(zoom);
       }
     }
     for (const [id, count] of this.counts) {
-      const hidden = bodies.filter(b => b.parentId === id && !this.visible.has(b.id)).length;
+      const hidden = bodies.filter((b) => b.parentId === id && !this.visible.has(b.id)).length;
       const s = this.camera.screen(this.positions.get(id)!);
       count.visible = hidden > 0 && id !== 'sun';
       const text = `+${hidden} moon${hidden === 1 ? '' : 's'}`;
@@ -198,7 +243,8 @@ export class SolarSystemScene {
     const { origin, destination } = settings.selection;
     const pair = `${origin}/${destination}`;
     if (pair !== this.pair) {
-      this.pair = pair; this.effectTime = 0;
+      this.pair = pair;
+      this.effectTime = 0;
       this.connectionWasAnimated = settings.effects && this.clock.playing;
     }
     const g = this.connectionLayer.clear();
@@ -212,18 +258,27 @@ export class SolarSystemScene {
     const a = this.camera.screen(this.positions.get(origin)!);
     const b = this.camera.screen(this.positions.get(destination)!);
     const t = settings.effects && this.connectionWasAnimated ? Math.min(1, this.effectTime / SCALE.growSeconds) : 1;
-    const dx = b.x - a.x, dy = b.y - a.y;
-    g.moveTo(a.x, a.y).lineTo(a.x + dx * t, a.y + dy * t).stroke({ color: '#ffb95e', width: 1.5, alpha: 0.85 });
+    const dx = b.x - a.x,
+      dy = b.y - a.y;
+    g.moveTo(a.x, a.y)
+      .lineTo(a.x + dx * t, a.y + dy * t)
+      .stroke({ color: '#ffb95e', width: 1.5, alpha: 0.85 });
     const angle = Math.atan2(dy, dx);
-    const endX = a.x + dx * t, endY = a.y + dy * t;
-    g.moveTo(endX - 9 * Math.cos(angle - 0.45), endY - 9 * Math.sin(angle - 0.45)).lineTo(endX, endY)
-      .lineTo(endX - 9 * Math.cos(angle + 0.45), endY - 9 * Math.sin(angle + 0.45)).stroke({ color: '#ffb95e', width: 1.5 });
-    g.moveTo(a.x + 9 * Math.cos(angle - 0.45), a.y + 9 * Math.sin(angle - 0.45)).lineTo(a.x, a.y)
-      .lineTo(a.x + 9 * Math.cos(angle + 0.45), a.y + 9 * Math.sin(angle + 0.45)).stroke({ color: '#ffb95e', width: 1.5 });
+    const endX = a.x + dx * t,
+      endY = a.y + dy * t;
+    g.moveTo(endX - 9 * Math.cos(angle - 0.45), endY - 9 * Math.sin(angle - 0.45))
+      .lineTo(endX, endY)
+      .lineTo(endX - 9 * Math.cos(angle + 0.45), endY - 9 * Math.sin(angle + 0.45))
+      .stroke({ color: '#ffb95e', width: 1.5 });
+    g.moveTo(a.x + 9 * Math.cos(angle - 0.45), a.y + 9 * Math.sin(angle - 0.45))
+      .lineTo(a.x, a.y)
+      .lineTo(a.x + 9 * Math.cos(angle + 0.45), a.y + 9 * Math.sin(angle + 0.45))
+      .stroke({ color: '#ffb95e', width: 1.5 });
     if (settings.effects && this.connectionWasAnimated && t === 1) {
       for (let i = 0; i < 3; i++) {
         const phase = ((this.effectTime - SCALE.growSeconds) / SCALE.pulseSeconds + i / 3) % 1;
-        const offsetX = -Math.sin(angle) * 4, offsetY = Math.cos(angle) * 4;
+        const offsetX = -Math.sin(angle) * 4,
+          offsetY = Math.cos(angle) * 4;
         g.circle(a.x + dx * phase + offsetX, a.y + dy * phase + offsetY, 3).fill('#ffcd87');
         g.circle(b.x - dx * phase - offsetX, b.y - dy * phase - offsetY, 3).fill('#ffcd87');
       }
@@ -235,12 +290,16 @@ export class SolarSystemScene {
     return { x: event.clientX - rect.left, y: event.clientY - rect.top };
   }
   private hit(point: Point): string | null {
-    let match: string | null = null, best = Infinity;
+    let match: string | null = null,
+      best = Infinity;
     for (const body of bodies) {
       if (!this.visible.has(body.id)) continue;
       const s = this.camera.screen(this.positions.get(body.id)!);
       const distance = Math.hypot(point.x - s.x, point.y - s.y);
-      if (distance <= Math.max(11, bodyRadius(body.radiusKm) * this.camera.zoom) && distance < best) { best = distance; match = body.id; }
+      if (distance <= Math.max(11, bodyRadius(body.radiusKm) * this.camera.zoom) && distance < best) {
+        best = distance;
+        match = body.id;
+      }
     }
     return match;
   }
@@ -249,8 +308,10 @@ export class SolarSystemScene {
     const p = this.local(event);
     this.pointers.set(event.pointerId, p);
     this.app.canvas.setPointerCapture(event.pointerId);
-    if (this.pointers.size === 1) { this.gestureStart = p; this.dragged = false; }
-    else this.dragged = true;
+    if (this.pointers.size === 1) {
+      this.gestureStart = p;
+      this.dragged = false;
+    } else this.dragged = true;
   };
   private pointerMove = (event: PointerEvent) => {
     const p = this.local(event);
@@ -264,10 +325,12 @@ export class SolarSystemScene {
       const other = [...this.pointers.entries()].find(([id]) => id !== event.pointerId)![1];
       const before = Math.hypot(previous.x - other.x, previous.y - other.y);
       const after = Math.hypot(p.x - other.x, p.y - other.y);
-      if (before > 0 && after > 0) this.camera.zoomAt(after / before, { x: (p.x + other.x) / 2, y: (p.y + other.y) / 2 });
+      if (before > 0 && after > 0)
+        this.camera.zoomAt(after / before, { x: (p.x + other.x) / 2, y: (p.y + other.y) / 2 });
       this.dragged = true;
     } else {
-      if (this.gestureStart && Math.hypot(p.x - this.gestureStart.x, p.y - this.gestureStart.y) > 5) this.dragged = true;
+      if (this.gestureStart && Math.hypot(p.x - this.gestureStart.x, p.y - this.gestureStart.y) > 5)
+        this.dragged = true;
       if (this.dragged) {
         this.camera.pan(p.x - previous.x, p.y - previous.y);
         this.callbacks.view(null);
@@ -288,8 +351,13 @@ export class SolarSystemScene {
     if (!this.pointers.size) this.gestureStart = null;
     this.app.canvas.style.cursor = 'grab';
   }
-  private pointerCancel = (event: PointerEvent) => { this.dragged = true; this.releasePointer(event); };
-  private pointerLeave = () => { this.hovered = null; };
+  private pointerCancel = (event: PointerEvent) => {
+    this.dragged = true;
+    this.releasePointer(event);
+  };
+  private pointerLeave = () => {
+    this.hovered = null;
+  };
   private wheel = (event: WheelEvent) => {
     event.preventDefault();
     const delta = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? this.camera.height : 1);

@@ -4,9 +4,13 @@ export class SimulationClock {
   playing: boolean;
   private last: number | null = null;
   constructor(time: number, speed: number, playing: boolean) {
-    this.time = time; this.speed = speed; this.playing = playing;
+    this.time = time;
+    this.speed = speed;
+    this.playing = playing;
   }
-  rebase() { this.last = null; }
+  rebase() {
+    this.last = null;
+  }
   tick(now: number, hidden = false): number {
     const elapsed = this.last === null ? 0 : Math.max(0, now - this.last);
     this.last = hidden ? null : now;

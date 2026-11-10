@@ -24,5 +24,11 @@ export interface Catalog {
   provenance: string;
   bodies: Body[];
 }
-export interface Point { x: number; y: number }
-export interface Selection { origin: string | null; destination: string | null }
+export interface Point {
+  x: number;
+  y: number;
+}
+export interface Selection {
+  origin: string | null;
+  destination: string | null;
+}
