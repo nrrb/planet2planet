@@ -434,35 +434,43 @@ components:
         id:
           type: string
         category:
-          $ref: '#/components/schemas/CategoryEnum'
+          allOf:
+          - $ref: '#/components/schemas/CategoryEnum'
+          readOnly: true
         topic:
           type: string
-          maxLength: 160
+          readOnly: true
         world:
           type: string
           nullable: true
         statement:
           type: string
+          readOnly: true
         episodes:
           type: array
           items:
             type: string
             maxLength: 120
+          readOnly: true
         howUsed:
           type: string
+          readOnly: true
           description: How the simulation uses it, or why it was left out.
         standing:
-          $ref: '#/components/schemas/StandingEnum'
+          allOf:
+          - $ref: '#/components/schemas/StandingEnum'
+          readOnly: true
         source:
           $ref: '#/components/schemas/Source'
         deadline:
-          type: object
-          additionalProperties: {}
+          allOf:
+          - $ref: '#/components/schemas/Deadline'
           nullable: true
           readOnly: true
       required:
       - category
       - deadline
+      - episodes
       - howUsed
       - id
       - source
@@ -611,6 +619,33 @@ components:
       description: |-
         * `conventional` - Conventional
         * `subspace` - Subspace
+    Deadline:
+      type: object
+      properties:
+        event:
+          type: string
+        year:
+          type: integer
+        threshold:
+          type: number
+          format: double
+          nullable: true
+        shareMet:
+          type: number
+          format: double
+          nullable: true
+          description: Share of runs that met it, 0 to 1.
+        medianResult:
+          type: number
+          format: double
+          nullable: true
+          description: Median year (or population) simulated.
+      required:
+      - event
+      - medianResult
+      - shareMet
+      - threshold
+      - year
     DirectLatency:
       type: object
       properties:

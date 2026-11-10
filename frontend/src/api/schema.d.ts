@@ -242,18 +242,16 @@ export interface components {
         };
         CanonFact: {
             id: string;
-            category: components["schemas"]["CategoryEnum"];
-            topic: string;
+            readonly category: components["schemas"]["CategoryEnum"];
+            readonly topic: string;
             world: string | null;
-            statement: string;
-            episodes?: string[];
+            readonly statement: string;
+            readonly episodes: string[];
             /** @description How the simulation uses it, or why it was left out. */
-            howUsed: string;
-            standing: components["schemas"]["StandingEnum"];
+            readonly howUsed: string;
+            readonly standing: components["schemas"]["StandingEnum"];
             source: components["schemas"]["Source"];
-            readonly deadline: {
-                [key: string]: unknown;
-            } | null;
+            readonly deadline: components["schemas"]["Deadline"] | null;
         };
         CanonNote: {
             year?: number | null;
@@ -312,6 +310,22 @@ export interface components {
          * @enum {string}
          */
         ConstellationStartedAsEnum: "conventional" | "subspace";
+        Deadline: {
+            event: string;
+            year: number;
+            /** Format: double */
+            threshold: number | null;
+            /**
+             * Format: double
+             * @description Share of runs that met it, 0 to 1.
+             */
+            shareMet: number | null;
+            /**
+             * Format: double
+             * @description Median year (or population) simulated.
+             */
+            medianResult: number | null;
+        };
         DirectLatency: {
             /** Format: double */
             direct: number;

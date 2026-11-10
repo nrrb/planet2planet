@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from apps.catalog.serializers import SourceSerializer
@@ -37,7 +38,9 @@ class CanonFactSerializer(serializers.ModelSerializer):
             "source",
             "deadline",
         ]
+        read_only_fields = fields
 
+    @extend_schema_field(DeadlineSerializer(allow_null=True))
     def get_deadline(self, fact: CanonFact) -> dict | None:
         if fact.category != CanonFact.Category.DEADLINE:
             return None
