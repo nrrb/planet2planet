@@ -32,6 +32,7 @@ def clear_caches() -> None:
     conjunction_window.cache_clear()
     package_route.cache_clear()
     package_latency_range.cache_clear()
+    direct_latency_range.cache_clear()
 
 
 def _noon(day: date) -> datetime:
@@ -273,4 +274,16 @@ def package_latency_range(
         )
         if route is not None:
             values.append(route.latency_ms)
+    return min(values), max(values)
+
+
+@lru_cache(maxsize=1024)
+def direct_latency_range(origin: str, destination: str, day: date) -> tuple[float, float]:
+    """Best and worst straight-line latency over 52 dates across the year starting at `day`."""
+    values = [
+        direct_latency_ms(
+            origin, destination, day + timedelta(days=round(i * 365 / SAMPLES_PER_YEAR))
+        )
+        for i in range(SAMPLES_PER_YEAR)
+    ]
     return min(values), max(values)
