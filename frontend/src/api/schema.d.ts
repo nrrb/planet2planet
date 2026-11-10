@@ -477,9 +477,9 @@ export interface components {
             region: string;
             /** @description True when the world has a subspace constellation by the site date. */
             readonly eligible: boolean;
-            gaseous: boolean;
             /** Format: double */
             radiusKm: number;
+            gaseous: boolean;
             /** Format: double */
             massKg: number;
             /** Format: double */
@@ -514,6 +514,8 @@ export interface components {
             region: string;
             /** @description True when the world has a subspace constellation by the site date. */
             readonly eligible: boolean;
+            /** Format: double */
+            radiusKm: number;
         };
     };
     responses: never;

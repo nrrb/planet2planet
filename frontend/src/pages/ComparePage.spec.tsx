@@ -7,9 +7,9 @@ import type { Company, Offer, QuoteResponse, Region, World } from '../api/types'
 import { ComparePage } from './ComparePage';
 
 const WORLDS: World[] = [
-  { id: 'jupiter', name: 'Jupiter', type: 'planet', parent: null, region: 'jovian', eligible: true },
-  { id: 'saturn', name: 'Saturn', type: 'planet', parent: null, region: 'saturnian', eligible: true },
-  { id: 'earth', name: 'Earth', type: 'planet', parent: null, region: 'earth-luna', eligible: true },
+  { id: 'jupiter', name: 'Jupiter', type: 'planet', parent: null, region: 'jovian', eligible: true, radiusKm: 1000 },
+  { id: 'saturn', name: 'Saturn', type: 'planet', parent: null, region: 'saturnian', eligible: true, radiusKm: 1000 },
+  { id: 'earth', name: 'Earth', type: 'planet', parent: null, region: 'earth-luna', eligible: true, radiusKm: 1000 },
 ];
 const REGIONS = [{ id: 'jovian', name: 'Jovian', order: 4, worldIds: [] }] as Region[];
 const COMPANIES = [

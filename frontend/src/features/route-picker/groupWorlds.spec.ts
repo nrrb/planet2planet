@@ -9,6 +9,7 @@ const world = (id: string, name: string, parent: string | null = null): World =>
   parent,
   region: 'x',
   eligible: true,
+  radiusKm: 1000,
 });
 
 describe('groupWorlds', () => {

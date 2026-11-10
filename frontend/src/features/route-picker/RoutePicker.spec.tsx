@@ -11,6 +11,7 @@ const world = (id: string, name: string, parent: string | null = null, eligible 
   parent,
   region: 'x',
   eligible,
+  radiusKm: 1000,
 });
 const WORLDS = [
   world('earth', 'Earth'),
