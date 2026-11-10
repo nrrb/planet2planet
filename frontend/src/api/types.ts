@@ -16,3 +16,4 @@ export type ResilienceTier = Schemas['ResilienceTierEnum'];
 export type Network = Schemas['Network'];
 export type NetworkNode = Schemas['Node'];
 export type NetworkLink = Schemas['Link'];
+export type HistoryEvent = Schemas['Event'];

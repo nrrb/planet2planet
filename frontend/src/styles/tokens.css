@@ -16,6 +16,14 @@
   --danger: #b00020;
   --ok: #0a6b3d;
 
+  --ev-constellation: #2457d6;
+  --ev-convert: #6a3fd1;
+  --ev-colony: #0a6b3d;
+  --ev-million: #94570a;
+  --ev-founded: #0c7f72;
+  --ev-acquired: #b82a66;
+  --ev-canon: #111111;
+
   --badge-price: #7a4a00;
   --badge-latency: #00665a;
   --badge-resilient: #5b2fc0;
@@ -59,6 +67,13 @@
   --focus: #ffd27a;
   --danger: #ff8d8d;
   --ok: #5fdcb5;
+  --ev-constellation: #6ea0ff;
+  --ev-convert: #b18cff;
+  --ev-colony: #5fdcb5;
+  --ev-million: #ffbf55;
+  --ev-founded: #3fd0bd;
+  --ev-acquired: #ff86b4;
+  --ev-canon: #e8eef9;
   --badge-price: #ffbf55;
   --badge-latency: #3fd0bd;
   --badge-resilient: #b18cff;
