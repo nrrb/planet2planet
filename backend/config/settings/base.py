@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     "apps.catalog",
     "apps.network",
     "apps.pricing",
+    "apps.inquiries",
 ]
 
 MIDDLEWARE = [
@@ -79,6 +80,7 @@ REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": ["djangorestframework_camel_case.render.CamelCaseJSONRenderer"],
     "DEFAULT_PARSER_CLASSES": ["djangorestframework_camel_case.parser.CamelCaseJSONParser"],
     "DEFAULT_PAGINATION_CLASS": None,
+    "DEFAULT_THROTTLE_RATES": {"inquiries": "5/min"},
 }
 
 SPECTACULAR_SETTINGS = {
