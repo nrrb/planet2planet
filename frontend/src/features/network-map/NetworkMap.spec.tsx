@@ -136,9 +136,18 @@ beforeEach(() => {
 afterEach(() => vi.unstubAllGlobals());
 
 describe('NetworkMap', () => {
-  it('starts on the backbones when the URL has no filters', async () => {
+  it('starts on the backbones when the URL has no filters, without changing the URL', async () => {
     renderAt('/about');
-    await waitFor(() => expect(screen.getByTestId('hash')).toHaveTextContent('#network&kind=backbone'));
+    await screen.findByTestId('map');
+    await waitFor(() => expect(lastProps().links.map((l) => l.id)).toEqual(['l1']));
+    expect(screen.getByTestId('hash')).toHaveTextContent('');
+    expect(
+      within(screen.getByRole('group', { name: 'Provider kind' })).getByRole('checkbox', { name: 'Backbone' }),
+    ).toBeChecked();
+  });
+
+  it('keeps the default when the hash is another section of the page', async () => {
+    renderAt('/about#history');
     await screen.findByTestId('map');
     await waitFor(() => expect(lastProps().links.map((l) => l.id)).toEqual(['l1']));
   });

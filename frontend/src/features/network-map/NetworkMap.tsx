@@ -1,14 +1,16 @@
-import { lazy, Suspense, useEffect, useId, useMemo, useState } from 'react';
+import { lazy, Suspense, useId, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useCompanies, useNetwork, useRegions, useWorlds } from '../../api/hooks';
 import type { Company } from '../../api/types';
 import { KIND_LABELS } from '../../content/labels';
-import { buildMapModel, EMPTY_FILTERS, networkRenderLinks } from '../../map/adapter';
+import { buildMapModel, EMPTY_FILTERS, type NetworkFilters, networkRenderLinks } from '../../map/adapter';
 import { LAYER_ORDER, LAYER_STYLES } from '../../map/palette';
 import { networkHash, parseNetworkHash } from './networkHash';
 import styles from './NetworkMap.module.css';
 
 const MapView = lazy(() => import('../../map/MapView'));
+
+const DEFAULT_FILTERS: NetworkFilters = { ...EMPTY_FILTERS, kinds: ['backbone'] };
 
 const toggle = (list: readonly string[], value: string): string[] =>
   list.includes(value) ? list.filter((v) => v !== value) : [...list, value];
@@ -72,18 +74,12 @@ export function NetworkMap() {
   const searchId = useId();
   const regionId = useId();
 
-  const filters = useMemo(() => parseNetworkHash(location.hash), [location.hash]);
-  // The unfiltered system is dense, so a first visit starts on the four backbones.
-  useEffect(() => {
-    if (location.hash === '') {
-      void navigate(
-        { hash: networkHash({ ...EMPTY_FILTERS, kinds: ['backbone'] }) },
-        { replace: true, preventScrollReset: true },
-      );
-    }
-    // only on first show
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // Only a #network hash carries filters. Any other hash (an "On this page" link) leaves the
+  // default view, the four backbones, because the unfiltered system is dense.
+  const filters = useMemo(
+    () => (location.hash.startsWith('#network') ? parseNetworkHash(location.hash) : DEFAULT_FILTERS),
+    [location.hash],
+  );
   const setFilters = (next: typeof filters): void =>
     void navigate({ hash: networkHash(next) }, { replace: true, preventScrollReset: true });
 
