@@ -35,6 +35,7 @@ class DatasetMeta(models.Model):
     year = models.PositiveSmallIntegerField()
     simulation_start = models.PositiveSmallIntegerField()
     subspace_speed_c = models.FloatField()
+    script_commit = models.CharField(max_length=60, blank=True)
 
     def __str__(self) -> str:
         return self.title

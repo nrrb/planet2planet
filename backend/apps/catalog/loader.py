@@ -40,6 +40,7 @@ def load_dataset(data: dict[str, Any]) -> dict[str, int]:
             "year": meta["year"],
             "simulation_start": meta["simulationStart"],
             "subspace_speed_c": meta["subspaceSpeedC"],
+            "script_commit": meta.get("scriptCommit") or "",
         },
     )
     for source in meta["sources"]:

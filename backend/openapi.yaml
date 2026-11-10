@@ -4,6 +4,33 @@ info:
   version: 0.1.0
   description: Subspace plan comparison for the Sol system, 2380. Fan work.
 paths:
+  /api/canon/facts/:
+    get:
+      operationId: canon_facts_list
+      parameters:
+      - in: query
+        name: category
+        schema:
+          type: string
+          enum:
+          - deadline
+          - set-aside
+          - starting-condition
+      tags:
+      - canon
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CanonFact'
+          description: ''
   /api/companies/:
     get:
       operationId: companies_list
@@ -274,6 +301,61 @@ paths:
                 type: object
                 additionalProperties: {}
           description: ''
+  /api/simulation/:
+    get:
+      operationId: simulation_retrieve
+      summary: Monte Carlo run details and market statistics
+      tags:
+      - simulation
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Simulation'
+          description: ''
+  /api/simulation/worlds/:
+    get:
+      operationId: simulation_worlds_list
+      summary: Per-world medians and percentiles across the Monte Carlo runs
+      parameters:
+      - in: query
+        name: metric
+        schema:
+          type: string
+          enum:
+          - colonized
+          - constellation
+          - one-million
+          - population
+          - subspace
+      - in: query
+        name: samples
+        schema:
+          type: boolean
+      - in: query
+        name: world
+        schema:
+          type: string
+      tags:
+      - simulation
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WorldStatistic'
+          description: ''
   /api/worlds/:
     get:
       operationId: worlds_list
@@ -346,6 +428,48 @@ components:
       required:
       - credits
       - label
+    CanonFact:
+      type: object
+      properties:
+        id:
+          type: string
+        category:
+          $ref: '#/components/schemas/CategoryEnum'
+        topic:
+          type: string
+          maxLength: 160
+        world:
+          type: string
+          nullable: true
+        statement:
+          type: string
+        episodes:
+          type: array
+          items:
+            type: string
+            maxLength: 120
+        howUsed:
+          type: string
+          description: How the simulation uses it, or why it was left out.
+        standing:
+          $ref: '#/components/schemas/StandingEnum'
+        source:
+          $ref: '#/components/schemas/Source'
+        deadline:
+          type: object
+          additionalProperties: {}
+          nullable: true
+          readOnly: true
+      required:
+      - category
+      - deadline
+      - howUsed
+      - id
+      - source
+      - standing
+      - statement
+      - topic
+      - world
     CanonNote:
       type: object
       properties:
@@ -362,6 +486,16 @@ components:
       required:
       - source
       - text
+    CategoryEnum:
+      enum:
+      - starting-condition
+      - deadline
+      - set-aside
+      type: string
+      description: |-
+        * `starting-condition` - Starting Condition
+        * `deadline` - Deadline
+        * `set-aside` - Set Aside
     Company:
       type: object
       properties:
@@ -610,6 +744,31 @@ components:
       - layer
       - operator
       - processingMs
+    Market:
+      type: object
+      properties:
+        metric:
+          type: string
+        kind:
+          type: string
+        median:
+          type: number
+          format: double
+          nullable: true
+        p10:
+          type: number
+          format: double
+          nullable: true
+        p90:
+          type: number
+          format: double
+          nullable: true
+      required:
+      - kind
+      - median
+      - metric
+      - p10
+      - p90
     Meta:
       type: object
       properties:
@@ -955,6 +1114,42 @@ components:
       - regions
       - stardate
       - to
+    Run:
+      type: object
+      properties:
+        firstSeed:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        runCount:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        startYear:
+          type: integer
+          maximum: 32767
+          minimum: 0
+        endYear:
+          type: integer
+          maximum: 32767
+          minimum: 0
+        scriptCommit:
+          type: string
+          description: Git commit of tools/colonization-sim.js.
+          maxLength: 60
+        generatedAt:
+          type: string
+          format: date-time
+        canonicalSeed:
+          type: integer
+      required:
+      - canonicalSeed
+      - endYear
+      - firstSeed
+      - generatedAt
+      - runCount
+      - scriptCommit
+      - startYear
     Segment:
       type: object
       properties:
@@ -992,6 +1187,18 @@ components:
         * `shared` - shared
         * `dedicated` - dedicated
         * `synchronized` - synchronized
+    Simulation:
+      type: object
+      properties:
+        run:
+          $ref: '#/components/schemas/Run'
+        market:
+          type: array
+          items:
+            $ref: '#/components/schemas/Market'
+      required:
+      - market
+      - run
     Source:
       type: object
       properties:
@@ -1008,6 +1215,16 @@ components:
       - id
       - title
       - url
+    StandingEnum:
+      enum:
+      - on-screen
+      - reference-book
+      - not-found
+      type: string
+      description: |-
+        * `on-screen` - On Screen
+        * `reference-book` - Reference Book
+        * `not-found` - Not Found
     StatusEnum:
       enum:
       - active
@@ -1178,6 +1395,48 @@ components:
       - radiusKm
       - region
       - type
+    WorldStatistic:
+      type: object
+      properties:
+        world:
+          type: string
+        metric:
+          type: string
+        median:
+          type: number
+          format: double
+          nullable: true
+        p10:
+          type: number
+          format: double
+          nullable: true
+        p90:
+          type: number
+          format: double
+          nullable: true
+        shareOfRuns:
+          type: number
+          format: double
+        canonical:
+          type: number
+          format: double
+          nullable: true
+          description: The same measure in the canonical run (seed 1701) the shop
+            uses.
+        samples:
+          type: array
+          items:
+            type: integer
+          description: One value per run, ascending. Only when one world is named
+            and samples=true.
+      required:
+      - canonical
+      - median
+      - metric
+      - p10
+      - p90
+      - shareOfRuns
+      - world
   securitySchemes:
     basicAuth:
       type: http

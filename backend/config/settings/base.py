@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     "apps.network",
     "apps.pricing",
     "apps.inquiries",
+    "apps.canon",
 ]
 
 MIDDLEWARE = [
