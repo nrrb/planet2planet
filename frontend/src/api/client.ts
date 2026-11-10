@@ -1,4 +1,13 @@
-import type { Company, InquiryConfirmation, InquiryRequest, QuoteResponse, Region, World, WorldDetail } from './types';
+import type {
+  Company,
+  InquiryConfirmation,
+  InquiryRequest,
+  Network,
+  QuoteResponse,
+  Region,
+  World,
+  WorldDetail,
+} from './types';
 
 /** An API error, with field messages when the server sent them (HTTP 400). */
 export class ApiError extends Error {
@@ -74,6 +83,7 @@ export function quoteQuery(params: QuoteParams): string {
 export const api = {
   worlds: () => request<World[]>('/api/worlds/'),
   world: (id: string) => request<WorldDetail>(`/api/worlds/${encodeURIComponent(id)}/`),
+  network: () => request<Network>('/api/network/'),
   regions: () => request<Region[]>('/api/regions/'),
   companies: () => request<Company[]>('/api/companies/'),
   quote: (params: QuoteParams) => request<QuoteResponse>(`/api/quotes/?${quoteQuery(params)}`),

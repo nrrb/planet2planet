@@ -13,3 +13,6 @@ export type InquiryRequest = Schemas['Inquiry'];
 export type InquiryConfirmation = Schemas['InquiryConfirmation'];
 export type ServiceClass = Schemas['ServiceClassEnum'];
 export type ResilienceTier = Schemas['ResilienceTierEnum'];
+export type Network = Schemas['Network'];
+export type NetworkNode = Schemas['Node'];
+export type NetworkLink = Schemas['Link'];
