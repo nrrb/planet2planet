@@ -12,7 +12,8 @@
     "data:offline": "python3 scripts/prepare-orbital-data.py --offline",
     "lint": "eslint .",
     "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"tests/**/*.ts\"",
-    "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\" \"tests/**/*.ts\""
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\" \"tests/**/*.ts\"",
+    "types": "openapi-typescript ../backend/openapi.yaml -o src/api/schema.d.ts"
   },
   "dependencies": {
     "pixi.js": "^8.14.0",
@@ -32,6 +33,7 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.1.1",
     "globals": "^17.14.0",
+    "openapi-typescript": "^7.13.0",
     "prettier": "^3.9.10",
     "tsx": "^4.20.0",
     "typescript": "^5.9.0",
