@@ -190,3 +190,14 @@ export const SOURCES = {
   disclaimer:
     'Planet2Planet is unofficial fan work. Star Trek and related marks belong to their owners. This site uses no Star Trek logos, insignia, images or interface designs.',
 };
+
+export const WATCH = {
+  intro:
+    'This is the history the shop uses, the run with seed 1701. Drag the year or press Play and watch the system fill in. Nothing plays until you ask it to.',
+  legend: [
+    ['Dashed ring', 'a conventional constellation: light-speed relays, built before subspace'],
+    ['Solid ring', 'a subspace constellation'],
+    ['Filled world', 'a colony has been founded'],
+    ['Faint world', 'nothing there yet'],
+  ] as [string, string][],
+};

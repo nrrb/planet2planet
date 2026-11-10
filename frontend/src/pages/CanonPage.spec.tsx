@@ -72,6 +72,10 @@ beforeEach(() => {
     vi.fn((input: string) => {
       const category = /category=([a-z-]+)/.exec(input)?.[1];
       if (input.startsWith('/api/canon/facts/')) return Promise.resolve(json(FACTS[category ?? ''] ?? []));
+      if (input.startsWith('/api/history/')) return Promise.resolve(json([]));
+      if (input.startsWith('/api/network/')) return Promise.resolve(json({ nodes: [], links: [], orbits: {} }));
+      if (input.startsWith('/api/worlds/')) return Promise.resolve(json([]));
+      if (input.startsWith('/api/companies/')) return Promise.resolve(json([]));
       if (input.startsWith('/api/simulation/worlds/')) return Promise.resolve(json([]));
       if (input.startsWith('/api/simulation/')) return Promise.resolve(json(SIMULATION));
       if (input.startsWith('/api/meta/')) return Promise.resolve(json(META));
@@ -80,6 +84,9 @@ beforeEach(() => {
   );
 });
 afterEach(() => vi.unstubAllGlobals());
+
+// The renderer needs WebGL; the map has its own tests.
+vi.mock('../map/MapView', () => ({ default: () => null }));
 
 describe('CanonPage', () => {
   it('has the sections of the plan, in order, each reachable from the contents list', () => {
@@ -95,6 +102,7 @@ describe('CanonPage', () => {
       'How the simulation works',
       'Monte Carlo',
       'Results across the runs',
+      'Watch one history',
       'What is invented',
       'Sources and downloads',
     ]);

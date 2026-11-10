@@ -1,10 +1,11 @@
 import { useMeta, useSimulation } from '../api/hooks';
-import { CANON_FIXES, INTRO, INVENTED, MONTE_CARLO, SIMULATION, SOURCES, WORLDS } from '../content/canon';
+import { CANON_FIXES, INTRO, INVENTED, MONTE_CARLO, SIMULATION, SOURCES, WATCH, WORLDS } from '../content/canon';
 import { CanonLabel } from '../features/canon/CanonLabel';
 import { Deadlines, SetAside, StartingConditions } from '../features/canon/FactTables';
 import { ScriptLink } from '../features/canon/ScriptLink';
 import { MarketFigures, PopulationChart, SettlementChart } from '../features/monte-carlo/ResultCharts';
 import { StripPlot } from '../features/monte-carlo/StripPlot';
+import { HistoryMap } from '../features/history-map/HistoryMap';
 import { repoLink } from '../config';
 import styles from '../ui/Section.module.css';
 
@@ -15,6 +16,7 @@ const SECTIONS = [
   { id: 'simulation', label: 'How the simulation works' },
   { id: 'monte-carlo', label: 'Monte Carlo' },
   { id: 'results', label: 'Results across the runs' },
+  { id: 'watch', label: 'Watch one history' },
   { id: 'invented', label: 'What is invented' },
   { id: 'sources', label: 'Sources and downloads' },
 ];
@@ -198,6 +200,12 @@ export default function CanonPage() {
         <SettlementChart />
         <PopulationChart />
         <MarketFigures />
+      </section>
+
+      <section id="watch" className={styles.section} aria-labelledby="watch-h">
+        <h2 id="watch-h">Watch one history</h2>
+        <p className={styles.prose}>{WATCH.intro}</p>
+        <HistoryMap />
       </section>
 
       <section id="invented" className={styles.section} aria-labelledby="invented-h">

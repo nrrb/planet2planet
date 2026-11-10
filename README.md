@@ -31,6 +31,15 @@ Open the URL Vite prints (usually http://127.0.0.1:5173). The API runs on
 http://127.0.0.1:8000, with Swagger docs at `/api/docs/` and the admin at `/admin/`
 (`docker compose run --rm backend python manage.py createsuperuser` first).
 
+To regenerate the dataset and the Monte Carlo summary (commit the script first, because the files record its commit):
+
+```sh
+node tools/colonization-sim.js 1701 400 --export
+make seed
+```
+
+Set `VITE_REPO_URL` in `frontend/.env` (see `frontend/.env.example`) so the Canon page can link to the script at that commit.
+
 Requires Docker with Compose, and `make`. Node LTS and Python 3.12+ are only needed to run
 tools outside containers.
 
