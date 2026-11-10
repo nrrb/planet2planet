@@ -1,7 +1,7 @@
 .wrap {
-  overflow: auto;
-  max-height: calc(100vh - 150px);
-  min-height: 240px;
+  /* Sideways scrolling stays inside the frame. There is no height limit, so the page does the
+     vertical scrolling and the table never competes with it. */
+  overflow-x: auto;
   border: 1px solid var(--line-strong);
   background: var(--surface);
 }
@@ -37,9 +37,6 @@
 }
 
 .table thead th {
-  position: sticky;
-  top: 0;
-  z-index: 3;
   background: var(--surface-3);
   border-bottom: 1px solid var(--line-strong);
   font-weight: 650;
