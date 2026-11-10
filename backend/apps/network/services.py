@@ -24,10 +24,14 @@ CONJUNCTION_HORIZON_DAYS = 4 * 366
 
 def clear_caches() -> None:
     _static_graph.cache_clear()
+    _edges_by_operator.cache_clear()
     node_positions.cache_clear()
     route_for.cache_clear()
+    diverse_routes.cache_clear()
     latency_range.cache_clear()
     conjunction_window.cache_clear()
+    package_route.cache_clear()
+    package_latency_range.cache_clear()
 
 
 def _noon(day: date) -> datetime:
@@ -72,6 +76,19 @@ def edges() -> tuple[Edge, ...]:
     return _static_graph()[4]
 
 
+@lru_cache(maxsize=1)
+def _edges_by_operator() -> dict[str, tuple[Edge, ...]]:
+    grouped: dict[str, list[Edge]] = {}
+    for edge in edges():
+        grouped.setdefault(edge.operator, []).append(edge)
+    return {operator: tuple(items) for operator, items in grouped.items()}
+
+
+def edges_for(carriers: Collection[str]) -> list[Edge]:
+    by_operator = _edges_by_operator()
+    return [edge for carrier in carriers for edge in by_operator.get(carrier, ())]
+
+
 def hub_slugs() -> frozenset[str]:
     return frozenset(n.slug for n in _static_graph()[2] if n.kind == Node.Kind.HUB)
 
@@ -113,7 +130,7 @@ def route_for(
     origin: str, destination: str, carriers: frozenset[str], day: date, reroute: bool = False
 ) -> Route | None:
     return shortest_path(
-        edges(),
+        edges_for(carriers),
         node_positions(day),
         f"c-{origin}",
         f"c-{destination}",
@@ -122,13 +139,14 @@ def route_for(
     )
 
 
+@lru_cache(maxsize=2048)
 def diverse_routes(
-    origin: str, destination: str, carriers: Collection[str], day: date, reroute: bool = False
+    origin: str, destination: str, carriers: frozenset[str], day: date, reroute: bool = False
 ) -> tuple[Route | None, Route | None]:
     region = {n.slug: n.region_id for n in _static_graph()[2]}
     shared = {f"h-{region[f'c-{origin}']}", f"h-{region[f'c-{destination}']}"}
     return diverse_path(
-        edges(),
+        edges_for(carriers),
         node_positions(day),
         f"c-{origin}",
         f"c-{destination}",
@@ -192,3 +210,67 @@ def conjunction_window(origin: str, destination: str, day: date) -> tuple[date, 
     while pair_degraded(origin, destination, end + timedelta(days=1)):
         end += timedelta(days=1)
     return start, end
+
+
+def _package_edges(
+    origin: str, destination: str, access_origin: str, transit: str, access_dest: str
+):
+    """Each carrier of a package is confined to its own leg (PLAN.md 6.2)."""
+    start, end = f"c-{origin}", f"c-{destination}"
+    long_haul = {"backbone", "cross", "conjunction"}
+    local = {"access", "mesh"}
+    chosen = []
+    for e in edges():
+        if (
+            e.operator == transit
+            and e.layer in long_haul
+            or e.operator == access_origin
+            and e.layer in local
+            and start in (e.a, e.b)
+            or e.operator == access_dest
+            and e.layer in local
+            and end in (e.a, e.b)
+        ):
+            chosen.append(e)
+    return chosen
+
+
+@lru_cache(maxsize=4096)
+def package_route(
+    origin: str,
+    destination: str,
+    access_origin: str,
+    transit: str,
+    access_dest: str,
+    day: date,
+    reroute: bool = False,
+) -> Route | None:
+    return shortest_path(
+        _package_edges(origin, destination, access_origin, transit, access_dest),
+        node_positions(day),
+        f"c-{origin}",
+        f"c-{destination}",
+        {access_origin, transit, access_dest},
+        reroute=reroute,
+    )
+
+
+@lru_cache(maxsize=1024)
+def package_latency_range(
+    origin: str,
+    destination: str,
+    access_origin: str,
+    transit: str,
+    access_dest: str,
+    day: date,
+    reroute: bool = False,
+) -> tuple[float, float]:
+    values = []
+    for i in range(SAMPLES_PER_YEAR):
+        sample = day + timedelta(days=round(i * 365 / SAMPLES_PER_YEAR))
+        route = package_route(
+            origin, destination, access_origin, transit, access_dest, sample, reroute
+        )
+        if route is not None:
+            values.append(route.latency_ms)
+    return min(values), max(values)
