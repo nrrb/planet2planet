@@ -41,6 +41,8 @@ export interface Meta {
   simulationStart: number;
   /** Subspace radio speed as a multiple of light speed, used for latency. */
   subspaceSpeedC: number;
+  /** The git commit of tools/colonization-sim.js that produced this file; the Monte Carlo summary carries the same value. */
+  scriptCommit: string | null;
   units: Record<string, string>;
   sources: Source[];
 }
