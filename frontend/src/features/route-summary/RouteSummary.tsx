@@ -12,11 +12,11 @@ export function RouteSummary({ route, regions }: { route: Route; regions: Region
   const names = route.regions.map((id) => regions.find((r) => r.id === id)?.name ?? id);
   return (
     <dl className={styles.readout} aria-label="Route summary">
-      <div className={`${styles.cell} ${styles.wide}`}>
+      <div className={`${styles.cell} ${styles.wide} ${styles.half}`}>
         <dt>Distance today</dt>
         <dd className="figure">{formatDistance(route.distanceKm)}</dd>
       </div>
-      <div className={`${styles.cell} ${styles.wide}`}>
+      <div className={`${styles.cell} ${styles.wide} ${styles.half}`}>
         <dt>One-way latency today</dt>
         <dd className="figure">
           {formatLatency(route.latencyMs.direct)}
