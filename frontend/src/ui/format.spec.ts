@@ -1,5 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { formatCredits, formatDate, formatDistance, formatLatency, formatLatencyRange, formatShare } from './format';
+import {
+  formatCredits,
+  formatDate,
+  formatDistance,
+  formatDuration,
+  formatLatency,
+  formatLatencyRange,
+  formatShare,
+  formatSpan,
+} from './format';
 
 describe('formatting', () => {
   it('groups credits', () => {
@@ -29,5 +38,18 @@ describe('formatting', () => {
 
   it('formats shares as percentages', () => {
     expect(formatShare(0.456)).toBe('46%');
+  });
+
+  it('picks the largest sensible unit for a duration', () => {
+    expect(formatDuration(1.28)).toBe('1.3 seconds');
+    expect(formatDuration(45)).toBe('45 seconds');
+    expect(formatDuration(1500)).toBe('25 minutes');
+    expect(formatDuration(34_320)).toBe('9.5 hours');
+    expect(formatDuration(400_000)).toBe('4.6 days');
+  });
+
+  it('shows one reading when the ends agree and a range when they do not', () => {
+    expect(formatSpan(0.0247, 0.0247, formatLatency)).toBe('about 0.025 ms');
+    expect(formatSpan(5.03, 24.22, formatLatency)).toBe('5.0 ms to 24.2 ms');
   });
 });

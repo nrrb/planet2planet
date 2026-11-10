@@ -32,3 +32,18 @@ export function formatDate(iso: string): string {
 }
 
 export const formatShare = (share: number): string => `${Math.round(share * 100)}%`;
+
+/** A span of seconds in the largest sensible unit: 1.3 seconds, 12 minutes, 9.5 hours. */
+export function formatDuration(seconds: number): string {
+  const trim = (n: number) => (n >= 10 ? n.toFixed(0) : n.toFixed(1)).replace(/\.0$/, '');
+  if (seconds < 120) return `${trim(seconds)} ${seconds === 1 ? 'second' : 'seconds'}`;
+  if (seconds < 7200) return `${trim(seconds / 60)} minutes`;
+  if (seconds < 172_800) return `${trim(seconds / 3600)} hours`;
+  return `${trim(seconds / 86_400)} days`;
+}
+
+/** One reading, or a range when the two ends differ meaningfully. */
+export function formatSpan(min: number, max: number, format: (n: number) => string): string {
+  const close = Math.abs(max - min) <= Math.max(Math.abs(max), Math.abs(min)) * 0.01;
+  return close ? `about ${format((min + max) / 2)}` : `${format(min)} to ${format(max)}`;
+}

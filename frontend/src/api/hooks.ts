@@ -5,6 +5,7 @@ const CATALOG = { staleTime: Infinity, gcTime: Infinity } as const;
 
 export const useWorlds = () => useQuery({ queryKey: ['worlds'], queryFn: api.worlds, ...CATALOG });
 export const useNetwork = () => useQuery({ queryKey: ['network'], queryFn: api.network, ...CATALOG });
+export const useMeta = () => useQuery({ queryKey: ['meta'], queryFn: api.meta, ...CATALOG });
 export const useHistory = () => useQuery({ queryKey: ['history'], queryFn: api.history, ...CATALOG });
 export const useRegions = () => useQuery({ queryKey: ['regions'], queryFn: api.regions, ...CATALOG });
 export const useCompanies = () => useQuery({ queryKey: ['companies'], queryFn: api.companies, ...CATALOG });
