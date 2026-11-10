@@ -27,6 +27,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
+    "djangorestframework_camel_case.middleware.CamelCaseMiddleWare",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -73,11 +74,22 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-    "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
+    "DEFAULT_RENDERER_CLASSES": ["djangorestframework_camel_case.render.CamelCaseJSONRenderer"],
+    "DEFAULT_PARSER_CLASSES": ["djangorestframework_camel_case.parser.CamelCaseJSONParser"],
+    "DEFAULT_PAGINATION_CLASS": None,
 }
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "Planet2Planet API",
     "DESCRIPTION": "Subspace plan comparison for the Sol system, 2380. Fan work.",
     "VERSION": "0.1.0",
+    "POSTPROCESSING_HOOKS": [
+        "drf_spectacular.hooks.postprocess_schema_enums",
+        "djangorestframework_camel_case.util.camelize_serializer_fields",
+    ],
 }
+
+# The site is a snapshot of one fixed day (PLAN.md section 2). The stardate is canon
+# ("Second Contact", Lower Decks); the calendar date is the 1,000-units-a-year convention.
+SITE_DATE = "2380-06-09"
+SITE_STARDATE = "57436.2"

@@ -10,7 +10,7 @@ test: test-backend
 	cd frontend && npm test
 
 test-backend:
-	docker compose run --rm backend pytest
+	docker compose run --rm backend pytest --ds=config.settings.test
 
 lint-backend:
 	docker compose run --rm backend sh -c "ruff check . && ruff format --check ."
