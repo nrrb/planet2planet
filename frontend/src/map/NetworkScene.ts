@@ -204,7 +204,7 @@ export class NetworkScene {
     if (!this.fitPoints) {
       this.camera.x = 0;
       this.camera.y = 0;
-      this.camera.fit(this.overview);
+      this.camera.fit(this.overview * 0.8);
       return;
     }
     const xs = this.fitPoints.map((p) => p.x);
@@ -314,14 +314,34 @@ export class NetworkScene {
     const { animate } = this.state;
     const order = { dim: 0, context: 1, route: 2 } as const;
     const links = [...this.state.links].sort((l, r) => order[l.emphasis] - order[r.emphasis]);
+    // Several carriers own links between the same two nodes. Fan them out sideways so each
+    // can be seen instead of drawing on top of one another.
+    const pairKey = (l: RenderLink) => (l.from < l.to ? `${l.from}|${l.to}` : `${l.to}|${l.from}`);
+    const groups = new Map<string, RenderLink[]>();
+    for (const link of links) {
+      if (link.emphasis === 'dim') continue;
+      const key = pairKey(link);
+      groups.set(key, [...(groups.get(key) ?? []), link]);
+    }
     for (const link of links) {
       const pa = this.nodePoint(link.from);
       const pb = this.nodePoint(link.to);
       if (!pa || !pb) continue;
-      const a = this.camera.screen(pa);
-      const b = this.camera.screen(pb);
+      let a = this.camera.screen(pa);
+      let b = this.camera.screen(pb);
       const length = Math.hypot(b.x - a.x, b.y - a.y);
       if (length < 1) continue;
+      const group = link.emphasis === 'dim' ? undefined : groups.get(pairKey(link));
+      if (group && group.length > 1) {
+        const index = group.indexOf(link);
+        // Offset from the canonical direction so links stored a to b and b to a stay together.
+        const sign = link.from < link.to ? 1 : -1;
+        const shift = (index - (group.length - 1) / 2) * 4 * sign;
+        const nx = (-(b.y - a.y) / length) * shift;
+        const ny = ((b.x - a.x) / length) * shift;
+        a = { x: a.x + nx, y: a.y + ny };
+        b = { x: b.x + nx, y: b.y + ny };
+      }
       this.screenLinks.push({ link, a, b });
       const style = LAYER_STYLES[link.layer] ?? LAYER_STYLES.mesh;
       const color = hex(style.color);
@@ -334,12 +354,12 @@ export class NetworkScene {
         continue;
       }
       // Base line: solid or in the layer's dash pattern, so layers differ without colour.
-      this.strokePattern(g, a, b, length, style.dash, 0, color, style.width, 0.75);
+      this.strokePattern(g, a, b, length, style.dash, 0, color, style.width, 0.8);
       // Traffic: short bright dashes that travel from `from` to `to` while animating, and a
       // chevron at the midpoint that shows the direction when they are not moving.
       if (animate) {
         const offset = (flowClock * FLOW_PX_PER_SECOND) % (FLOW_DASH + FLOW_GAP);
-        this.strokePattern(g, a, b, length, [FLOW_DASH, FLOW_GAP], offset, 0xffffff, style.width + 1, 0.9);
+        this.strokePattern(g, a, b, length, [FLOW_DASH, FLOW_GAP], offset, 0xffffff, style.width, 0.85);
       } else if (length > 24) {
         this.chevron(g, a, b, length, color);
       }
