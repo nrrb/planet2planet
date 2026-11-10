@@ -1,4 +1,5 @@
 import type {
+  CanonFact,
   Company,
   InquiryConfirmation,
   InquiryRequest,
@@ -7,8 +8,10 @@ import type {
   Network,
   QuoteResponse,
   Region,
+  Simulation,
   World,
   WorldDetail,
+  WorldStatistic,
 } from './types';
 
 /** An API error, with field messages when the server sent them (HTTP 400). */
@@ -88,6 +91,13 @@ export const api = {
   network: () => request<Network>('/api/network/'),
   meta: () => request<Meta>('/api/meta/'),
   history: () => request<HistoryEvent[]>('/api/history/'),
+  canonFacts: (category?: string) =>
+    request<CanonFact[]>(`/api/canon/facts/${category ? `?category=${encodeURIComponent(category)}` : ''}`),
+  simulation: () => request<Simulation>('/api/simulation/'),
+  worldStatistics: (metric: string, world?: string) =>
+    request<WorldStatistic[]>(
+      `/api/simulation/worlds/?metric=${encodeURIComponent(metric)}${world ? `&world=${encodeURIComponent(world)}&samples=true` : ''}`,
+    ),
   regions: () => request<Region[]>('/api/regions/'),
   companies: () => request<Company[]>('/api/companies/'),
   quote: (params: QuoteParams) => request<QuoteResponse>(`/api/quotes/?${quoteQuery(params)}`),

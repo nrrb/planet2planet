@@ -24,6 +24,11 @@
   --ev-acquired: #b82a66;
   --ev-canon: #111111;
 
+  --label-screen: #0a6b3d;
+  --label-book: #94570a;
+  --label-invented: #5b2fc0;
+  --label-real: #2457d6;
+
   --badge-price: #7a4a00;
   --badge-latency: #00665a;
   --badge-resilient: #5b2fc0;
@@ -74,6 +79,10 @@
   --ev-founded: #3fd0bd;
   --ev-acquired: #ff86b4;
   --ev-canon: #e8eef9;
+  --label-screen: #5fdcb5;
+  --label-book: #ffbf55;
+  --label-invented: #b18cff;
+  --label-real: #6ea0ff;
   --badge-price: #ffbf55;
   --badge-latency: #3fd0bd;
   --badge-resilient: #b18cff;

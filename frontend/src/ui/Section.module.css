@@ -69,3 +69,14 @@
   gap: 4px;
   max-width: 78ch;
 }
+
+.code {
+  margin: 0;
+  padding: 8px 10px;
+  overflow-x: auto;
+  border: 1px solid var(--line-strong);
+  background: var(--surface-2);
+  font-family: var(--font-figures);
+  font-size: var(--step--1);
+  max-width: 100%;
+}
