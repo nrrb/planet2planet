@@ -27,6 +27,10 @@ export interface SceneState {
   labelPlanets: boolean;
   /** Flow animation. Off for reduced motion or when paused. */
   animate: boolean;
+  /** Mark worlds as the route's origin (circle ring) or destination (square ring), labelled in text. */
+  markers?: ReadonlyMap<string, 'from' | 'to'>;
+  /** Draw every moon even when zoomed out, as a small dot. */
+  showAllMoons?: boolean;
 }
 
 export type Hover =
@@ -251,7 +255,7 @@ export class NetworkScene {
       layer.scale.set(zoom, -zoom);
       layer.position.set(width / 2 - x * zoom, height / 2 + y * zoom);
     }
-    const { highlighted, dimOthers, labelPlanets, animate } = this.state;
+    const { highlighted, dimOthers, labelPlanets, animate, markers, showAllMoons } = this.state;
     const sunScreen = this.camera.screen({ x: 0, y: 0 });
     this.sunLabel.position.set(sunScreen.x + bodyRadius(SUN_RADIUS_KM) * zoom + 6, sunScreen.y - 7);
     this.sunLabel.visible = zoom >= 0.3;
@@ -271,24 +275,35 @@ export class NetworkScene {
       const moon = body.parent !== null;
       const chosen = highlighted.has(body.id);
       const emphasised = chosen || linked.has(body.id) || body.id === this.hovered;
-      const showMoon = !moon || emphasised || zoom >= 1.6;
+      const showMoon = !moon || emphasised || zoom >= 1.6 || Boolean(showAllMoons);
       const disk = this.disks.get(body.id);
       if (disk) {
         disk.visible = showMoon;
         disk.position.set(p.x, p.y);
+        // However far out the camera is, a world stays at least a few pixels across.
+        const minPx = moon ? 2.2 : 3;
+        disk.scale.set(Math.max(1, minPx / (bodyRadius(body.radiusKm) * zoom)));
         disk.alpha = dimOthers && !emphasised ? 0.3 : 1;
       }
       const track = this.moonTracks.get(body.id);
       const parent = body.parent ? this.positions.get(body.parent) : null;
       if (track && parent) {
         track.position.set(parent.x, parent.y);
-        track.visible = showMoon;
+        // With every moon shown at overview zoom, its orbit ring would only add clutter.
+        track.visible = showMoon && (!showAllMoons || emphasised || zoom >= 1.6);
       }
       const s = this.camera.screen(p);
       const label = this.labels.get(body.id);
       if (label) {
+        const role = markers?.get(body.id);
+        const text = role ? `${body.name} (${role})` : body.name;
+        if (label.text !== text) label.text = text;
         const wanted =
-          chosen || body.id === this.hovered || (labelPlanets && !moon) || (labelPlanets && moon && zoom >= 2.2);
+          chosen ||
+          Boolean(role) ||
+          body.id === this.hovered ||
+          (labelPlanets && !moon) ||
+          (labelPlanets && moon && zoom >= 2.2);
         label.visible = showMoon && wanted;
         label.alpha = dimOthers && !chosen && body.id !== this.hovered ? 0.8 : 1;
         label.position.set(s.x + bodyRadius(body.radiusKm) * zoom + 7, s.y - 7);
@@ -304,7 +319,11 @@ export class NetworkScene {
       const s = this.camera.screen(p);
       const base = bodyRadius(body.radiusKm) * zoom + 6;
       const pulse = animate ? 1 + 0.18 * Math.sin(flowClock * 3) : 1;
-      g.circle(s.x, s.y, base * pulse).stroke({ color: hex(MAP_ACCENT), width: 2, alpha: 0.9 });
+      const r = base * pulse;
+      // Origin: a circle. Destination: a square. So the two differ without relying on colour.
+      if (markers?.get(id) === 'to') g.rect(s.x - r, s.y - r, r * 2, r * 2);
+      else g.circle(s.x, s.y, r);
+      g.stroke({ color: hex(MAP_ACCENT), width: 2, alpha: 0.9 });
     }
     this.drawLinks(g, flowClock);
   }

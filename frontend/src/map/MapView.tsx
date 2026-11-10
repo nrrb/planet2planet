@@ -15,6 +15,12 @@ interface Props {
   fitNodes: readonly string[] | null;
   /** Names the map for assistive technology. */
   label: string;
+  /** Origin and destination markers, drawn without any route. */
+  markers?: ReadonlyMap<string, 'from' | 'to'>;
+  /** Show every moon at overview zoom. */
+  showAllMoons?: boolean;
+  /** Height of the map frame; defaults to a tall panel for dialogs. */
+  compact?: boolean;
 }
 
 const SITE_TIME = Date.UTC(2380, 5, 9, 12);
@@ -52,7 +58,18 @@ function tooltipText(hover: Hover): { title: string; lines: string[] } {
 }
 
 /** The animated map. Loaded lazily, since it carries the whole rendering library. */
-export default function MapView({ model, links, highlighted, dimOthers, labelPlanets, fitNodes, label }: Props) {
+export default function MapView({
+  model,
+  links,
+  highlighted,
+  dimOthers,
+  labelPlanets,
+  fitNodes,
+  label,
+  markers,
+  showAllMoons,
+  compact,
+}: Props) {
   const host = useRef<HTMLDivElement>(null);
   const scene = useRef<NetworkScene | null>(null);
   const reduced = useReducedMotion();
@@ -93,8 +110,8 @@ export default function MapView({ model, links, highlighted, dimOthers, labelPla
   }, [model]);
 
   useEffect(() => {
-    scene.current?.setState({ links, highlighted, dimOthers, labelPlanets, animate });
-  }, [links, highlighted, dimOthers, labelPlanets, animate, status]);
+    scene.current?.setState({ links, highlighted, dimOthers, labelPlanets, animate, markers, showAllMoons });
+  }, [links, highlighted, dimOthers, labelPlanets, animate, markers, showAllMoons, status]);
 
   const fitKey = fitNodes ? fitNodes.join(',') : '';
   useEffect(() => {
@@ -131,7 +148,7 @@ export default function MapView({ model, links, highlighted, dimOthers, labelPla
       {/* eslint-disable jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */}
       <div
         ref={host}
-        className={styles.canvasWrap}
+        className={`${styles.canvasWrap} ${compact ? styles.compact : ''}`}
         tabIndex={0}
         role="application"
         aria-label={`${label}. Arrow keys pan, plus and minus zoom, zero resets the view.`}
@@ -159,7 +176,7 @@ export default function MapView({ model, links, highlighted, dimOthers, labelPla
         )}
       </div>
       {/* eslint-enable jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */}
-      <div className={styles.controls}>
+      <div className={`${styles.controls} ${compact ? styles.overlay : ''}`}>
         <button type="button" className={styles.control} onClick={() => scene.current?.zoom(1.4)} aria-label="Zoom in">
           +
         </button>
@@ -187,9 +204,13 @@ export default function MapView({ model, links, highlighted, dimOthers, labelPla
         >
           {paused || reduced ? 'Play motion' : 'Pause motion'}
         </button>
-        {reduced && <span className={styles.hint}>Motion is off because your system asks for reduced motion.</span>}
+        {reduced && !compact && (
+          <span className={styles.hint}>Motion is off because your system asks for reduced motion.</span>
+        )}
       </div>
-      <Legend layers={[...new Set(links.filter((l) => l.emphasis !== 'dim').map((l) => l.layer))]} />
+      {links.length > 0 && (
+        <Legend layers={[...new Set(links.filter((l) => l.emphasis !== 'dim').map((l) => l.layer))]} />
+      )}
     </div>
   );
 }
