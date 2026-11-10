@@ -19,9 +19,16 @@ describe('repoLink', () => {
 
 describe('ScriptLink', () => {
   it('names the script and the short commit, as text, when there is no repository to link to', () => {
-    render(<ScriptLink commit={COMMIT} />);
+    render(<ScriptLink commit={COMMIT} base={null} />);
     expect(screen.getByText('tools/colonization-sim.js')).toBeInTheDocument();
     expect(screen.getByText('f115c20')).toBeInTheDocument();
     expect(screen.queryByRole('link')).not.toBeInTheDocument();
+  });
+
+  it('links to the file at the recorded commit, in a new tab, when a repository is configured', () => {
+    render(<ScriptLink commit={COMMIT} base="https://github.com/example/p2p" />);
+    const link = screen.getByRole('link');
+    expect(link).toHaveAttribute('href', `https://github.com/example/p2p/blob/${COMMIT}/tools/colonization-sim.js`);
+    expect(link).toHaveAttribute('target', '_blank');
   });
 });

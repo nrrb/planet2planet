@@ -1,4 +1,3 @@
-import type { Body } from './types';
 export const SCALE = {
   minRadiusPx: 2,
   bodyReferenceKm: 100,
@@ -17,13 +16,3 @@ export const SCALE = {
 };
 export const bodyRadius = (radiusKm: number) =>
   Math.max(SCALE.minRadiusPx, SCALE.bodyScale * Math.log1p(radiusKm / SCALE.bodyReferenceKm));
-export function orbitRadius(body: Body, parent: Body): number {
-  if (!body.orbit) return 0;
-  const solar = parent.id === 'sun';
-  return (
-    bodyRadius(parent.radiusKm) +
-    SCALE.clearance +
-    (solar ? SCALE.solarScale : SCALE.lunarScale) *
-      Math.log1p(body.orbit.radiusKm / (solar ? SCALE.solarReferenceKm : SCALE.lunarReferenceKm))
-  );
-}
