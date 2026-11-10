@@ -7,7 +7,7 @@
     "year": 2380,
     "simulationStart": 2151,
     "subspaceSpeedC": 52000,
-    "scriptCommit": "f115c203b6caf71e22b8af776bc0a6d9ead0f5c4",
+    "scriptCommit": "1f948fb3fd73d8779f4dc754193b7db753337775",
     "units": {
       "distance": "km unless the field says Au",
       "mass": "kg",
