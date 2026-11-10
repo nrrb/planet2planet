@@ -62,6 +62,29 @@ paths:
                 items:
                   $ref: '#/components/schemas/Event'
           description: ''
+  /api/inquiries/:
+    post:
+      operationId: inquiries_create
+      summary: Store a fictional 'Request this plan' submission
+      tags:
+      - inquiries
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Inquiry'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InquiryConfirmation'
+          description: ''
   /api/meta/:
     get:
       operationId: meta_retrieve
@@ -499,6 +522,42 @@ components:
       - type
       - world
       - year
+    Inquiry:
+      type: object
+      properties:
+        offerId:
+          type: string
+          maxLength: 40
+        companyName:
+          type: string
+          maxLength: 120
+        contact:
+          type: string
+          format: email
+          maxLength: 254
+        expectedTraffic:
+          type: string
+          maxLength: 500
+        from:
+          type: string
+        to:
+          type: string
+      required:
+      - companyName
+      - contact
+      - from
+      - offerId
+      - to
+    InquiryConfirmation:
+      type: object
+      properties:
+        demo:
+          type: boolean
+        message:
+          type: string
+      required:
+      - demo
+      - message
     Latency:
       type: object
       properties:

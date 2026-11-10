@@ -36,6 +36,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/inquiries/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Store a fictional 'Request this plan' submission */
+        post: operations["inquiries_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/meta/": {
         parameters: {
             query?: never;
@@ -238,6 +255,19 @@ export interface components {
             company: string | null;
             buyer: string | null;
             readonly detail: string | null;
+        };
+        Inquiry: {
+            offerId: string;
+            companyName: string;
+            /** Format: email */
+            contact: string;
+            expectedTraffic?: string;
+            from: string;
+            to: string;
+        };
+        InquiryConfirmation: {
+            demo: boolean;
+            message: string;
         };
         Latency: {
             /** Format: double */
@@ -535,6 +565,29 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Event"][];
+                };
+            };
+        };
+    };
+    inquiries_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Inquiry"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InquiryConfirmation"];
                 };
             };
         };
