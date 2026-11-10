@@ -708,7 +708,7 @@ The animated maps use the code already in `frontend/`. Before any UI work, miles
 
 **Gaps:** any missing capabilities (layer styles, dimming, flow animation along a link, text alternatives) are added to the map code in small, separately committed steps.
 
-**Data placement:** the frontend keeps display configuration and aesthetic body positions (its own clock and orbit model). Links and routes come from the API. Animation never depends on continuous backend data: the client animates on its own, and `/api/meta/` and `/api/network/` supply the site date and reference positions as an occasional anchor to keep it accurate. Positions used for latency and conjunction are computed in the backend (section 5).
+**Data placement:** the frontend keeps display configuration and aesthetic body positions (its own clock and orbit model). Links and routes come from the API. Animation never depends on continuous backend data: the client animates on its own, and the API supplies orbital elements (`/api/worlds/`) and the site date (`/api/meta/`), and the client solves Kepler's equation itself, so it matches the backend. Its logarithmic radial scaling is a display transform only and keeps the true angle. Positions used for latency and conjunction are computed in the backend (section 5).
 
 ## 12. Local development
 

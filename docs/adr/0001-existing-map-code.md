@@ -28,9 +28,11 @@ PLAN.md section 11.3 requires a review of `frontend/` before UI work. The three 
 
 1. Only 30 bodies; the plan has 33 worlds. Positions stay client-side: they are aesthetic,
    so the scene keeps its own clock and orbit model and animates smoothly with no per-frame
-   backend data. The backend sends only an occasional anchor (site date and reference
-   positions from `/api/network/`), which the client uses to rebase its clock and correct
-   drift (ruling, M1 follow-up). The three missing worlds are added to the client catalog.
+   backend data. The client adopts the backend's Kepler model: it receives orbital elements
+   (planets, dwarf planets) and moon orbit radius, period and phase from the API, solves
+   Kepler's equation itself, and then applies its existing logarithmic radial scaling, which
+   is display-only and keeps the true angle. The backend sends the site date as an
+   occasional anchor to rebase the clock (ruling, M1 follow-up). The three missing worlds are added to the client catalog.
 2. No layered links (access, mesh, backbone, cross-link, conjunction), no per-segment
    colour, labels, hover or tap, no dimming, no flow animation.
 3. No year-driven state for the Canon history map.
@@ -38,7 +40,8 @@ PLAN.md section 11.3 requires a review of `frontend/` before UI work. The three 
 
 ## Decision
 
-Keep Pixi and the existing model code. Add `src/map/adapter.ts` (API links and offer segments to scene input; positions are not part of it)
+Keep Pixi and the existing scaling, camera and selection code; replace the circular orbit
+math in `model/orbits.ts` with a Kepler solver fed by API elements. Add `src/map/adapter.ts` (API links and offer segments to scene input; positions are not part of it)
 and extend the scene in small commits: a multi-layer link
 renderer, dimming, flow animation, then hover and tap events. Text alternatives live in
 React outside the canvas. The map moves into the new app shell without a rewrite.
