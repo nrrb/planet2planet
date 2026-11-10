@@ -153,7 +153,7 @@ export function ComparePage() {
         onClose={() => setRouteOffer(null)}
         title={routeOffer ? `Route: ${routeOffer.title}` : 'Route'}
       >
-        {routeOffer && <RouteDialogContent offer={routeOffer} />}
+        {routeOffer && <RouteDialogContent offer={routeOffer} from={state.from ?? ''} to={state.to ?? ''} />}
       </Dialog>
       <Dialog
         open={compareOpen && comparedOffers.length >= 2}

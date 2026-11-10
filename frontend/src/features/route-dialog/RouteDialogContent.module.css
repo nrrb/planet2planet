@@ -1,0 +1,19 @@
+.layout {
+  display: grid;
+  gap: 16px;
+}
+.text {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+}
+.text ol {
+  margin: 0;
+  padding-left: 20px;
+}
+@media (min-width: 1280px) {
+  .layout {
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
