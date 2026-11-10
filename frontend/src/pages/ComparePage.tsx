@@ -19,6 +19,7 @@ import { FilterDrawer } from '../features/filters/FilterDrawer';
 import { InquiryForm } from '../features/inquiry/InquiryForm';
 import { RouteDialogContent } from '../features/route-dialog/RouteDialogContent';
 import { RoutePicker } from '../features/route-picker/RoutePicker';
+import { WorldsMap } from '../features/worlds-map/WorldsMap';
 import { RouteSummary } from '../features/route-summary/RouteSummary';
 import { companyMap } from '../features/results/providers';
 import { Results } from '../features/results/Results';
@@ -74,6 +75,7 @@ export function ComparePage() {
       <a className={styles.skip} href="#results">
         Skip to results
       </a>
+      <WorldsMap from={state.from} to={state.to} />
       {worlds.data ? (
         <RoutePicker
           worlds={worlds.data}

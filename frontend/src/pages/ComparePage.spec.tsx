@@ -56,6 +56,9 @@ const QUOTE: QuoteResponse = {
   offers: [offer('a', 'Transit Shared', 624), offer('b', 'Transit Dedicated', 1316)],
 };
 
+// The renderer needs WebGL; the map has its own tests.
+vi.mock('../map/MapView', () => ({ default: () => null }));
+
 let quoteHandler: (url: string) => Response;
 const json = (body: unknown, status = 200) => new Response(JSON.stringify(body), { status });
 
@@ -84,6 +87,7 @@ beforeEach(() => {
       if (input.startsWith('/api/worlds/')) return Promise.resolve(json(WORLDS));
       if (input.startsWith('/api/regions/')) return Promise.resolve(json(REGIONS));
       if (input.startsWith('/api/companies/')) return Promise.resolve(json(COMPANIES));
+      if (input.startsWith('/api/network/')) return Promise.resolve(json({ nodes: [], links: [], orbits: {} }));
       if (input.startsWith('/api/quotes/')) return Promise.resolve(quoteHandler(input));
       return Promise.resolve(json({}, 404));
     }),
