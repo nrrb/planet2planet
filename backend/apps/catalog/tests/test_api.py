@@ -20,6 +20,7 @@ def test_worlds_list_flags_eligibility(client, loaded):
     assert len(worlds) == 33
     assert worlds["io"]["parent"] == "jupiter"
     assert worlds["earth"]["eligible"] is True
+    assert worlds["earth"]["radiusKm"] == pytest.approx(6371, rel=0.01)
     assert all(isinstance(w["eligible"], bool) for w in worlds.values())
 
 

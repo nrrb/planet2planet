@@ -1048,11 +1048,11 @@ components:
           readOnly: true
           description: True when the world has a subspace constellation by the site
             date.
-        gaseous:
-          type: boolean
         radiusKm:
           type: number
           format: double
+        gaseous:
+          type: boolean
         massKg:
           type: number
           format: double
@@ -1155,11 +1155,15 @@ components:
           readOnly: true
           description: True when the world has a subspace constellation by the site
             date.
+        radiusKm:
+          type: number
+          format: double
       required:
       - eligible
       - id
       - name
       - parent
+      - radiusKm
       - region
       - type
   securitySchemes:

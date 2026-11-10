@@ -21,7 +21,7 @@ class WorldListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = World
-        fields = ["id", "name", "type", "parent", "region", "eligible"]
+        fields = ["id", "name", "type", "parent", "region", "eligible", "radius_km"]
 
     def get_eligible(self, world: World) -> bool:
         year = self.context["site_year"]
@@ -44,7 +44,6 @@ class WorldDetailSerializer(WorldListSerializer):
         fields = [
             *WorldListSerializer.Meta.fields,
             "gaseous",
-            "radius_km",
             "mass_kg",
             "surface_gravity",
             "main_elements",
