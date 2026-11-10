@@ -50,3 +50,18 @@ React outside the canvas. The map moves into the new app shell without a rewrite
 
 Risk from PLAN.md section 18 item 1 is reduced: the renderer already handles resize,
 touch and reduced motion. The remaining work is link rendering and data wiring (M6).
+
+## Outcome (M6)
+
+The plan above changed once the code was read in full. `SolarSystemScene` is tied to its own
+30-body catalog, circular orbits and origin/destination selection UI, so extending it would
+have meant rewriting most of it. **Ruling:** a new `NetworkScene` (`src/map/`) is driven only
+by API data, and reuses the existing `Camera` and the logarithmic scaling constants. The
+Kepler solver is in `src/map/kepler.ts`, checked against a fixture exported from the backend
+ephemeris to about 1e-8 AU. The old prototype files (`SolarSystemScene`, `SolarSystemMap`,
+`MapControls`, `bodies.json`, their tests) are still in the repository but nothing imports
+them; they can be removed once the history map (M8) is done.
+
+Layers differ by line style as well as colour, traffic direction shows as moving dashes or,
+with motion off, as a chevron on each link, and the map is a keyboard-operable widget with the
+route listed as text beneath it.
