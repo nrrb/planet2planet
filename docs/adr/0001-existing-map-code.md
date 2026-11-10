@@ -27,8 +27,10 @@ PLAN.md section 11.3 requires a review of `frontend/` before UI work. The three 
 ## Gaps against the plan
 
 1. Only 30 bodies; the plan has 33 worlds. Positions stay client-side: they are aesthetic,
-   so the scene keeps its own clock and orbit model and the API supplies no map positions
-   (ruling, M1 follow-up). The three missing worlds are added to the client catalog.
+   so the scene keeps its own clock and orbit model and animates smoothly with no per-frame
+   backend data. The backend sends only an occasional anchor (site date and reference
+   positions from `/api/network/`), which the client uses to rebase its clock and correct
+   drift (ruling, M1 follow-up). The three missing worlds are added to the client catalog.
 2. No layered links (access, mesh, backbone, cross-link, conjunction), no per-segment
    colour, labels, hover or tap, no dimming, no flow animation.
 3. No year-driven state for the Canon history map.
