@@ -3,7 +3,7 @@ import { HISTORY_INTRO, NETWORK_INTRO, OVERVIEW } from '../content/about';
 import { Sources } from '../features/about/Sources';
 import { Subspace } from '../features/about/Subspace';
 import { Tiers } from '../features/about/Tiers';
-import styles from '../features/about/Section.module.css';
+import styles from '../ui/Section.module.css';
 import { NetworkMap } from '../features/network-map/NetworkMap';
 import { Timeline } from '../features/timeline/Timeline';
 

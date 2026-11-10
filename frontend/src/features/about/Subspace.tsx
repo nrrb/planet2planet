@@ -1,7 +1,7 @@
 import { useMeta, useWorldDetail } from '../../api/hooks';
 import { SUBSPACE } from '../../content/about';
 import { formatDuration, formatLatency, formatSpan } from '../../ui/format';
-import styles from './Section.module.css';
+import styles from '../../ui/Section.module.css';
 
 /** Earth to each of these, from the delays in the dataset. */
 const EXAMPLES = [

@@ -1,5 +1,5 @@
 import { TIERS, TIERS_INTRO } from '../../content/about';
-import styles from './Section.module.css';
+import styles from '../../ui/Section.module.css';
 
 export function Tiers() {
   return (
