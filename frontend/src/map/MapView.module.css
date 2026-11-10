@@ -11,7 +11,6 @@
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  background: #060b16;
   touch-action: none;
 }
 .canvasWrap.compact {
@@ -31,13 +30,13 @@
   min-height: calc(var(--tap) - 4px);
   min-width: calc(var(--tap) - 4px);
   padding: 0 8px;
-  background: rgb(6 11 22 / 0.78);
-  border-color: #3a4a6a;
-  color: #e8eef9;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  border-color: var(--line-strong);
+  color: var(--text);
   font-size: var(--step--1);
 }
 .overlay .control:hover:not(:disabled) {
-  border-color: #8aa0ff;
+  border-color: var(--accent);
 }
 .canvasWrap:focus-visible {
   outline: 3px solid var(--focus);
@@ -56,7 +55,7 @@
   place-items: center;
   padding: 16px;
   text-align: center;
-  color: #c8d3e8;
+  color: var(--muted);
 }
 
 .tooltip {

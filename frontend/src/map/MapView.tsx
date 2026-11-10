@@ -1,8 +1,9 @@
 import { type KeyboardEvent, useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from '../ui/useReducedMotion';
+import { useSiteTheme } from '../ui/useSiteTheme';
 import type { MapModel, RenderLink } from './adapter';
 import type { Hover, NetworkScene } from './NetworkScene';
-import { LAYER_ORDER, LAYER_STYLES } from './palette';
+import { LAYER_ORDER, LAYER_STYLES, layerColor, MAP_COLORS, type MapTheme } from './palette';
 import styles from './MapView.module.css';
 
 interface Props {
@@ -26,7 +27,7 @@ interface Props {
 const SITE_TIME = Date.UTC(2380, 5, 9, 12);
 
 /** Layer colours and line styles, shown for the layers actually drawn. */
-export function Legend({ layers }: { layers: readonly string[] }) {
+export function Legend({ layers, theme }: { layers: readonly string[]; theme: MapTheme }) {
   const shown = LAYER_ORDER.filter((layer) => layers.includes(layer));
   return (
     <ul className={styles.legend} aria-label="Map legend">
@@ -37,7 +38,11 @@ export function Legend({ layers }: { layers: readonly string[] }) {
           <li key={layer}>
             <span
               className={styles.swatch}
-              style={{ color: style.color, borderTopStyle: dash, borderTopWidth: Math.round(style.width) + 1 }}
+              style={{
+                color: layerColor(theme, layer),
+                borderTopStyle: dash,
+                borderTopWidth: Math.round(style.width) + 1,
+              }}
               aria-hidden="true"
             />
             {style.label}
@@ -73,6 +78,11 @@ export default function MapView({
   const host = useRef<HTMLDivElement>(null);
   const scene = useRef<NetworkScene | null>(null);
   const reduced = useReducedMotion();
+  const theme = useSiteTheme();
+  const themeAtCreation = useRef(theme);
+  useEffect(() => {
+    themeAtCreation.current = theme;
+  });
   const [paused, setPaused] = useState(false);
   const [status, setStatus] = useState<'loading' | 'ready' | 'failed'>('loading');
   const [hover, setHover] = useState<Hover | null>(null);
@@ -87,6 +97,7 @@ export default function MapView({
         NetworkScene.create(
           { bodies: model.bodies, orbits: model.orbits, nodes: model.nodes, startTime: SITE_TIME },
           { onHover: setHover },
+          themeAtCreation.current,
         ),
       )
       .then((instance) => {
@@ -108,6 +119,11 @@ export default function MapView({
       created?.destroy();
     };
   }, [model]);
+
+  // Follow the site theme without rebuilding the scene.
+  useEffect(() => {
+    scene.current?.setTheme(theme);
+  }, [theme, status]);
 
   useEffect(() => {
     scene.current?.setState({ links, highlighted, dimOthers, labelPlanets, animate, markers, showAllMoons });
@@ -149,6 +165,7 @@ export default function MapView({
       <div
         ref={host}
         className={`${styles.canvasWrap} ${compact ? styles.compact : ''}`}
+        style={{ background: MAP_COLORS[theme].background }}
         tabIndex={0}
         role="application"
         aria-label={`${label}. Arrow keys pan, plus and minus zoom, zero resets the view.`}
@@ -209,7 +226,7 @@ export default function MapView({
         )}
       </div>
       {links.length > 0 && (
-        <Legend layers={[...new Set(links.filter((l) => l.emphasis !== 'dim').map((l) => l.layer))]} />
+        <Legend theme={theme} layers={[...new Set(links.filter((l) => l.emphasis !== 'dim').map((l) => l.layer))]} />
       )}
     </div>
   );

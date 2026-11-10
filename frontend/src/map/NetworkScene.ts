@@ -15,7 +15,7 @@ import {
   systemRadius,
 } from './layout';
 import { AU_KM, daysSinceJ2000, moonOffset } from './kepler';
-import { bodyColor, LAYER_STYLES, MAP_ACCENT, MAP_BACKGROUND, MAP_MUTED, MAP_TEXT } from './palette';
+import { bodyFill, LAYER_STYLES, layerColor, MAP_COLORS, type MapColors, type MapTheme } from './palette';
 
 export interface SceneState {
   links: readonly RenderLink[];
@@ -93,48 +93,88 @@ export class NetworkScene {
   private mounted = false;
   private overview: number;
   private fitPoints: Point[] | null = null;
+  private theme: MapTheme;
+  private colors: MapColors;
+  private sunDisk = new Graphics();
+  /** Orbit paths, kept as data so they can be redrawn when the theme changes. */
+  private orbitShapes: { g: Graphics; points?: Point[]; radius?: number }[] = [];
+  private diskRadii = new Map<string, number>();
 
   private constructor(
     private app: Application,
     private input: SceneInput,
     private callbacks: SceneCallbacks,
+    theme: MapTheme,
   ) {
+    this.theme = theme;
+    this.colors = MAP_COLORS[theme];
     this.time = input.startTime;
     this.overview = systemRadius(input.bodies, input.orbits) + 40;
     app.stage.addChild(this.orbitLayer, this.bodyLayer, this.overlay, this.labelLayer);
 
-    const sun = new Graphics().circle(0, 0, bodyRadius(SUN_RADIUS_KM)).fill(hex(bodyColor('sun')));
-    this.bodyLayer.addChild(sun);
-    this.sunLabel = this.makeLabel('Sun', MAP_MUTED);
+    this.bodyLayer.addChild(this.sunDisk);
+    this.sunLabel = this.makeLabel('Sun', this.colors.muted);
 
     for (const body of input.bodies) {
       const orbit = input.orbits[body.id];
-      const disk = new Graphics().circle(0, 0, bodyRadius(body.radiusKm)).fill(hex(bodyColor(body.id)));
+      const disk = new Graphics();
       this.disks.set(body.id, disk);
+      this.diskRadii.set(body.id, bodyRadius(body.radiusKm));
       this.bodyLayer.addChild(disk);
+      const track = new Graphics();
+      this.orbitLayer.addChild(track);
       if (orbit.kind === 'moon') {
         const parent = input.bodies.find((b) => b.id === body.parent);
         const days = daysSinceJ2000(input.startTime);
         const offset = moonOffset(orbit, days);
         const radius = lunarRadius(parent?.radiusKm ?? 0, Math.hypot(offset.x, offset.y) * AU_KM);
-        const track = new Graphics()
-          .circle(0, 0, radius)
-          .stroke({ color: 0xffffff, alpha: 0.18, width: 1, pixelLine: true });
         this.moonTracks.set(body.id, track);
-        this.orbitLayer.addChild(track);
+        this.orbitShapes.push({ g: track, radius });
       } else {
-        const track = new Graphics();
-        const points = orbitTrack(orbit);
-        track
-          .poly(
-            points.flatMap((p) => [p.x, p.y]),
-            true,
-          )
-          .stroke({ color: 0xffffff, alpha: 0.22, width: 1, pixelLine: true });
-        this.orbitLayer.addChild(track);
+        this.orbitShapes.push({ g: track, points: orbitTrack(orbit) });
       }
-      this.labels.set(body.id, this.makeLabel(body.name, MAP_TEXT));
+      this.labels.set(body.id, this.makeLabel(body.name, this.colors.text));
     }
+    this.paint();
+  }
+
+  /** Draw (or redraw) everything whose colour depends on the theme. */
+  private paint(): void {
+    const c = this.colors;
+    this.app.renderer.background.color = hex(c.background);
+    const ring = { color: hex(c.outline), alpha: c.outlineAlpha, width: 1, pixelLine: true };
+    this.sunDisk
+      .clear()
+      .circle(0, 0, bodyRadius(SUN_RADIUS_KM))
+      .fill(hex(bodyFill('sun', this.theme)))
+      .stroke(ring);
+    for (const [id, disk] of this.disks) {
+      disk
+        .clear()
+        .circle(0, 0, this.diskRadii.get(id) ?? 2)
+        .fill(hex(bodyFill(id, this.theme)))
+        .stroke(ring);
+    }
+    const track = { color: hex(c.track), alpha: c.trackAlpha, width: 1, pixelLine: true };
+    for (const shape of this.orbitShapes) {
+      shape.g.clear();
+      if (shape.points)
+        shape.g.poly(
+          shape.points.flatMap((p) => [p.x, p.y]),
+          true,
+        );
+      else shape.g.circle(0, 0, shape.radius ?? 0);
+      shape.g.stroke(track);
+    }
+    for (const label of this.labels.values()) label.style.fill = c.text;
+    this.sunLabel.style.fill = c.muted;
+  }
+
+  setTheme(theme: MapTheme): void {
+    if (theme === this.theme) return;
+    this.theme = theme;
+    this.colors = MAP_COLORS[theme];
+    this.paint();
   }
 
   private makeLabel(text: string, fill: string): Text {
@@ -143,20 +183,20 @@ export class NetworkScene {
     return label;
   }
 
-  static async create(input: SceneInput, callbacks: SceneCallbacks): Promise<NetworkScene> {
+  static async create(input: SceneInput, callbacks: SceneCallbacks, theme: MapTheme): Promise<NetworkScene> {
     const app = new Application();
     try {
       await app.init({
-        backgroundColor: MAP_BACKGROUND,
+        backgroundColor: MAP_COLORS[theme].background,
         antialias: true,
         autoStart: false,
         preference: 'webgl',
         resolution: window.devicePixelRatio || 1,
         autoDensity: true,
       });
-      return new NetworkScene(app, input, callbacks);
+      return new NetworkScene(app, input, callbacks, theme);
     } catch (error) {
-      if (app.renderer) app.destroy(true, { children: true, texture: true, textureSource: true });
+      if (app.renderer) app.destroy({ removeView: true });
       throw error;
     }
   }
@@ -323,7 +363,7 @@ export class NetworkScene {
       // Origin: a circle. Destination: a square. So the two differ without relying on colour.
       if (markers?.get(id) === 'to') g.rect(s.x - r, s.y - r, r * 2, r * 2);
       else g.circle(s.x, s.y, r);
-      g.stroke({ color: hex(MAP_ACCENT), width: 2, alpha: 0.9 });
+      g.stroke({ color: hex(this.colors.accent), width: 2, alpha: 0.9 });
     }
     this.drawLinks(g, flowClock);
   }
@@ -363,7 +403,7 @@ export class NetworkScene {
       }
       this.screenLinks.push({ link, a, b });
       const style = LAYER_STYLES[link.layer] ?? LAYER_STYLES.mesh;
-      const color = hex(style.color);
+      const color = hex(layerColor(this.theme, link.layer));
       if (link.emphasis === 'dim') {
         g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ color, width: 1, alpha: 0.07 });
         continue;
@@ -378,7 +418,7 @@ export class NetworkScene {
       // chevron at the midpoint that shows the direction when they are not moving.
       if (animate) {
         const offset = (flowClock * FLOW_PX_PER_SECOND) % (FLOW_DASH + FLOW_GAP);
-        this.strokePattern(g, a, b, length, [FLOW_DASH, FLOW_GAP], offset, 0xffffff, style.width, 0.85);
+        this.strokePattern(g, a, b, length, [FLOW_DASH, FLOW_GAP], offset, hex(this.colors.flow), style.width, 0.85);
       } else if (length > 24) {
         this.chevron(g, a, b, length, color);
       }
@@ -556,6 +596,18 @@ export class NetworkScene {
       canvas.removeEventListener('wheel', this.wheel);
       this.app.ticker.remove(this.frame);
     }
-    this.app.destroy(true, { children: true, texture: true, textureSource: true });
+    // Destroy only what this scene created. Pixi's default fill for a Graphics is one shared
+    // global white texture, so destroying Graphics with `texture: true` (as `app.destroy` does
+    // for children) wipes it for every other map on the page and turns them blank.
+    for (const g of [this.sunDisk, this.overlay, ...this.disks.values(), ...this.orbitShapes.map((o) => o.g)]) {
+      g.destroy();
+    }
+    // A label's texture is its own, so it is safe, and needed, to release it.
+    for (const label of [this.sunLabel, ...this.labels.values()]) {
+      label.destroy({ texture: true, textureSource: true });
+    }
+    // Never pass `true` here: that also releases Pixi's global pools (the shared batch pool), and
+    // the next frame of every other map on the page then throws and goes blank.
+    this.app.destroy({ removeView: true });
   }
 }
