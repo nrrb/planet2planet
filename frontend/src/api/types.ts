@@ -1,0 +1,15 @@
+import type { components } from './schema';
+
+type Schemas = components['schemas'];
+export type Offer = Schemas['Offer'];
+export type QuoteResponse = Schemas['QuoteResponse'];
+export type RouteSummary = Schemas['RouteSummary'];
+export type World = Schemas['WorldList'];
+export type WorldDetail = Schemas['WorldDetail'];
+export type Region = Schemas['Region'];
+export type Company = Schemas['Company'];
+export type Segment = Schemas['Segment'];
+export type InquiryRequest = Schemas['Inquiry'];
+export type InquiryConfirmation = Schemas['InquiryConfirmation'];
+export type ServiceClass = Schemas['ServiceClassEnum'];
+export type ResilienceTier = Schemas['ResilienceTierEnum'];
