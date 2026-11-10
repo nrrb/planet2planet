@@ -1,9 +1,9 @@
 """Heliocentric positions from JPL approximate Keplerian elements, solved in 2D.
 
-Latency and conjunction only need distances at the site date, so inclination is ignored: each body moves in
-the ecliptic plane with its true longitude measured from the longitude of perihelion. The
-error for strongly inclined dwarf planets is a few percent of their distance, which does not
-matter for latency. Pure functions; no Django imports.
+Latency and conjunction only need distances at the site date, so inclination is ignored:
+each body moves in the ecliptic plane with its true longitude measured from the longitude of
+perihelion. The error for strongly inclined dwarf planets is a few percent of their distance,
+which does not matter for latency. Pure functions; no Django imports.
 """
 
 import math
