@@ -55,14 +55,6 @@ export const BADGE_LABELS: Record<string, string> = {
   'most-resilient': 'Most resilient',
 };
 
-export const SORT_LABELS = {
-  price: 'Monthly price',
-  latency: 'Latency today',
-  'worst-latency': 'Worst-case latency',
-  tier: 'Redundancy tier',
-} as const;
-export type SortKey = keyof typeof SORT_LABELS;
-
 export const CONJUNCTION_LABELS = {
   rerouted: 'Rerouted: stays up through solar conjunction',
   degraded: 'Degraded: reduced throughput during conjunction',

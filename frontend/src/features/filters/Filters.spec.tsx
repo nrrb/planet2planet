@@ -39,20 +39,13 @@ describe('Filters', () => {
 
   it('offers providers on the route', async () => {
     const { current } = setup();
-    await userEvent.click(screen.getByText(/Specific providers/));
     await userEvent.click(screen.getByRole('checkbox', { name: 'Cassini Link' }));
     expect(current().companies).toEqual(['cassini-link']);
-  });
-
-  it('disables reset when no filter is set', () => {
-    setup();
-    expect(screen.getByRole('button', { name: 'Reset filters' })).toBeDisabled();
   });
 
   it('shows the checked state from the URL', () => {
     setup(parseCompareParams(new URLSearchParams('from=a&to=b&tier=contingency&reroute=true')));
     expect(screen.getByRole('checkbox', { name: 'Contingency' })).toBeChecked();
     expect(screen.getByRole('checkbox', { name: 'Reroutes through solar conjunction' })).toBeChecked();
-    expect(screen.getByRole('button', { name: 'Reset filters' })).toBeEnabled();
   });
 });

@@ -38,7 +38,7 @@ function CanonNotes({ worldId }: { worldId: string }) {
   if (!data) return null;
   return (
     <div>
-      <h4 style={{ margin: '6px 0 2px' }}>{data.name}</h4>
+      <h4 style={{ margin: '4px 0 2px' }}>{data.name}</h4>
       {data.canonNotes.length ? (
         <ul>
           {data.canonNotes.map((note, index) => (

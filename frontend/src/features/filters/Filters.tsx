@@ -8,7 +8,7 @@ import {
   SERVICE_CLASS_LABELS,
   TIER_LABELS,
 } from '../../content/labels';
-import { activeFilterCount, type CompareState, withoutFilters } from '../compare/params';
+import type { CompareState } from '../compare/params';
 import styles from './Filters.module.css';
 
 type Update = (change: (state: CompareState) => CompareState) => void;
@@ -21,19 +21,17 @@ interface GroupProps {
   options: [string, string, string?][];
   selected: string[];
   onToggle: (value: string) => void;
+  scroll?: boolean;
 }
 
-function CheckGroup({ legend, options, selected, onToggle }: GroupProps) {
+function CheckGroup({ legend, options, selected, onToggle, scroll }: GroupProps) {
   return (
-    <fieldset className={styles.group}>
+    <fieldset className={`${styles.group} ${scroll ? styles.scroll : ''}`}>
       <legend>{legend}</legend>
       {options.map(([value, label, hint]) => (
-        <label key={value} className={styles.option}>
+        <label key={value} className={styles.option} title={hint}>
           <input type="checkbox" checked={selected.includes(value)} onChange={() => onToggle(value)} />
-          <span>
-            {label}
-            {hint && <span className={styles.hint}> ({hint})</span>}
-          </span>
+          {label}
         </label>
       ))}
     </fieldset>
@@ -50,9 +48,8 @@ interface Props {
 export function Filters({ state, update, providers }: Props) {
   const latencyId = useId();
   const entries = (labels: Record<string, string>): [string, string][] => Object.entries(labels);
-  const count = activeFilterCount(state);
   return (
-    <form className={styles.form} onSubmit={(event) => event.preventDefault()} aria-label="Filters">
+    <form className={styles.form} onSubmit={(event) => event.preventDefault()} aria-label="Filter options">
       <CheckGroup
         legend="Service class"
         options={Object.entries(SERVICE_CLASS_LABELS).map(([value, label]) => [
@@ -64,7 +61,7 @@ export function Filters({ state, update, providers }: Props) {
         onToggle={(value) => update((s) => ({ ...s, classes: toggle(s.classes, value) }))}
       />
       <div>
-        <label htmlFor={latencyId} style={{ fontWeight: 650, display: 'block', marginBottom: 4 }}>
+        <label htmlFor={latencyId} className={styles.fieldLabel}>
           Latest acceptable latency (ms)
         </label>
         <input
@@ -79,6 +76,14 @@ export function Filters({ state, update, providers }: Props) {
             update((s) => ({ ...s, maxLatencyMs: event.target.value && value > 0 ? value : null }));
           }}
         />
+        <label className={styles.option} style={{ marginTop: 4 }}>
+          <input
+            type="checkbox"
+            checked={state.reroute}
+            onChange={() => update((s) => ({ ...s, reroute: !s.reroute }))}
+          />
+          Reroutes through solar conjunction
+        </label>
       </div>
       <CheckGroup
         legend="Sector"
@@ -98,32 +103,19 @@ export function Filters({ state, update, providers }: Props) {
         selected={state.kinds}
         onToggle={(value) => update((s) => ({ ...s, kinds: toggle(s.kinds, value) }))}
       />
-      <details className={styles.providers} open={state.companies.length > 0}>
-        <summary>Specific providers{state.companies.length ? ` (${state.companies.length})` : ''}</summary>
-        <CheckGroup
-          legend="Providers on this route"
-          options={providers.map((company) => [company.id, company.name])}
-          selected={state.companies}
-          onToggle={(value) => update((s) => ({ ...s, companies: toggle(s.companies, value) }))}
-        />
-      </details>
       <CheckGroup
         legend="Hardened for"
         options={entries(ENVIRONMENT_LABELS)}
         selected={state.envs}
         onToggle={(value) => update((s) => ({ ...s, envs: toggle(s.envs, value) }))}
       />
-      <label className={styles.option}>
-        <input
-          type="checkbox"
-          checked={state.reroute}
-          onChange={() => update((s) => ({ ...s, reroute: !s.reroute }))}
-        />
-        <span>Reroutes through solar conjunction</span>
-      </label>
-      <button type="button" className={styles.reset} disabled={count === 0} onClick={() => update(withoutFilters)}>
-        Reset filters
-      </button>
+      <CheckGroup
+        legend="Specific providers"
+        options={providers.map((company) => [company.id, company.name])}
+        selected={state.companies}
+        onToggle={(value) => update((s) => ({ ...s, companies: toggle(s.companies, value) }))}
+        scroll
+      />
     </form>
   );
 }

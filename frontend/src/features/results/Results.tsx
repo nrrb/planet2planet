@@ -1,11 +1,10 @@
-import type { Offer } from '../../api/types';
+import { useMemo } from 'react';
 import { ApiError } from '../../api/client';
-import { SORT_LABELS, type SortKey } from '../../content/labels';
-import { useMediaQuery } from '../../ui/useMediaQuery';
-import { OfferCard } from './OfferCard';
+import type { Offer } from '../../api/types';
 import { OfferTable } from './OfferTable';
 import type { OfferItemProps } from './offerView';
-import { type CompanyMap, latencyScale } from './providers';
+import { type CompanyMap, companyName, latencyScale } from './providers';
+import { type SortDir, type SortKey, sortOffers } from './sorting';
 import styles from './Results.module.css';
 
 interface Props {
@@ -16,6 +15,7 @@ interface Props {
   fromName: string;
   toName: string;
   sort: SortKey;
+  dir: SortDir;
   onSort: (key: SortKey) => void;
   filtered: boolean;
   onResetFilters: () => void;
@@ -29,6 +29,8 @@ interface Props {
   onToggleDetails: (id: string) => void;
   onShowRoute: (offer: Offer) => void;
   onRequest: (offer: Offer) => void;
+  /** Shown beside the count, e.g. the compare button. */
+  toolbar?: React.ReactNode;
 }
 
 function errorMessage(error: Error): string {
@@ -39,8 +41,11 @@ function errorMessage(error: Error): string {
 }
 
 export function Results(props: Props) {
-  const wide = useMediaQuery('(min-width: 1024px)');
-  const { offers, error, loading } = props;
+  const { offers, error, loading, companies, sort, dir } = props;
+  const sorted = useMemo(
+    () => (offers ? sortOffers(offers, sort, dir, (o) => companyName(companies, o.leadCompanyId)) : undefined),
+    [offers, sort, dir, companies],
+  );
 
   if (error && !offers) {
     return (
@@ -52,7 +57,7 @@ export function Results(props: Props) {
       </div>
     );
   }
-  if (!offers) {
+  if (!sorted) {
     return (
       <p role="status" className={styles.state}>
         Loading plans…
@@ -60,10 +65,10 @@ export function Results(props: Props) {
     );
   }
 
-  const scale = latencyScale(offers);
+  const scale = latencyScale(sorted);
   const rowProps = (offer: Offer): OfferItemProps => ({
     offer,
-    companies: props.companies,
+    companies,
     scale,
     from: props.from,
     to: props.to,
@@ -80,22 +85,13 @@ export function Results(props: Props) {
     <div aria-busy={loading}>
       <div className={styles.head}>
         <p className={styles.count} role="status" aria-live="polite">
-          {offers.length === 0
+          {sorted.length === 0
             ? 'No plans match these filters'
-            : `${offers.length} ${offers.length === 1 ? 'plan' : 'plans'} from ${props.fromName} to ${props.toName}`}
+            : `${sorted.length} ${sorted.length === 1 ? 'plan' : 'plans'} from ${props.fromName} to ${props.toName}`}
         </p>
-        <label className={styles.sort}>
-          Sort by
-          <select value={props.sort} onChange={(event) => props.onSort(event.target.value as SortKey)}>
-            {Object.entries(SORT_LABELS).map(([key, label]) => (
-              <option key={key} value={key}>
-                {label}
-              </option>
-            ))}
-          </select>
-        </label>
+        {props.toolbar}
       </div>
-      {offers.length === 0 ? (
+      {sorted.length === 0 ? (
         <div className={styles.state}>
           <p>{props.filtered ? 'No plan matches every filter you chose.' : 'No plans connect these worlds.'}</p>
           {props.filtered && (
@@ -104,14 +100,8 @@ export function Results(props: Props) {
             </button>
           )}
         </div>
-      ) : wide ? (
-        <OfferTable offers={offers} sort={props.sort} onSort={props.onSort} rowProps={rowProps} />
       ) : (
-        <ul className={styles.list}>
-          {offers.map((offer) => (
-            <OfferCard key={offer.id} {...rowProps(offer)} />
-          ))}
-        </ul>
+        <OfferTable offers={sorted} sort={sort} dir={dir} onSort={props.onSort} rowProps={rowProps} />
       )}
     </div>
   );

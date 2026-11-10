@@ -2,135 +2,33 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 12px;
+  gap: 8px 12px;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 6px;
 }
 .count {
-  font-weight: 600;
+  font-weight: 650;
   font-size: var(--step-1);
 }
-.sort {
-  display: flex;
-  align-items: center;
+
+.state {
+  padding: 20px 12px;
+  border: 1px dashed var(--line-strong);
+  text-align: center;
+  display: grid;
   gap: 8px;
-  font-size: var(--step--1);
-  color: var(--muted);
+  justify-items: center;
 }
-.sort select {
-  min-height: var(--tap);
-  padding: 0 10px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--surface);
-  color: var(--text);
-  font-size: var(--step-0);
+.stateError {
+  border-color: var(--danger);
 }
 
-.list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 12px;
-}
-@media (min-width: 768px) {
-  .list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    align-items: start;
-  }
-}
-
-.card {
-  display: grid;
-  gap: 12px;
-  padding: 14px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-}
-.cardOpen {
-  border-color: var(--accent);
-}
-.titleRow {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  align-items: flex-start;
-}
-.title {
-  font-size: var(--step-1);
-  font-weight: 650;
-}
-.provider {
-  color: var(--muted);
-  font-size: var(--step--1);
-  margin-top: 2px;
-}
-.badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 8px;
-}
-.price {
-  text-align: right;
-  white-space: nowrap;
-}
-.monthly {
-  font-size: var(--step-2);
-  font-weight: 650;
-  display: block;
-}
-.setup {
-  color: var(--muted);
-  font-size: var(--step--1);
-}
-
-.latency {
-  display: grid;
-  gap: 4px;
-}
-.latencyText {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  font-size: var(--step--1);
-  color: var(--muted);
-}
-.latencyNow {
-  color: var(--text);
-  font-weight: 600;
-}
-
-.facts {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px 12px;
-  margin: 0;
-  font-size: var(--step--1);
-}
-.facts dt {
-  color: var(--muted);
-}
-.facts dd {
-  margin: 0;
-  font-weight: 550;
-}
-
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-}
 .button {
   min-height: var(--tap);
-  padding: 0 14px;
-  border: 1px solid var(--line);
+  padding: 0 10px;
+  border: 1px solid var(--line-strong);
   border-radius: var(--radius);
-  background: transparent;
-  cursor: pointer;
+  background: var(--surface);
   font-weight: 550;
 }
 .button:hover {
@@ -141,30 +39,24 @@
   border-color: var(--accent);
   color: var(--accent-ink);
 }
-.check {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  min-height: var(--tap);
-  padding: 0 6px;
-  cursor: pointer;
-}
-.check input {
-  width: 20px;
-  height: 20px;
-}
 
+/* Offer details, opened under a row. */
 .details {
   display: grid;
-  gap: 18px;
-  padding-top: 12px;
-  border-top: 1px solid var(--line);
+  gap: 14px 24px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  align-items: start;
+}
+.details section {
+  min-width: 0;
 }
 .details h3 {
-  font-size: var(--step-0);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--line-strong);
 }
-.details ul {
+.details ul,
+.details ol {
   margin: 0;
   padding-left: 18px;
 }
@@ -175,7 +67,7 @@
 }
 .details td,
 .details th {
-  padding: 4px 0;
+  padding: 2px 0;
   text-align: left;
   border-bottom: 1px solid var(--line);
 }
@@ -187,74 +79,46 @@
   color: var(--muted);
   font-size: var(--step--1);
 }
-
-.state {
-  padding: 28px 16px;
-  border: 1px dashed var(--line);
-  border-radius: var(--radius-lg);
-  text-align: center;
-  display: grid;
-  gap: 12px;
-  justify-items: center;
+.provider {
+  color: var(--muted);
 }
-.stateError {
-  border-color: var(--danger);
+.setup {
+  color: var(--muted);
+  font-size: var(--step--1);
 }
 
+/* The side-by-side compare sheet. */
 .tableWrap {
   overflow-x: auto;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
+  border: 1px solid var(--line-strong);
 }
 .table {
   width: 100%;
   border-collapse: collapse;
-  font-size: var(--step--1);
+  font-size: var(--step-0);
 }
 .table th,
 .table td {
-  padding: 10px 12px;
+  padding: 4px 8px;
   text-align: left;
   vertical-align: top;
   border-bottom: 1px solid var(--line);
+  border-right: 1px solid var(--line);
 }
-.table th {
-  color: var(--muted);
+.table thead th {
+  background: var(--surface-3);
+}
+.table tbody th {
+  background: var(--surface-2);
   font-weight: 600;
   white-space: nowrap;
-}
-.table tr:last-child td {
-  border-bottom: 0;
 }
 .sortButton {
   border: 0;
   background: none;
   padding: 0;
-  min-height: 32px;
-  cursor: pointer;
-  font-weight: 600;
-  color: inherit;
-}
-.sortButton[aria-pressed='true'] {
+  min-height: 24px;
+  font-weight: 550;
   color: var(--accent);
-}
-.cellPlan {
-  min-width: 280px;
-}
-.cellPlan .actions {
-  margin-top: 10px;
-}
-.cellLatency {
-  min-width: 150px;
-}
-.rowOpen td {
-  background: var(--surface-2);
-}
-.detailsRow td {
-  background: var(--surface-2);
-}
-.num {
-  text-align: right;
-  white-space: nowrap;
+  text-decoration: underline;
 }

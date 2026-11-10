@@ -5,6 +5,7 @@ import {
   MAX_COMPARE,
   parseCompareParams,
   quoteParamsFrom,
+  sortBy,
   swapWorlds,
   toggleCompare,
   toSearchParams,
@@ -16,7 +17,7 @@ const parse = (query: string) => parseCompareParams(new URLSearchParams(query));
 describe('compare params', () => {
   it('round-trips state through the URL', () => {
     const query =
-      'from=moon&to=titan&sort=latency&class=shared,dedicated&sector=science&tier=standard&kind=backbone&company=cassini-link&env=radiation&maxLatencyMs=80&reroute=true&offer=of_1&cmp=of_1,of_2';
+      'from=moon&to=titan&sort=latency&dir=desc&class=shared,dedicated&sector=science&tier=standard&kind=backbone&company=cassini-link&env=radiation&maxLatencyMs=80&reroute=true&offer=of_1&cmp=of_1,of_2';
     const state = parse(query);
     expect(state.classes).toEqual(['shared', 'dedicated']);
     expect(state.maxLatencyMs).toBe(80);
@@ -26,6 +27,21 @@ describe('compare params', () => {
 
   it('leaves defaults out of the URL', () => {
     expect(toSearchParams(parse('from=moon&to=titan&sort=price')).toString()).toBe('from=moon&to=titan');
+  });
+
+  it('sorts by a column and reverses it on a second choice', () => {
+    let state = parse('from=moon&to=titan');
+    expect(state).toMatchObject({ sort: 'price', dir: 'asc' });
+    state = sortBy(state, 'tier');
+    expect(state).toMatchObject({ sort: 'tier', dir: 'desc' });
+    state = sortBy(state, 'tier');
+    expect(state).toMatchObject({ sort: 'tier', dir: 'asc' });
+    expect(Object.fromEntries(toSearchParams(state))).toMatchObject({ sort: 'tier', dir: 'asc' });
+    expect(toSearchParams(sortBy(sortBy(state, 'price'), 'price')).get('dir')).toBe('desc');
+  });
+
+  it('keeps sorting out of the server query', () => {
+    expect(quoteParamsFrom(parse('from=moon&to=titan&sort=latency'))).not.toHaveProperty('sort');
   });
 
   it('ignores bad values instead of throwing', () => {

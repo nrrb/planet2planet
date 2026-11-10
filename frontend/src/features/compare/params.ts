@@ -1,11 +1,12 @@
 import type { QuoteParams } from '../../api/client';
-import { SORT_LABELS, type SortKey } from '../../content/labels';
+import { DEFAULT_SORT, defaultDir, isSortKey, type SortDir, type SortKey } from '../results/sorting';
 
 /** Everything about the Compare view that is shareable lives in the URL. */
 export interface CompareState {
   from: string | null;
   to: string | null;
   sort: SortKey;
+  dir: SortDir;
   classes: string[];
   sectors: string[];
   tiers: string[];
@@ -21,18 +22,19 @@ export interface CompareState {
 }
 
 export const MAX_COMPARE = 3;
-export const DEFAULT_SORT: SortKey = 'price';
 
 const list = (value: string | null): string[] => (value ? value.split(',').filter(Boolean) : []);
-const isSort = (value: string | null): value is SortKey => value !== null && value in SORT_LABELS;
 
 export function parseCompareParams(search: URLSearchParams): CompareState {
   const max = Number(search.get('maxLatencyMs'));
-  const sort = search.get('sort');
+  const sortParam = search.get('sort');
+  const sort = isSortKey(sortParam) ? sortParam : DEFAULT_SORT;
+  const dirParam = search.get('dir');
   return {
     from: search.get('from'),
     to: search.get('to'),
-    sort: isSort(sort) ? sort : DEFAULT_SORT,
+    sort,
+    dir: dirParam === 'asc' || dirParam === 'desc' ? dirParam : defaultDir(sort),
     classes: list(search.get('class')),
     sectors: list(search.get('sector')),
     tiers: list(search.get('tier')),
@@ -51,7 +53,8 @@ export function toSearchParams(state: CompareState): URLSearchParams {
   const out = new URLSearchParams();
   if (state.from) out.set('from', state.from);
   if (state.to) out.set('to', state.to);
-  if (state.sort !== DEFAULT_SORT) out.set('sort', state.sort);
+  if (state.sort !== DEFAULT_SORT || state.dir !== defaultDir(DEFAULT_SORT)) out.set('sort', state.sort);
+  if (state.dir !== defaultDir(state.sort)) out.set('dir', state.dir);
   const lists: [string, string[]][] = [
     ['class', state.classes],
     ['sector', state.sectors],
@@ -74,7 +77,6 @@ export function quoteParamsFrom(state: CompareState): QuoteParams | null {
   return {
     from: state.from,
     to: state.to,
-    sort: state.sort,
     class: state.classes,
     sector: state.sectors,
     tier: state.tiers,
@@ -117,6 +119,12 @@ export function withoutFilters(state: CompareState): CompareState {
 export function chooseWorld(state: CompareState, end: 'from' | 'to', world: string): CompareState {
   const other = end === 'from' ? 'to' : 'from';
   return { ...state, [end]: world, [other]: state[other] === world ? null : state[other], offer: null, compare: [] };
+}
+
+/** Sort by a column. Choosing the active column again reverses it. */
+export function sortBy(state: CompareState, key: SortKey): CompareState {
+  if (state.sort === key) return { ...state, dir: state.dir === 'asc' ? 'desc' : 'asc' };
+  return { ...state, sort: key, dir: defaultDir(key) };
 }
 
 export function swapWorlds(state: CompareState): CompareState {

@@ -104,26 +104,53 @@ describe('ComparePage', () => {
     expect(screen.getByText('Stardate 57436.2')).toBeInTheDocument();
   });
 
-  it('puts the chosen worlds, filters and sort in the URL', async () => {
+  it('sorts by any column and keeps the choice in the URL, without refetching', async () => {
     renderAt('/?from=jupiter&to=saturn');
     await screen.findByText('2 plans from Jupiter to Saturn');
-    await userEvent.selectOptions(screen.getByLabelText('Sort by'), 'latency');
-    expect(screen.getByTestId('location')).toHaveTextContent('sort=latency');
+    const calls = vi.mocked(fetch).mock.calls.length;
+    const prices = () =>
+      screen
+        .getAllByRole('row')
+        .slice(1)
+        .map((row) => row.textContent);
+    expect(prices()[0]).toContain('Transit Shared');
+    await userEvent.click(screen.getByRole('button', { name: 'Monthly cr' }));
+    expect(screen.getByTestId('location')).toHaveTextContent('sort=price&dir=desc');
+    expect(prices()[0]).toContain('Transit Dedicated');
+    await userEvent.click(screen.getByRole('button', { name: 'Hops' }));
+    expect(screen.getByTestId('location')).toHaveTextContent('sort=hops');
+    expect(vi.mocked(fetch).mock.calls.length).toBe(calls);
+  });
+
+  it('shows the active sort on its column header', async () => {
+    renderAt('/?from=jupiter&to=saturn&sort=tier');
+    await screen.findByText('2 plans from Jupiter to Saturn');
+    expect(screen.getByRole('columnheader', { name: /Redundancy/ })).toHaveAttribute('aria-sort', 'descending');
+  });
+
+  it('starts with the filter drawer closed, under the world selection', async () => {
+    renderAt('/?from=jupiter&to=saturn&class=dedicated');
+    await screen.findByText('2 plans from Jupiter to Saturn');
+    const toggle = screen.getByRole('button', { name: 'Filters (1)' });
+    expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    const from = screen.getByLabelText('From');
+    expect(from.compareDocumentPosition(toggle) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
   it('restores a shared view from its URL', async () => {
     renderAt('/?from=jupiter&to=saturn&sort=tier&class=dedicated');
     await screen.findByText('2 plans from Jupiter to Saturn');
-    expect(screen.getByLabelText('Sort by')).toHaveValue('tier');
     const urls = vi.mocked(fetch).mock.calls.map((call) => call[0] as string);
-    expect(urls.some((u) => u.includes('sort=tier') && u.includes('class=dedicated'))).toBe(true);
+    expect(urls.some((u) => u.includes('class=dedicated'))).toBe(true);
+    expect(urls.some((u) => u.includes('sort='))).toBe(false); // sorting is done in the browser
   });
 
   it('says so and offers a reset when filters match nothing', async () => {
     quoteHandler = () => json({ ...QUOTE, offers: [] });
     renderAt('/?from=jupiter&to=saturn&class=dedicated');
     expect(await screen.findByText('No plans match these filters')).toBeInTheDocument();
-    await userEvent.click(screen.getByRole('button', { name: 'Reset filters', hidden: false }));
+    const reset = screen.getAllByRole('button', { name: 'Reset filters' });
+    await userEvent.click(reset[reset.length - 1]);
     expect(screen.getByTestId('location')).not.toHaveTextContent('class=');
   });
 
@@ -149,6 +176,6 @@ describe('ComparePage', () => {
     for (const id of ['a', 'b', 'c'])
       await userEvent.click(screen.getByRole('checkbox', { name: `Compare Plan ${id}` }));
     expect(screen.getByRole('checkbox', { name: 'Compare Plan d' })).toBeDisabled();
-    expect(screen.getByRole('button', { name: 'Compare 3 plans' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Compare 3 plans side by side' })).toBeInTheDocument();
   });
 });

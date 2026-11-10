@@ -9,12 +9,13 @@ import {
   chooseWorld,
   MAX_COMPARE,
   quoteParamsFrom,
+  sortBy,
   swapWorlds,
   toggleCompare,
   withoutFilters,
 } from '../features/compare/params';
 import { useCompareParams } from '../features/compare/useCompareParams';
-import { Filters } from '../features/filters/Filters';
+import { FilterDrawer } from '../features/filters/FilterDrawer';
 import { InquiryForm } from '../features/inquiry/InquiryForm';
 import { RouteDialogContent } from '../features/route-dialog/RouteDialogContent';
 import { RoutePicker } from '../features/route-picker/RoutePicker';
@@ -22,7 +23,6 @@ import { RouteSummary } from '../features/route-summary/RouteSummary';
 import { companyMap } from '../features/results/providers';
 import { Results } from '../features/results/Results';
 import { Dialog } from '../ui/Dialog';
-import { useMediaQuery } from '../ui/useMediaQuery';
 import styles from './ComparePage.module.css';
 
 export function ComparePage() {
@@ -31,12 +31,10 @@ export function ComparePage() {
   const regions = useRegions();
   const companies = useCompanies();
   const quote = useQuote(quoteParamsFrom(state));
-  const wide = useMediaQuery('(min-width: 768px)');
 
   const [routeOffer, setRouteOffer] = useState<Offer | null>(null);
   const [inquiryOffer, setInquiryOffer] = useState<Offer | null>(null);
   const [compareOpen, setCompareOpen] = useState(false);
-  const [filtersOpen, setFiltersOpen] = useState(false);
 
   const companyById = useMemo(() => companyMap(companies.data), [companies.data]);
   const nameOf = (id: string | null) => worlds.data?.find((w) => w.id === id)?.name ?? id ?? '';
@@ -65,7 +63,6 @@ export function ComparePage() {
           ((state.from && c.worldIds.includes(state.from)) || (state.to && c.worldIds.includes(state.to))))),
   );
   const filterCount = activeFilterCount(state);
-  const filters = <Filters state={state} update={update} providers={providers} />;
   const quoteable = Boolean(state.from && state.to);
 
   return (
@@ -98,56 +95,54 @@ export function ComparePage() {
       {quote.data && regions.data && <RouteSummary route={quote.data.route} regions={regions.data} />}
       {!quoteable && <p>Choose two worlds to see the plans that connect them.</p>}
       {quoteable && (
-        <div className={styles.toolbar}>
-          {comparedOffers.length >= 2 && (
-            <button type="button" className={`${styles.button} ${styles.accent}`} onClick={() => setCompareOpen(true)}>
-              Compare {comparedOffers.length} plans
-            </button>
-          )}
-          <button
-            type="button"
-            className={`${styles.button} ${styles.filterButton}`}
-            onClick={() => setFiltersOpen(true)}
-          >
-            Filters{filterCount ? ` (${filterCount})` : ''}
-          </button>
-        </div>
+        <FilterDrawer
+          state={state}
+          update={update}
+          providers={providers}
+          companyName={(id) => companyById.get(id)?.name ?? id}
+        />
       )}
       {quoteable && (
-        <div className={styles.layout}>
-          <aside className={styles.sidebar} aria-label="Filters">
-            {wide && filters}
-          </aside>
-          <section id="results" aria-label="Results" tabIndex={-1}>
-            <Results
-              offers={offers}
-              loading={quote.isFetching}
-              error={quote.error}
-              onRetry={() => void quote.refetch()}
-              fromName={nameOf(state.from)}
-              toName={nameOf(state.to)}
-              sort={state.sort}
-              onSort={(sort) => update((s) => ({ ...s, sort }))}
-              filtered={filterCount > 0}
-              onResetFilters={() => update(withoutFilters)}
-              companies={companyById}
-              from={state.from ?? ''}
-              to={state.to ?? ''}
-              compare={state.compare}
-              maxCompare={MAX_COMPARE}
-              openOffer={state.offer}
-              onToggleCompare={(id) => update((s) => toggleCompare(s, id))}
-              onToggleDetails={(id) => update((s) => ({ ...s, offer: s.offer === id ? null : id }))}
-              onShowRoute={setRouteOffer}
-              onRequest={setInquiryOffer}
-            />
-          </section>
-        </div>
+        <section id="results" aria-label="Results" tabIndex={-1}>
+          <Results
+            offers={offers}
+            loading={quote.isFetching}
+            error={quote.error}
+            onRetry={() => void quote.refetch()}
+            fromName={nameOf(state.from)}
+            toName={nameOf(state.to)}
+            sort={state.sort}
+            dir={state.dir}
+            onSort={(key) => update((s) => sortBy(s, key))}
+            filtered={filterCount > 0}
+            onResetFilters={() => update(withoutFilters)}
+            companies={companyById}
+            from={state.from ?? ''}
+            to={state.to ?? ''}
+            compare={state.compare}
+            maxCompare={MAX_COMPARE}
+            openOffer={state.offer}
+            onToggleCompare={(id) => update((s) => toggleCompare(s, id))}
+            onToggleDetails={(id) => update((s) => ({ ...s, offer: s.offer === id ? null : id }))}
+            onShowRoute={setRouteOffer}
+            onRequest={setInquiryOffer}
+            toolbar={
+              comparedOffers.length >= 2 ? (
+                <button
+                  type="button"
+                  className={`${styles.button} ${styles.accent}`}
+                  onClick={() => setCompareOpen(true)}
+                >
+                  Compare {comparedOffers.length} plans side by side
+                </button>
+              ) : (
+                <span className={styles.hint}>Tick two or three plans to compare them side by side.</span>
+              )
+            }
+          />
+        </section>
       )}
 
-      <Dialog open={filtersOpen && !wide} onClose={() => setFiltersOpen(false)} title="Filters" sheet>
-        {filters}
-      </Dialog>
       <Dialog
         open={routeOffer !== null}
         onClose={() => setRouteOffer(null)}
