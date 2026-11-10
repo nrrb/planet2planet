@@ -4,6 +4,22 @@
  */
 
 export interface paths {
+    "/api/canon/facts/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["canon_facts_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/companies/": {
         parameters: {
             query?: never;
@@ -142,6 +158,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/simulation/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Monte Carlo run details and market statistics */
+        get: operations["simulation_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/simulation/worlds/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Per-world medians and percentiles across the Monte Carlo runs */
+        get: operations["simulation_worlds_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/worlds/": {
         parameters: {
             query?: never;
@@ -190,11 +240,33 @@ export interface components {
             label: string;
             credits: number;
         };
+        CanonFact: {
+            id: string;
+            category: components["schemas"]["CategoryEnum"];
+            topic: string;
+            world: string | null;
+            statement: string;
+            episodes?: string[];
+            /** @description How the simulation uses it, or why it was left out. */
+            howUsed: string;
+            standing: components["schemas"]["StandingEnum"];
+            source: components["schemas"]["Source"];
+            readonly deadline: {
+                [key: string]: unknown;
+            } | null;
+        };
         CanonNote: {
             year?: number | null;
             text: string;
             source: string | null;
         };
+        /**
+         * @description * `starting-condition` - Starting Condition
+         *     * `deadline` - Deadline
+         *     * `set-aside` - Set Aside
+         * @enum {string}
+         */
+        CategoryEnum: "starting-condition" | "deadline" | "set-aside";
         Company: {
             id: string;
             name: string;
@@ -290,6 +362,16 @@ export interface components {
             capacityClass: string;
             /** @description Passes within 0.1 AU of the Sun at the site date. */
             degraded: boolean;
+        };
+        Market: {
+            metric: string;
+            kind: string;
+            /** Format: double */
+            median: number | null;
+            /** Format: double */
+            p10: number | null;
+            /** Format: double */
+            p90: number | null;
         };
         Meta: {
             title: string;
@@ -433,6 +515,17 @@ export interface components {
             from: string;
             to: string;
         };
+        Run: {
+            firstSeed: number;
+            runCount: number;
+            startYear: number;
+            endYear: number;
+            /** @description Git commit of tools/colonization-sim.js. */
+            scriptCommit: string;
+            /** Format: date-time */
+            generatedAt: string;
+            canonicalSeed: number;
+        };
         Segment: {
             companyId: string;
             layer: string;
@@ -449,12 +542,23 @@ export interface components {
          * @enum {string}
          */
         ServiceClassEnum: "shared" | "dedicated" | "synchronized";
+        Simulation: {
+            run: components["schemas"]["Run"];
+            market: components["schemas"]["Market"][];
+        };
         Source: {
             id: string;
             title: string;
             /** Format: uri */
             url: string;
         };
+        /**
+         * @description * `on-screen` - On Screen
+         *     * `reference-book` - Reference Book
+         *     * `not-found` - Not Found
+         * @enum {string}
+         */
+        StandingEnum: "on-screen" | "reference-book" | "not-found";
         /**
          * @description * `active` - Active
          *     * `division` - Division
@@ -522,6 +626,25 @@ export interface components {
             /** Format: double */
             radiusKm: number;
         };
+        WorldStatistic: {
+            world: string;
+            metric: string;
+            /** Format: double */
+            median: number | null;
+            /** Format: double */
+            p10: number | null;
+            /** Format: double */
+            p90: number | null;
+            /** Format: double */
+            shareOfRuns: number;
+            /**
+             * Format: double
+             * @description The same measure in the canonical run (seed 1701) the shop uses.
+             */
+            canonical: number | null;
+            /** @description One value per run, ascending. Only when one world is named and samples=true. */
+            samples?: number[];
+        };
     };
     responses: never;
     parameters: never;
@@ -531,6 +654,27 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    canon_facts_list: {
+        parameters: {
+            query?: {
+                category?: "deadline" | "set-aside" | "starting-condition";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CanonFact"][];
+                };
+            };
+        };
+    };
     companies_list: {
         parameters: {
             query?: {
@@ -719,6 +863,48 @@ export interface operations {
                     "application/json": {
                         [key: string]: unknown;
                     };
+                };
+            };
+        };
+    };
+    simulation_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Simulation"];
+                };
+            };
+        };
+    };
+    simulation_worlds_list: {
+        parameters: {
+            query?: {
+                metric?: "colonized" | "constellation" | "one-million" | "population" | "subspace";
+                samples?: boolean;
+                world?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorldStatistic"][];
                 };
             };
         };
