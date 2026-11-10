@@ -9,8 +9,8 @@ from .models import Company, DatasetMeta, Event, Region, Source, World
 from .serializers import (
     CompanySerializer,
     EventSerializer,
+    MetaSerializer,
     RegionSerializer,
-    SourceSerializer,
     WorldDetailSerializer,
     WorldListSerializer,
 )
@@ -21,18 +21,22 @@ def site_year() -> int:
 
 
 class MetaView(APIView):
-    @extend_schema(summary="Site date, stardate, subspace speed and sources")
+    @extend_schema(
+        summary="Site date, stardate, subspace speed and sources", responses=MetaSerializer
+    )
     def get(self, request):
         dataset = DatasetMeta.objects.get()
         return Response(
-            {
-                "title": dataset.title,
-                "siteDate": settings.SITE_DATE,
-                "stardate": settings.SITE_STARDATE,
-                "year": site_year(),
-                "subspaceSpeedC": dataset.subspace_speed_c,
-                "sources": SourceSerializer(Source.objects.order_by("slug"), many=True).data,
-            }
+            MetaSerializer(
+                {
+                    "title": dataset.title,
+                    "site_date": settings.SITE_DATE,
+                    "stardate": settings.SITE_STARDATE,
+                    "year": site_year(),
+                    "subspace_speed_c": dataset.subspace_speed_c,
+                    "sources": Source.objects.order_by("slug"),
+                }
+            ).data
         )
 
 

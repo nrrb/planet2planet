@@ -129,3 +129,14 @@ class EventSerializer(serializers.ModelSerializer):
 
     def get_detail(self, event: Event) -> str | None:
         return event.detail or None
+
+
+class MetaSerializer(serializers.Serializer):
+    title = serializers.CharField()
+    site_date = serializers.DateField()
+    stardate = serializers.CharField()
+    year = serializers.IntegerField()
+    subspace_speed_c = serializers.FloatField(
+        help_text="Subspace speed as a multiple of light speed."
+    )
+    sources = SourceSerializer(many=True)

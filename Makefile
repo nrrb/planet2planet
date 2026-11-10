@@ -1,4 +1,4 @@
-.PHONY: up down test test-backend lint-backend lint seed
+.PHONY: up down test test-backend lint-backend lint seed schema
 
 up:
 	docker compose up -d --wait
@@ -21,4 +21,8 @@ lint: lint-backend
 seed:
 	docker compose run --rm backend sh -c "python manage.py migrate && \
 	  python manage.py load_dataset && python manage.py load_orbital_elements && \
-	  python manage.py build_network"
+	  python manage.py build_network && python manage.py generate_plans"
+
+schema:
+	docker compose run --rm backend python manage.py spectacular --file openapi.yaml --validate
+	cd frontend && npm run types
