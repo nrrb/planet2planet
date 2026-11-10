@@ -3,6 +3,8 @@ import { CANON_FIXES, INTRO, INVENTED, MONTE_CARLO, SIMULATION, SOURCES, WORLDS 
 import { CanonLabel } from '../features/canon/CanonLabel';
 import { Deadlines, SetAside, StartingConditions } from '../features/canon/FactTables';
 import { ScriptLink } from '../features/canon/ScriptLink';
+import { MarketFigures, PopulationChart, SettlementChart } from '../features/monte-carlo/ResultCharts';
+import { StripPlot } from '../features/monte-carlo/StripPlot';
 import { repoLink } from '../config';
 import styles from '../ui/Section.module.css';
 
@@ -12,6 +14,7 @@ const SECTIONS = [
   { id: 'canon-fixes', label: 'What canon fixes' },
   { id: 'simulation', label: 'How the simulation works' },
   { id: 'monte-carlo', label: 'Monte Carlo' },
+  { id: 'results', label: 'Results across the runs' },
   { id: 'invented', label: 'What is invented' },
   { id: 'sources', label: 'Sources and downloads' },
 ];
@@ -183,6 +186,18 @@ export default function CanonPage() {
         <p className={styles.prose}>{MONTE_CARLO.checked}</p>
         <p className={styles.prose}>{MONTE_CARLO.streams}</p>
         <p className={styles.prose}>{MONTE_CARLO.oneRun}</p>
+        {run && <StripPlot canonicalSeed={run.canonicalSeed} />}
+      </section>
+
+      <section id="results" className={styles.section} aria-labelledby="results-h">
+        <h2 id="results-h">Results across the runs</h2>
+        <p className={styles.prose}>
+          <CanonLabel kind="invented" /> Everything here is a result of the simulation, not canon, apart from the Moon’s
+          50 million, the one population figure canon gives. Each chart can be shown as a table.
+        </p>
+        <SettlementChart />
+        <PopulationChart />
+        <MarketFigures />
       </section>
 
       <section id="invented" className={styles.section} aria-labelledby="invented-h">

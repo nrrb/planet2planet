@@ -72,6 +72,7 @@ beforeEach(() => {
     vi.fn((input: string) => {
       const category = /category=([a-z-]+)/.exec(input)?.[1];
       if (input.startsWith('/api/canon/facts/')) return Promise.resolve(json(FACTS[category ?? ''] ?? []));
+      if (input.startsWith('/api/simulation/worlds/')) return Promise.resolve(json([]));
       if (input.startsWith('/api/simulation/')) return Promise.resolve(json(SIMULATION));
       if (input.startsWith('/api/meta/')) return Promise.resolve(json(META));
       return Promise.resolve(new Response('{}', { status: 404 }));
@@ -93,6 +94,7 @@ describe('CanonPage', () => {
       'What canon fixes',
       'How the simulation works',
       'Monte Carlo',
+      'Results across the runs',
       'What is invented',
       'Sources and downloads',
     ]);
