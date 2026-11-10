@@ -102,6 +102,11 @@ export function NetworkMap() {
   );
   const selected = trading.filter((c) => filters.providers.includes(c.id));
   const highlighted = useMemo(() => new Set(selected.flatMap((c) => c.worldIds)), [selected]);
+  // Frame the chosen providers' coverage; with none chosen, the whole system.
+  const fitNodes = useMemo(
+    () => (selected.length ? [...new Set(selected.flatMap((c) => c.worldIds.map((w) => `c-${w}`)))] : null),
+    [selected],
+  );
   const worldName = (id: string) => worlds.data?.find((w) => w.id === id)?.name ?? id;
   const visible = trading.filter((c) => c.name.toLowerCase().includes(search.toLowerCase()));
   const kinds = Object.keys(KIND_LABELS);
@@ -220,7 +225,7 @@ export function NetworkMap() {
             highlighted={highlighted}
             dimOthers={filters.providers.length > 0}
             labelPlanets
-            fitNodes={null}
+            fitNodes={fitNodes}
             label="Map of Sol's subspace network"
           />
         </Suspense>
