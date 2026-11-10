@@ -36,6 +36,9 @@ class DatasetMeta(models.Model):
     simulation_start = models.PositiveSmallIntegerField()
     subspace_speed_c = models.FloatField()
 
+    def __str__(self) -> str:
+        return self.title
+
 
 class World(models.Model):
     class Type(models.TextChoices):
@@ -65,7 +68,7 @@ class World(models.Model):
     orbital_speed_km_s = models.FloatField()
     constellation_established = models.PositiveSmallIntegerField(null=True, blank=True)
     constellation_started_as = models.CharField(
-        max_length=20, choices=ConstellationKind.choices, null=True, blank=True
+        max_length=20, choices=ConstellationKind.choices, blank=True
     )
     subspace_since = models.PositiveSmallIntegerField(null=True, blank=True)
     colonized = models.PositiveSmallIntegerField(null=True, blank=True)
@@ -76,9 +79,7 @@ class World(models.Model):
     class Meta:
         ordering = ["slug"]
         constraints = [
-            models.CheckConstraint(
-                condition=~Q(parent=F("slug")), name="world_not_its_own_parent"
-            ),
+            models.CheckConstraint(condition=~Q(parent=F("slug")), name="world_not_its_own_parent"),
         ]
 
     def __str__(self) -> str:
@@ -96,6 +97,9 @@ class PopulationSnapshot(models.Model):
             models.UniqueConstraint(fields=["world", "year"], name="unique_snapshot_per_year"),
         ]
 
+    def __str__(self) -> str:
+        return f"{self.world_id} {self.year}"
+
 
 class CanonNote(models.Model):
     world = models.ForeignKey(World, on_delete=models.CASCADE, related_name="canon_notes")
@@ -105,6 +109,9 @@ class CanonNote(models.Model):
 
     class Meta:
         ordering = ["world_id", "id"]
+
+    def __str__(self) -> str:
+        return f"{self.world_id}: {self.text[:40]}"
 
 
 class Company(models.Model):
@@ -123,7 +130,7 @@ class Company(models.Model):
     name = models.CharField(max_length=120)
     kind = models.CharField(max_length=20, choices=Kind.choices)
     sectors = ArrayField(models.CharField(max_length=20))
-    environment = models.CharField(max_length=30, null=True, blank=True)
+    environment = models.CharField(max_length=30, blank=True)
     focus = models.CharField(max_length=300)
     headquarters = models.ForeignKey(World, on_delete=models.PROTECT, related_name="hosted")
     region = models.ForeignKey(Region, on_delete=models.PROTECT, related_name="companies")
@@ -160,6 +167,9 @@ class ServiceArea(models.Model):
             models.UniqueConstraint(fields=["company", "world"], name="unique_service_area"),
         ]
 
+    def __str__(self) -> str:
+        return f"{self.company_id} @ {self.world_id}"
+
 
 class Event(models.Model):
     year = models.SmallIntegerField()
@@ -171,9 +181,12 @@ class Event(models.Model):
     buyer = models.ForeignKey(
         Company, null=True, blank=True, on_delete=models.CASCADE, related_name="purchases"
     )
-    detail = models.CharField(max_length=300, null=True, blank=True)
+    detail = models.CharField(max_length=300, blank=True)
     sequence = models.PositiveIntegerField(default=0)
 
     class Meta:
         ordering = ["year", "sequence"]
         indexes = [models.Index(fields=["type"])]
+
+    def __str__(self) -> str:
+        return f"{self.year} {self.type} {self.world_id}"
