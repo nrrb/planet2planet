@@ -104,7 +104,7 @@ The header has three links (Compare, About, Canon), collapsing into a menu on ph
   - which regions the route crosses
 - **A "Show route map" button** opens the map dialog (3.3).
 
-**Filters** (a bottom sheet on mobile, a sidebar on desktop):
+**Filters** (a drawer directly under the world selects, closed by default; active filters show as removable chips beside its toggle):
 
 - service class: shared, dedicated, synchronized
 - maximum latency
@@ -117,9 +117,9 @@ The header has three links (Compare, About, Canon), collapsing into a menu on ph
 
 **Results**
 
-- **Sort** by monthly price, latency today, worst-case latency, or redundancy tier.
+- **Sort** by clicking any column header; the choice is kept in the URL (`sort` and `dir`). Sorting happens in the browser, so it never refetches.
 - **Badges** on the best offer in each category: "Lowest price", "Lowest latency", "Most resilient".
-- **Offer cards on mobile; a sortable comparison table from the `lg` breakpoint.** Each offer shows:
+- **One dense, spreadsheet-style comparison table at every width.** Every column sorts in the browser, the first two columns and the actions stay frozen while the rest scroll sideways inside the table, and a units line explains the abbreviations. On a phone only the checkbox and a narrow plan column stay frozen. Each offer shows:
   - plan name and lead provider (with "a division of …" where it applies)
   - monthly price and setup fee
   - latency today and its range
@@ -288,10 +288,9 @@ Sections, in order:
 
 - **Built mobile first,** with single-column layouts at 360 px and up.
 - **Breakpoints:**
-  - `md` at 768 px: filters become a sidebar and offers show two per row
-  - `lg` at 1024 px: results switch to a comparison table
+  - `md` at 768 px: on narrower screens the actions column scrolls with the table instead of staying frozen
   - `xl` at 1280 px: the map dialog and About map get a side panel
-- **Touch targets** are at least 44 px. Nothing scrolls sideways except the timeline and wide tables, inside their own containers.
+- **Touch targets** are at least 44 px on touch devices (`pointer: coarse`) and 28 px with a mouse, so the interface can be dense. Nothing scrolls sideways except the timeline and wide tables, inside their own containers.
 
 ### 3.10 Accessibility
 
@@ -304,8 +303,8 @@ Sections, in order:
 ### 3.11 Visual identity
 
 - **An original look.** Not a copy of LCARS or any Star Trek interface, logo or insignia, so the design is its own.
-- **Direction:** a dark space theme with a light theme, a crisp sans-serif with a monospace face for figures, and one colour per network layer.
-- **Implementation:** design tokens as CSS custom properties, respecting `prefers-color-scheme` with a manual toggle.
+- **Direction:** built for telecom engineers and procurement staff who live in spreadsheets: high information density, a white background and black text, thin grid lines, small type, and a monospace face for figures. Colour is rare and meaningful: layer colours on the maps (drawn on a dark canvas), and one colour for the three "best in category" tags.
+- **Implementation:** design tokens as CSS custom properties. Light is the default whatever the system setting; a manual toggle switches to a dark theme.
 
 ## 4. What plans are compared on
 
