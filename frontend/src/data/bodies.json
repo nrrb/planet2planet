@@ -1,0 +1,569 @@
+{
+  "generatedAt": "2026-11-09T00:00:00Z",
+  "epoch": "2026-11-09T00:00:00Z",
+  "frame": "ICRF / J2000 ecliptic, parent-centered",
+  "units": {
+    "distance": "km",
+    "period": "days",
+    "angle": "radians",
+    "time": "UTC"
+  },
+  "referenceKind": "illustrative",
+  "provenance": "Approximate seed: rounded NASA/JPL physical and mean orbital parameters; solar orbital radii are conventional rounded semi-major axes. Sun radius is the IAU nominal value. Angles use a deterministic golden-angle layout, NOT observations. Seed directions are schematic (+1 except Triton -1), NOT vector-derived. JPL API DNS was unavailable during preparation. Run live regeneration for projected directions and angles.",
+  "bodies": [
+    {
+      "id": "sun",
+      "name": "Sun",
+      "horizonsId": "10",
+      "parentId": null,
+      "radiusKm": 695700,
+      "color": "#ffdc55",
+      "sources": [
+        "https://nssdc.gsfc.nasa.gov/planetary/factsheet/sunfact.html"
+      ]
+    },
+    {
+      "id": "mercury",
+      "name": "Mercury",
+      "horizonsId": "199",
+      "parentId": "sun",
+      "radiusKm": 2439.4,
+      "color": "#a7a9ac",
+      "sources": [
+        "https://ssd.jpl.nasa.gov/planets/phys_par.html"
+      ],
+      "orbit": {
+        "radiusKm": 57909050,
+        "periodDays": 87.9691,
+        "angleRad": 2.3999632297,
+        "direction": 1,
+        "epoch": "2026-11-09T00:00:00Z"
+      }
+    },
+    {
+      "id": "venus",
+      "name": "Venus",
+      "horizonsId": "299",
+      "parentId": "sun",
+      "radiusKm": 6051.8,
+      "color": "#ead7ae",
+      "sources": [
+        "https://ssd.jpl.nasa.gov/planets/phys_par.html"
+      ],
+      "orbit": {
+        "radiusKm": 108208000,
+        "periodDays": 224.701,
+        "angleRad": 4.7999264594,
+        "direction": 1,
+        "epoch": "2026-11-09T00:00:00Z"
+      }
+    },
+    {
+      "id": "earth",
+      "name": "Earth",
+      "horizonsId": "399",
+      "parentId": "sun",
+      "radiusKm": 6371.0084,
+      "color": "#4d9fff",
+      "sources": [
+        "https://ssd.jpl.nasa.gov/planets/phys_par.html"
+      ],
+      "orbit": {
+        "radiusKm": 149598023,
+        "periodDays": 365.256,
+        "angleRad": 0.9167043819204137,
+        "direction": 1,
+        "epoch": "2026-11-09T00:00:00Z"
+      }
+    },
+    {
+      "id": "mars",
+      "name": "Mars",
+      "horizonsId": "499",
+      "parentId": "sun",
+      "radiusKm": 3389.5,
+      "color": "#e77b51",
+      "sources": [
+        "https://ssd.jpl.nasa.gov/planets/phys_par.html"
+      ],
+      "orbit": {
+        "radiusKm": 227939200,
+        "periodDays": 686.98,
+        "angleRad": 3.3166676116204137,
+        "direction": 1,
+        "epoch": "2026-11-09T00:00:00Z"
+      }
+    },
+    {
+      "id": "jupiter",
+      "name": "Jupiter",
+      "horizonsId": "599",
+      "parentId": "sun",
+      "radiusKm": 69911,
+      "color": "#d6b18d",
+      "sources": [
+        "https://ssd.jpl.nasa.gov/planets/phys_par.html"
+      ],
+      "orbit": {
+        "radiusKm": 778570000,
+        "periodDays": 4332.59,
+        "angleRad": 5.716630841320413,
+        "direction": 1,
+        "epoch": "2026-11-09T00:00:00Z"
+      }
+    },
+    {
+      "id": "saturn",
+      "name": "Saturn",
+      "horizonsId": "699",
+      "parentId": "sun",
+      "radiusKm": 58232,
+      "color": "#ead19a",
+      "sources": [
+        "https://ssd.jpl.nasa.gov/planets/phys_par.html"
+      ],
+      "orbit": {
+        "radiusKm": 1433530000,
+        "periodDays": 10759.22,
+        "angleRad": 1.8334087638408274,
+        "direction": 1,
+        "epoch": "2026-11-09T00:00:00Z"
+      }
+    },
+    {
+      "id": "uranus",
+      "name": "Uranus",
+      "horizonsId": "799",
+      "parentId": "sun",
+      "radiusKm": 25362,
+      "color": "#8bdfe1",
+      "sources": [
+        "https://ssd.jpl.nasa.gov/planets/phys_par.html"
+      ],
+      "orbit": {
+        "radiusKm": 2872460000,
+        "periodDays": 30688.5,
+        "angleRad": 4.233371993540828,
+        "direction": 1,
+        "epoch": "2026-11-09T00:00:00Z"
+      }
+    },
+    {
+      "id": "neptune",
+      "name": "Neptune",
+      "horizonsId": "899",
+      "parentId": "sun",
+      "radiusKm": 24622,
+      "color": "#557ce8",
+      "sources": [
+        "https://ssd.jpl.nasa.gov/planets/phys_par.html"
+      ],
+      "orbit": {
+        "radiusKm": 4495060000,
+        "periodDays": 60182,
+        "angleRad": 0.35014991606124113,
+        "direction": 1,
+        "epoch": "2026-11-09T00:00:00Z"
+      }
+    },
+    {
+      "id": "moon",
+      "name": "Moon",
+      "horizonsId": "301",
+      "parentId": "earth",
+      "radiusKm": 1737.4,
+      "color": "#c8cbd2",
+      "sources": [
+        "https://ssd.jpl.nasa.gov/sats/phys_par/",
+        "https://ssd.jpl.nasa.gov/sats/elem/"
+      ],
+      "orbit": {
+        "radiusKm": 384400,
+        "periodDays": 27.3217,
+        "angleRad": 2.75011314576124,
+        "direction": 1,
+        "epoch": "2026-11-09T00:00:00Z"
+      }
+    },
+    {
+      "id": "phobos",
+      "name": "Phobos",
+      "horizonsId": "401",
+      "parentId": "mars",
+      "radiusKm": 11.08,
+      "color": "#b9a697",
+      "sources": [
+        "https://ssd.jpl.nasa.gov/sats/phys_par/",
+        "https://ssd.jpl.nasa.gov/sats/elem/"
+      ],
+      "orbit": {
+        "radiusKm": 9376,
+        "periodDays": 0.31891,
+        "angleRad": 5.150076375461239,
+        "direction": 1,
+        "epoch": "2026-11-09T00:00:00Z"
+      }
+    },
+    {
+      "id": "deimos",
+      "name": "Deimos",
+      "horizonsId": "402",
+      "parentId": "mars",
+      "radiusKm": 6.2,
+      "color": "#bfae9d",
+      "sources": [
+        "https://ssd.jpl.nasa.gov/sats/phys_par/",
+        "https://ssd.jpl.nasa.gov/sats/elem/"
+      ],
+      "orbit": {
+        "radiusKm": 23463,
+        "periodDays": 1.26244,
+        "angleRad": 1.2668542979816557,
+        "direction": 1,
+        "epoch": "2026-11-09T00:00:00Z"
+      }
+    },
+    {
+      "id": "io",
+      "name": "Io",
+      "horizonsId": "501",
+      "parentId": "jupiter",
+      "radiusKm": 1821.49,
+      "color": "#e3c35d",
+      "sources": [
+        "https://ssd.jpl.nasa.gov/sats/phys_par/",
+        "https://ssd.jpl.nasa.gov/sats/elem/"
+      ],
+      "orbit": {
+        "radiusKm": 421800,
+        "periodDays": 1.76914,
+        "angleRad": 3.666817527681655,
+        "direction": 1,
+        "epoch": "2026-11-09T00:00:00Z"
+      }
+    },
+    {
+      "id": "europa",
+      "name": "Europa",
+      "horizonsId": "502",
+      "parentId": "jupiter",
+      "radiusKm": 1560.8,
+      "color": "#cfc1a7",
+      "sources": [
+        "https://ssd.jpl.nasa.gov/sats/phys_par/",
+        "https://ssd.jpl.nasa.gov/sats/elem/"
+      ],
+      "orbit": {
+        "radiusKm": 671100,
+        "periodDays": 3.55118,
+        "angleRad": 6.066780757381654,
+        "direction": 1,
+        "epoch": "2026-11-09T00:00:00Z"
+      }
+    },
+    {
+      "id": "ganymede",
+      "name": "Ganymede",
+      "horizonsId": "503",
+      "parentId": "jupiter",
+      "radiusKm": 2631.2,
+      "color": "#a89d8d",
+      "sources": [
+        "https://ssd.jpl.nasa.gov/sats/phys_par/",
+        "https://ssd.jpl.nasa.gov/sats/elem/"
+      ],
+      "orbit": {
+        "radiusKm": 1070400,
+        "periodDays": 7.15455,
+        "angleRad": 2.1835586799020703,
+        "direction": 1,
+        "epoch": "2026-11-09T00:00:00Z"
+      }
+    },
+    {
+      "id": "callisto",
+      "name": "Callisto",
+      "horizonsId": "504",
+      "parentId": "jupiter",
+      "radiusKm": 2410.3,
+      "color": "#8c8680",
+      "sources": [
+        "https://ssd.jpl.nasa.gov/sats/phys_par/",
+        "https://ssd.jpl.nasa.gov/sats/elem/"
+      ],
+      "orbit": {
+        "radiusKm": 1882700,
+        "periodDays": 16.689,
+        "angleRad": 4.583521909602069,
+        "direction": 1,
+        "epoch": "2026-11-09T00:00:00Z"
+      }
+    },
+    {
+      "id": "mimas",
+      "name": "Mimas",
+      "horizonsId": "601",
+      "parentId": "saturn",
+      "radiusKm": 198.2,
+      "color": "#c3c5c8",
+      "sources": [
+        "https://ssd.jpl.nasa.gov/sats/phys_par/",
+        "https://ssd.jpl.nasa.gov/sats/elem/"
+      ],
+      "orbit": {
+        "radiusKm": 185540,
+        "periodDays": 0.94242,
+        "angleRad": 0.7002998321224823,
+        "direction": 1,
+        "epoch": "2026-11-09T00:00:00Z"
+      }
+    },
+    {
+      "id": "enceladus",
+      "name": "Enceladus",
+      "horizonsId": "602",
+      "parentId": "saturn",
+      "radiusKm": 252.1,
+      "color": "#e3edf1",
+      "sources": [
+        "https://ssd.jpl.nasa.gov/sats/phys_par/",
+        "https://ssd.jpl.nasa.gov/sats/elem/"
+      ],
+      "orbit": {
+        "radiusKm": 238040,
+        "periodDays": 1.37022,
+        "angleRad": 3.1002630618224813,
+        "direction": 1,
+        "epoch": "2026-11-09T00:00:00Z"
+      }
+    },
+    {
+      "id": "tethys",
+      "name": "Tethys",
+      "horizonsId": "603",
+      "parentId": "saturn",
+      "radiusKm": 531.1,
+      "color": "#cdd4d6",
+      "sources": [
+        "https://ssd.jpl.nasa.gov/sats/phys_par/",
+        "https://ssd.jpl.nasa.gov/sats/elem/"
+      ],
+      "orbit": {
+        "radiusKm": 294670,
+        "periodDays": 1.8878,
+        "angleRad": 5.50022629152248,
+        "direction": 1,
+        "epoch": "2026-11-09T00:00:00Z"
+      }
+    },
+    {
+      "id": "dione",
+      "name": "Dione",
+      "horizonsId": "604",
+      "parentId": "saturn",
+      "radiusKm": 561.4,
+      "color": "#c4c7c2",
+      "sources": [
+        "https://ssd.jpl.nasa.gov/sats/phys_par/",
+        "https://ssd.jpl.nasa.gov/sats/elem/"
+      ],
+      "orbit": {
+        "radiusKm": 377420,
+        "periodDays": 2.73692,
+        "angleRad": 1.6170042140428933,
+        "direction": 1,
+        "epoch": "2026-11-09T00:00:00Z"
+      }
+    },
+    {
+      "id": "rhea",
+      "name": "Rhea",
+      "horizonsId": "605",
+      "parentId": "saturn",
+      "radiusKm": 763.5,
+      "color": "#bab8b2",
+      "sources": [
+        "https://ssd.jpl.nasa.gov/sats/phys_par/",
+        "https://ssd.jpl.nasa.gov/sats/elem/"
+      ],
+      "orbit": {
+        "radiusKm": 527070,
+        "periodDays": 4.51821,
+        "angleRad": 4.016967443742892,
+        "direction": 1,
+        "epoch": "2026-11-09T00:00:00Z"
+      }
+    },
+    {
+      "id": "titan",
+      "name": "Titan",
+      "horizonsId": "606",
+      "parentId": "saturn",
+      "radiusKm": 2574.76,
+      "color": "#d9a956",
+      "sources": [
+        "https://ssd.jpl.nasa.gov/sats/phys_par/",
+        "https://ssd.jpl.nasa.gov/sats/elem/"
+      ],
+      "orbit": {
+        "radiusKm": 1221870,
+        "periodDays": 15.9454,
+        "angleRad": 0.13374536626331235,
+        "direction": 1,
+        "epoch": "2026-11-09T00:00:00Z"
+      }
+    },
+    {
+      "id": "iapetus",
+      "name": "Iapetus",
+      "horizonsId": "608",
+      "parentId": "saturn",
+      "radiusKm": 734.5,
+      "color": "#9f9589",
+      "sources": [
+        "https://ssd.jpl.nasa.gov/sats/phys_par/",
+        "https://ssd.jpl.nasa.gov/sats/elem/"
+      ],
+      "orbit": {
+        "radiusKm": 3560840,
+        "periodDays": 79.3215,
+        "angleRad": 2.5337085959633114,
+        "direction": 1,
+        "epoch": "2026-11-09T00:00:00Z"
+      }
+    },
+    {
+      "id": "miranda",
+      "name": "Miranda",
+      "horizonsId": "705",
+      "parentId": "uranus",
+      "radiusKm": 235.8,
+      "color": "#c2c4c6",
+      "sources": [
+        "https://ssd.jpl.nasa.gov/sats/phys_par/",
+        "https://ssd.jpl.nasa.gov/sats/elem/"
+      ],
+      "orbit": {
+        "radiusKm": 129900,
+        "periodDays": 1.41348,
+        "angleRad": 4.9336718256633105,
+        "direction": 1,
+        "epoch": "2026-11-09T00:00:00Z"
+      }
+    },
+    {
+      "id": "ariel",
+      "name": "Ariel",
+      "horizonsId": "701",
+      "parentId": "uranus",
+      "radiusKm": 578.9,
+      "color": "#d1d6d5",
+      "sources": [
+        "https://ssd.jpl.nasa.gov/sats/phys_par/",
+        "https://ssd.jpl.nasa.gov/sats/elem/"
+      ],
+      "orbit": {
+        "radiusKm": 190900,
+        "periodDays": 2.52038,
+        "angleRad": 1.0504497481837234,
+        "direction": 1,
+        "epoch": "2026-11-09T00:00:00Z"
+      }
+    },
+    {
+      "id": "umbriel",
+      "name": "Umbriel",
+      "horizonsId": "702",
+      "parentId": "uranus",
+      "radiusKm": 584.7,
+      "color": "#85898f",
+      "sources": [
+        "https://ssd.jpl.nasa.gov/sats/phys_par/",
+        "https://ssd.jpl.nasa.gov/sats/elem/"
+      ],
+      "orbit": {
+        "radiusKm": 266000,
+        "periodDays": 4.14418,
+        "angleRad": 3.4504129778837225,
+        "direction": 1,
+        "epoch": "2026-11-09T00:00:00Z"
+      }
+    },
+    {
+      "id": "titania",
+      "name": "Titania",
+      "horizonsId": "703",
+      "parentId": "uranus",
+      "radiusKm": 788.9,
+      "color": "#b7b4ad",
+      "sources": [
+        "https://ssd.jpl.nasa.gov/sats/phys_par/",
+        "https://ssd.jpl.nasa.gov/sats/elem/"
+      ],
+      "orbit": {
+        "radiusKm": 436300,
+        "periodDays": 8.70587,
+        "angleRad": 5.850376207583722,
+        "direction": 1,
+        "epoch": "2026-11-09T00:00:00Z"
+      }
+    },
+    {
+      "id": "oberon",
+      "name": "Oberon",
+      "horizonsId": "704",
+      "parentId": "uranus",
+      "radiusKm": 761.4,
+      "color": "#a59c96",
+      "sources": [
+        "https://ssd.jpl.nasa.gov/sats/phys_par/",
+        "https://ssd.jpl.nasa.gov/sats/elem/"
+      ],
+      "orbit": {
+        "radiusKm": 583500,
+        "periodDays": 13.4632,
+        "angleRad": 1.9671541301041344,
+        "direction": 1,
+        "epoch": "2026-11-09T00:00:00Z"
+      }
+    },
+    {
+      "id": "triton",
+      "name": "Triton",
+      "horizonsId": "801",
+      "parentId": "neptune",
+      "radiusKm": 1352.6,
+      "color": "#c8d4ce",
+      "sources": [
+        "https://ssd.jpl.nasa.gov/sats/phys_par/",
+        "https://ssd.jpl.nasa.gov/sats/elem/"
+      ],
+      "orbit": {
+        "radiusKm": 354800,
+        "periodDays": 5.87685,
+        "angleRad": 4.367117359804141,
+        "direction": -1,
+        "epoch": "2026-11-09T00:00:00Z"
+      }
+    },
+    {
+      "id": "nereid",
+      "name": "Nereid",
+      "horizonsId": "802",
+      "parentId": "neptune",
+      "radiusKm": 170,
+      "color": "#a2a8b1",
+      "sources": [
+        "https://ssd.jpl.nasa.gov/sats/phys_par/",
+        "https://ssd.jpl.nasa.gov/sats/elem/"
+      ],
+      "orbit": {
+        "radiusKm": 5513400,
+        "periodDays": 360.136,
+        "angleRad": 0.48389528232454637,
+        "direction": 1,
+        "epoch": "2026-11-09T00:00:00Z"
+      }
+    }
+  ]
+}
