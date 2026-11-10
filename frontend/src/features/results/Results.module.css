@@ -240,7 +240,7 @@
   color: var(--accent);
 }
 .cellPlan {
-  min-width: 300px;
+  min-width: 280px;
 }
 .cellPlan .actions {
   margin-top: 10px;

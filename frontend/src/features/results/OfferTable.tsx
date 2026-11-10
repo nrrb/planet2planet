@@ -69,17 +69,19 @@ function OfferRow(props: RowProps) {
             {formatLatencyRange(offer.latencyMs.min, offer.latencyMs.max)}
           </span>
         </td>
-        <td>{classLabel(offer)}</td>
+        <td>
+          {classLabel(offer)}
+          <div className={styles.setup}>{tierLabel(offer)} redundancy</div>
+        </td>
         <td>
           {routeShort(offer)}
           <div className={styles.setup}>{formatShare(offer.onNetworkShare)} on the lead network</div>
+          <div className={styles.setup}>{conjunctionShort(offer)}</div>
         </td>
-        <td>{conjunctionShort(offer)}</td>
-        <td>{tierLabel(offer)}</td>
       </tr>
       {detailsOpen && (
         <tr className={styles.detailsRow}>
-          <td colSpan={7}>
+          <td colSpan={5}>
             <OfferDetails offer={offer} from={props.from} to={props.to} id={`details-${offer.id}`} />
           </td>
         </tr>
@@ -106,10 +108,8 @@ export function OfferTable({ offers, sort, onSort, rowProps }: TableProps) {
             <th scope="col">Plan</th>
             <SortHeader sortKey="price" active={sort} onSort={onSort} />
             <SortHeader sortKey="latency" active={sort} onSort={onSort} />
-            <th scope="col">Service</th>
-            <th scope="col">Route</th>
-            <th scope="col">Solar conjunction</th>
-            <SortHeader sortKey="tier" active={sort} onSort={onSort} />
+            <th scope="col">Service and redundancy</th>
+            <th scope="col">Route and solar conjunction</th>
           </tr>
         </thead>
         <tbody>
