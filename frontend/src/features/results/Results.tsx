@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
 import { ApiError } from '../../api/client';
 import type { Offer } from '../../api/types';
+import { useMediaQuery } from '../../ui/useMediaQuery';
+import { OfferCards } from './OfferCards';
 import { OfferTable } from './OfferTable';
 import type { OfferItemProps } from './offerView';
 import { type CompanyMap, companyName, latencyScale } from './providers';
@@ -40,7 +42,11 @@ function errorMessage(error: Error): string {
   return error instanceof ApiError && error.message ? error.message : 'Something went wrong loading plans.';
 }
 
+/** Below this width a table of 18 columns cannot fit, so plans become cards. */
+export const CARDS_QUERY = '(max-width: 767px)';
+
 export function Results(props: Props) {
+  const asCards = useMediaQuery(CARDS_QUERY);
   const { offers, error, loading, companies, sort, dir } = props;
   const sorted = useMemo(
     () => (offers ? sortOffers(offers, sort, dir, (o) => companyName(companies, o.leadCompanyId)) : undefined),
@@ -100,6 +106,8 @@ export function Results(props: Props) {
             </button>
           )}
         </div>
+      ) : asCards ? (
+        <OfferCards offers={sorted} sort={sort} dir={dir} onSort={props.onSort} rowProps={rowProps} />
       ) : (
         <OfferTable offers={sorted} sort={sort} dir={dir} onSort={props.onSort} rowProps={rowProps} />
       )}

@@ -8,12 +8,51 @@ export async function openCompare(page: Page, query = 'from=jupiter&to=saturn') 
   await expect(page.getByRole('status').filter({ hasText: /plans? from|No plans match/ })).toBeVisible();
 }
 
-export const offerRows = (page: Page) => page.locator('table tbody tr:has(input[type=checkbox])');
+/** Plans are table rows on wide screens and cards on narrow ones; both count as an offer row. */
+export const offerRows = (page: Page) =>
+  page.locator('table tbody tr:has(input[type=checkbox]), ul[aria-label="Plans"] > li');
 
-/** The monthly price of every listed offer, in table order, as numbers. */
+/** True when the plans are shown as cards (a narrow viewport). */
+export const showsCards = async (page: Page) => (await page.getByRole('list', { name: 'Plans' }).count()) > 0;
+
+const digits = (text: string) => Number(text.replace(/[^0-9]/g, ''));
+
+/** The monthly price of every listed offer, in list order, as numbers. */
 export async function prices(page: Page): Promise<number[]> {
+  if (await showsCards(page)) {
+    const cards = await offerRows(page).allInnerTexts();
+    return cards.map((text) => digits(/([\d,]+)\s*cr a month/.exec(text.replace(/\s+/g, ' '))?.[1] ?? ''));
+  }
   const cells = await page.locator('table tbody tr:has(input[type=checkbox]) td:nth-child(4)').allTextContents();
-  return cells.map((text) => Number(text.replace(/[^0-9]/g, '')));
+  return cells.map(digits);
+}
+
+/** The number of hops of every listed offer, in list order. */
+export async function hopCounts(page: Page): Promise<number[]> {
+  if (await showsCards(page)) {
+    const cards = await offerRows(page).allInnerTexts();
+    return cards.map((text) => Number(/(\d+)\s*hops/.exec(text.replace(/\s+/g, ' '))?.[1]));
+  }
+  const cells = await page.locator('table tbody tr:has(input[type=checkbox]) td:nth-child(13)').allTextContents();
+  return cells.map(Number);
+}
+
+/** Sort by a column: a header button in the table, the "Sort by" select on cards. */
+export async function chooseSort(page: Page, column: { header: string; option: string }) {
+  if (await showsCards(page)) {
+    await page.getByRole('combobox', { name: 'Sort by' }).selectOption(column.option);
+  } else {
+    await page.getByRole('button', { name: column.header }).click();
+  }
+}
+
+/** Reverse the current sort: click the same header again, or the direction button on cards. */
+export async function reverseSort(page: Page, header: string) {
+  if (await showsCards(page)) {
+    await page.getByRole('button', { name: /first$|A to Z|Z to A/ }).click();
+  } else {
+    await page.getByRole('button', { name: header }).click();
+  }
 }
 
 /**
