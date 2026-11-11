@@ -1,4 +1,4 @@
-.PHONY: up down test test-backend lint-backend lint seed schema
+.PHONY: up down test test-backend lint-backend lint seed schema e2e e2e-update size
 
 up:
 	docker compose up -d --wait
@@ -28,3 +28,15 @@ seed:
 schema:
 	docker compose run --rm backend python manage.py spectacular --file openapi.yaml --validate
 	cd frontend && npm run types
+
+# Browser tests. Needs `make up && make seed`; the Vite dev server is started by Playwright.
+e2e:
+	cd e2e && npm ci --silent && npx playwright install chromium webkit && npx playwright test
+
+# Refresh the pixel baselines for this platform (see docs/adr/0005-testing-strategy.md).
+e2e-update:
+	cd e2e && npm run update-snapshots
+
+# First-page bundle budgets and the lazy-loading check.
+size:
+	cd frontend && npm run build && npm run size
