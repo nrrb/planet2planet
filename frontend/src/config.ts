@@ -27,3 +27,7 @@ export const SUN_ORBIT_ORDER = [
   'makemake',
   'eris',
 ];
+
+/** Who made the site, and where its source lives. Always shown in the footer, whatever VITE_REPO_URL says. */
+export const AUTHOR = { name: 'Nicholas Bennett', url: 'https://nicholasbennett.work/' } as const;
+export const SOURCE_URL = 'https://github.com/nrrb/planet2planet';
