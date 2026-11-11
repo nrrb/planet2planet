@@ -78,3 +78,28 @@ export function sortOffers(offers: readonly Offer[], key: SortKey, dir: SortDir,
     })
     .map((entry) => entry.offer);
 }
+
+/** Full names for the sort choices, for places that have no column header to click. */
+export const SORT_LABELS: Record<SortKey, string> = {
+  plan: 'Plan name',
+  provider: 'Provider',
+  price: 'Monthly price',
+  setup: 'Setup fee',
+  latency: 'Latency now',
+  'min-latency': 'Best latency over the year',
+  'worst-latency': 'Worst latency over the year',
+  class: 'Service class',
+  throughput: 'Throughput',
+  tier: 'Redundancy',
+  hops: 'Hops',
+  handoffs: 'Hand-offs',
+  share: 'Lead provider share',
+  conjunction: 'Conjunction',
+};
+
+/** Which way the list runs, in words. */
+export function directionLabel(key: SortKey, dir: SortDir): string {
+  if (key === 'plan' || key === 'provider') return dir === 'asc' ? 'A to Z' : 'Z to A';
+  if (key === 'tier') return dir === 'asc' ? 'Least resilient first' : 'Most resilient first';
+  return dir === 'asc' ? 'Lowest first' : 'Highest first';
+}

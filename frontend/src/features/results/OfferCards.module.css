@@ -1,0 +1,137 @@
+.sortBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.sortLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  font-size: var(--step--1);
+}
+.sortLabel select {
+  min-height: var(--tap);
+  padding: 0 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: var(--step-0);
+}
+
+.list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+}
+.compared {
+  border-color: var(--accent);
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+.titleBlock {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+  min-width: 0;
+}
+.title {
+  margin: 0;
+  font-size: var(--step-1);
+  font-weight: 650;
+}
+.kind {
+  color: var(--muted);
+  font-size: var(--step--1);
+}
+.compare {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: var(--tap);
+  font-size: var(--step--1);
+  font-weight: 600;
+  flex: none;
+}
+.compare input {
+  width: 24px;
+  height: 24px;
+  margin: 0;
+}
+.provider {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--step--1);
+}
+.figures {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.big {
+  font-size: var(--step-2);
+  font-weight: 700;
+  line-height: 1.15;
+}
+.unit {
+  color: var(--muted);
+  font-size: var(--step--1);
+}
+.sub {
+  color: var(--muted);
+  font-size: var(--step--1);
+}
+.facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 12px;
+  margin: 0;
+  font-size: var(--step--1);
+}
+.facts div {
+  min-width: 0;
+}
+.facts dt {
+  color: var(--muted);
+}
+.facts dd {
+  margin: 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.actions {
+  display: flex;
+  gap: 6px;
+}
+.actions button {
+  flex: 1;
+  min-height: var(--tap);
+}
+.details {
+  padding-top: 6px;
+  border-top: 1px solid var(--line);
+}
+.units {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: var(--step--1);
+}

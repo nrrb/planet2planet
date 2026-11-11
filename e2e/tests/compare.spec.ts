@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { noSidewaysScroll, offerRows, openCompare, prices } from './helpers';
+import { chooseSort, hopCounts, noSidewaysScroll, offerRows, openCompare, prices, reverseSort, showsCards } from './helpers';
 
 test.describe('Compare page', () => {
   test('opens on Jupiter and Saturn with offers when the URL has no worlds', async ({ page }) => {
@@ -52,8 +52,11 @@ test.describe('Compare page', () => {
     // The active filter stays visible as a chip while the drawer is closed.
     await toggle.click();
     await expect(page.getByRole('button', { name: 'Remove filter Class: Dedicated' })).toBeVisible();
-    const classes = await page.locator('table tbody tr:has(input[type=checkbox]) td:nth-child(10)').allTextContents();
-    expect(new Set(classes)).toEqual(new Set(['Dedicated']));
+    // Every remaining plan is Dedicated: a table cell, or a line on a card.
+    const rows = await offerRows(page).allInnerTexts();
+    expect(rows.length).toBeGreaterThan(0);
+    for (const row of rows) expect(row).toMatch(/Dedicated/);
+    expect(rows.some((row) => /\bShared\b/.test(row))).toBe(false);
   });
 
   test('a filter that matches nothing says so, and one click resets it', async ({ page }) => {
@@ -68,25 +71,24 @@ test.describe('Compare page', () => {
     await openCompare(page);
     const ascending = await prices(page);
     expect(ascending).toEqual([...ascending].sort((a, b) => a - b));
-    await page.getByRole('button', { name: 'Monthly cr' }).click();
+    await reverseSort(page, 'Monthly cr');
     await expect(page).toHaveURL(/dir=desc/);
     // The URL changes a beat before the rows re-sort.
     await expect.poll(async () => (await prices(page))[0]).toBe(Math.max(...ascending));
     const descending = await prices(page);
     expect(descending).toEqual([...descending].sort((a, b) => b - a));
 
-    await page.getByRole('button', { name: 'Hops' }).click();
+    await chooseSort(page, { header: 'Hops', option: 'hops' });
     await expect(page).toHaveURL(/sort=hops/);
-    const hopsCells = page.locator('table tbody tr:has(input[type=checkbox]) td:nth-child(13)');
     await expect.poll(async () => {
-      const hops = (await hopsCells.allTextContents()).map(Number);
+      const hops = await hopCounts(page);
       return JSON.stringify(hops) === JSON.stringify([...hops].sort((a, b) => a - b));
     }).toBe(true);
   });
 
   test('three plans can be compared side by side, and no fourth', async ({ page }) => {
     await openCompare(page);
-    const boxes = page.locator('table tbody input[type=checkbox]');
+    const boxes = offerRows(page).getByRole('checkbox');
     // The choice lives in the URL, so a box ticks a beat after the click: click, then expect.
     for (const i of [0, 1, 2]) {
       await boxes.nth(i).click();
@@ -159,8 +161,34 @@ test.describe('Compare page', () => {
   test('does not scroll sideways, and the table scrolls only sideways inside its frame', async ({ page }) => {
     await openCompare(page);
     await noSidewaysScroll(page);
+    if (await showsCards(page)) return; // cards have no scrolling frame; the page just gets longer
     const frame = page.getByRole('region', { name: 'Plans, scrollable table' });
     const { clientHeight, scrollHeight } = await frame.evaluate((el) => ({ clientHeight: el.clientHeight, scrollHeight: el.scrollHeight }));
     expect(scrollHeight, 'the table has its own vertical scroll').toBeLessThanOrEqual(clientHeight + 1);
+  });
+
+  test('on a narrow screen each plan is a card, with a "Sort by" select above the list', async ({ page }, info) => {
+    test.skip(info.project.name !== 'phone' && info.project.name !== 'webkit-phone', 'Cards are for narrow viewports.');
+    await openCompare(page);
+    await expect(page.getByRole('table')).toHaveCount(0);
+    const list = page.getByRole('list', { name: 'Plans' });
+    expect(await list.getByRole('listitem').count()).toBeGreaterThan(20);
+    const first = list.getByRole('listitem').first();
+    await expect(first.getByRole('heading')).toBeVisible();
+    for (const button of ['Route', 'Details', 'Request']) await expect(first.getByRole('button', { name: button })).toBeVisible();
+    await noSidewaysScroll(page);
+
+    const select = page.getByRole('combobox', { name: 'Sort by' });
+    await expect(select).toHaveValue('price');
+    const sortBox = await select.boundingBox();
+    const listBox = await list.boundingBox();
+    expect(sortBox!.y).toBeLessThan(listBox!.y);
+
+    await select.selectOption('latency');
+    await expect(page).toHaveURL(/sort=latency/);
+    await expect(page.getByRole('button', { name: 'Lowest first' })).toBeVisible();
+    await page.getByRole('button', { name: 'Lowest first' }).click();
+    await expect(page).toHaveURL(/dir=desc/);
+    await expect(page.getByRole('button', { name: 'Highest first' })).toBeVisible();
   });
 });
