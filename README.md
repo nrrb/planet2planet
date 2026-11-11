@@ -32,6 +32,15 @@ and the solar conjunction rule are invented for this project.
 
 The site is light by default, with a dark theme, and is tested against WCAG 2.2 AA in both.
 
+## Screenshots
+
+![The Compare page on a desktop: an animated map of the Sol system, the Earth and Mars selected, and 33 plans in a sortable table](docs/images/compare.png)
+
+<p align="center">
+  <img src="docs/images/route-map.png" alt="The route map dialog in the dark theme, showing the path from Earth to Mars and the carrier for each segment" width="62%">
+  <img src="docs/images/compare-phone.png" alt="The Compare page on a phone, where each plan is a card with a Sort by select above the list" width="31%">
+</p>
+
 ## Quick start
 
 ```sh
@@ -117,6 +126,7 @@ make seed
 | `make size` | Build, then check the first-page bundle budgets and that the map renderer stays lazy |
 | `make e2e` | Browser tests in Chromium and WebKit (needs `make up && make seed`) |
 | `make e2e-update` | Refresh this machine's pixel baselines |
+| `make screenshots` | Regenerate the README screenshots in `docs/images` (needs `make up && make seed`) |
 | `make og` | Regenerate the link-preview picture, `frontend/public/og.png` (needs `make up && make seed`) |
 | `make deploy` | Create or update the AWS deployment |
 | `make deploy-status` / `make deploy-ssh` | Show the deployment's state, or open a shell on the server |
@@ -175,7 +185,7 @@ See [ADR 0006](docs/adr/0006-aws-deployment.md) for the design and what it costs
 - `tools/`: the simulation script that regenerates the dataset
 - `deploy/`: the AWS deployment script
 - `docker-compose.yml`: the local database and API; `docker-compose.prod.yml` and `Caddyfile`: the production stack
-- `docs/`: derivation notes and architecture decision records
+- `docs/`: derivation notes, architecture decision records and the README screenshots
 
 ## Documentation
 
