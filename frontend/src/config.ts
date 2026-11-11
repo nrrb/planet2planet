@@ -11,6 +11,19 @@ export function repoLink(path: string, commit?: string, base: string | null = RE
   return `${base}/blob/${commit ?? 'main'}/${path}`;
 }
 
+/**
+ * Files in the repository that the site links to. A test checks that each one exists.
+ * Only the script is linked at a commit (the one that made the data). The data files and the derivation
+ * document are linked on main, because the exported data is committed after the script that produced it,
+ * so a link to them at the script's commit is a 404.
+ */
+export const REPO_FILES = {
+  script: 'tools/colonization-sim.js',
+  dataset: 'backend/data/sol-telecom-2380.json',
+  monteCarlo: 'backend/data/sol-montecarlo-2380.json',
+  derivation: 'docs/sol-telecom-2380-derivation.md',
+} as const;
+
 /** Worlds that orbit the Sun, innermost first, for ordering the pickers. */
 export const SUN_ORBIT_ORDER = [
   'mercury',
