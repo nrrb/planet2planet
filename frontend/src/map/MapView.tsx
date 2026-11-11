@@ -24,6 +24,8 @@ interface Props {
   marks?: ReadonlyMap<string, WorldMark>;
   /** Height of the map frame; defaults to a tall panel for dialogs. */
   compact?: boolean;
+  /** Just the picture, filling its parent: no controls, legend or border. For the share image. */
+  bare?: boolean;
 }
 
 const SITE_TIME = Date.UTC(2380, 5, 9, 12);
@@ -77,6 +79,7 @@ export default function MapView({
   showAllMoons,
   marks,
   compact,
+  bare,
 }: Props) {
   const host = useRef<HTMLDivElement>(null);
   const scene = useRef<NetworkScene | null>(null);
@@ -162,12 +165,12 @@ export default function MapView({
 
   const tip = hover ? tooltipText(hover) : null;
   return (
-    <div className={styles.frame}>
+    <div className={`${styles.frame} ${bare ? styles.frameBare : ''}`}>
       {/* A custom widget: the canvas has no native keyboard behaviour, so the wrapper handles keys. */}
       {/* eslint-disable jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */}
       <div
         ref={host}
-        className={`${styles.canvasWrap} ${compact ? styles.compact : ''}`}
+        className={`${styles.canvasWrap} ${compact ? styles.compact : ''} ${bare ? styles.bare : ''}`}
         style={{ background: MAP_COLORS[theme].background }}
         tabIndex={0}
         role="application"
@@ -196,39 +199,46 @@ export default function MapView({
         )}
       </div>
       {/* eslint-enable jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */}
-      <div className={`${styles.controls} ${compact ? styles.overlay : ''}`}>
-        <button type="button" className={styles.control} onClick={() => scene.current?.zoom(1.4)} aria-label="Zoom in">
-          +
-        </button>
-        <button
-          type="button"
-          className={styles.control}
-          onClick={() => scene.current?.zoom(1 / 1.4)}
-          aria-label="Zoom out"
-        >
-          −
-        </button>
-        <button
-          type="button"
-          className={styles.control}
-          onClick={() => scene.current?.fitTo(fitNodes && fitNodes.length ? fitNodes : null)}
-        >
-          Reset view
-        </button>
-        <button
-          type="button"
-          className={styles.control}
-          onClick={() => setPaused((p) => !p)}
-          disabled={reduced}
-          aria-pressed={paused}
-        >
-          {paused || reduced ? 'Play motion' : 'Pause motion'}
-        </button>
-        {reduced && !compact && (
-          <span className={styles.hint}>Motion is off because your system asks for reduced motion.</span>
-        )}
-      </div>
-      {links.length > 0 && (
+      {!bare && (
+        <div className={`${styles.controls} ${compact ? styles.overlay : ''}`}>
+          <button
+            type="button"
+            className={styles.control}
+            onClick={() => scene.current?.zoom(1.4)}
+            aria-label="Zoom in"
+          >
+            +
+          </button>
+          <button
+            type="button"
+            className={styles.control}
+            onClick={() => scene.current?.zoom(1 / 1.4)}
+            aria-label="Zoom out"
+          >
+            −
+          </button>
+          <button
+            type="button"
+            className={styles.control}
+            onClick={() => scene.current?.fitTo(fitNodes && fitNodes.length ? fitNodes : null)}
+          >
+            Reset view
+          </button>
+          <button
+            type="button"
+            className={styles.control}
+            onClick={() => setPaused((p) => !p)}
+            disabled={reduced}
+            aria-pressed={paused}
+          >
+            {paused || reduced ? 'Play motion' : 'Pause motion'}
+          </button>
+          {reduced && !compact && (
+            <span className={styles.hint}>Motion is off because your system asks for reduced motion.</span>
+          )}
+        </div>
+      )}
+      {!bare && links.length > 0 && (
         <Legend theme={theme} layers={[...new Set(links.filter((l) => l.emphasis !== 'dim').map((l) => l.layer))]} />
       )}
     </div>

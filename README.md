@@ -77,6 +77,7 @@ flowchart LR
 | `make e2e` | Browser tests in Chromium and WebKit (needs `make up && make seed`) |
 | `make e2e-update` | Refresh this machine's pixel baselines |
 | `make deploy` / `make destroy` | Create or delete the AWS deployment |
+| `make og` | Regenerate the link-preview picture, `frontend/public/og.png` (needs `make up && make seed`) |
 
 ## Deploying to AWS
 

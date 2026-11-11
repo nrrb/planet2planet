@@ -7,7 +7,8 @@
     "test": "playwright test",
     "test:chromium": "playwright test --project=desktop --project=phone --project=tablet",
     "update-snapshots": "playwright test --grep @visual --update-snapshots",
-    "install-browsers": "playwright install chromium webkit"
+    "install-browsers": "playwright install chromium webkit",
+    "og": "node scripts/generate-og.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.0",

@@ -43,7 +43,7 @@ export function ComparePage() {
     document.title =
       state.from && state.to
         ? `${nameOf(state.from)} to ${nameOf(state.to)}: Planet2Planet`
-        : 'Planet2Planet: compare subspace plans';
+        : 'Planet2Planet: Solar Telecom Shopping';
     // nameOf depends only on the worlds list
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.from, state.to, worlds.data]);
