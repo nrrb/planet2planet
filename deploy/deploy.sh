@@ -81,7 +81,7 @@ make_key() {
     ssh-keygen -q -t ed25519 -N "" -C "planet2planet-deploy" -f "$KEY"
   fi
   if ! ls_ get-key-pair --key-pair-name "$NAME" >/dev/null 2>&1; then
-    ls_ import-key-pair --key-pair-name "$NAME" --public-key-base64 "$(base64 <"$KEY.pub" | tr -d '\n')" >/dev/null
+    ls_ import-key-pair --key-pair-name "$NAME" --public-key-base64 "$(cat "$KEY.pub")" >/dev/null
   fi
 }
 
