@@ -9,8 +9,8 @@
     "preview": "vite preview --host 127.0.0.1",
     "test": "vitest run",
     "lint": "eslint .",
-    "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"tests/**/*.ts\"",
-    "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\" \"tests/**/*.ts\"",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"scripts/*.mjs\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\" \"scripts/*.mjs\"",
     "types": "openapi-typescript ../backend/openapi.yaml -o src/api/schema.d.ts",
     "test:unit": "vitest run",
     "size": "node scripts/check-bundle.mjs"
