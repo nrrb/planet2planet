@@ -80,8 +80,8 @@ make_key() {
     say "Creating an SSH key in .deploy/"
     ssh-keygen -q -t ed25519 -N "" -C "planet2planet-deploy" -f "$KEY"
   fi
-  if ! ls_ get-key-pair --key-pair-name "$NAME" >/dev/null 2>&1; then
-    ls_ import-key-pair --key-pair-name "$NAME" --public-key-base64 "$(cat "$KEY.pub")" >/dev/null
+  if ! ls_ get-key-pair --key-pair-name "$NAME-key" >/dev/null 2>&1; then
+    ls_ import-key-pair --key-pair-name "$NAME-key" --public-key-base64 "$(cat "$KEY.pub")" >/dev/null
   fi
 }
 
@@ -111,7 +111,7 @@ create_infrastructure() {
     say "Creating the Lightsail instance ($BUNDLE, $BLUEPRINT, $ZONE)"
     user_data >"$STATE/user-data.sh"
     ls_ create-instances --instance-names "$NAME" --availability-zone "$ZONE" \
-      --blueprint-id "$BLUEPRINT" --bundle-id "$BUNDLE" --key-pair-name "$NAME" \
+      --blueprint-id "$BLUEPRINT" --bundle-id "$BUNDLE" --key-pair-name "$NAME-key" \
       --user-data "file://$STATE/user-data.sh" \
       --tags key=project,value=planet2planet >/dev/null
   fi
@@ -268,7 +268,7 @@ cmd_destroy() {
   [ "$answer" = "destroy $NAME" ] || die "cancelled"
   if instance_exists; then ls_ delete-instance --instance-name "$NAME" --force-delete-add-ons >/dev/null; fi
   ls_ release-static-ip --static-ip-name "$NAME-ip" >/dev/null 2>&1 || true
-  ls_ delete-key-pair --key-pair-name "$NAME" >/dev/null 2>&1 || true
+  ls_ delete-key-pair --key-pair-name "$NAME-key" >/dev/null 2>&1 || true
   echo "Deleted. Local secrets remain in .deploy/ (git-ignored); remove them if you will not redeploy."
   echo "Remember to remove the A records for $DOMAIN at your registrar."
 }
