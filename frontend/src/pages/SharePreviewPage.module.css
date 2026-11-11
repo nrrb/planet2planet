@@ -54,3 +54,11 @@
   font-size: 18px;
   color: #b9c3d9;
 }
+.contrast {
+  margin: 10px 0 0;
+  padding-top: 10px;
+  border-top: 1px solid #2a3350;
+  font-size: 19px;
+  font-weight: 600;
+  color: #e8b44f;
+}

@@ -8,6 +8,7 @@ const MapView = lazy(() => import('../map/MapView'));
 
 const FROM = 'earth';
 const TO = 'eris';
+const LIGHT_KM_PER_SECOND = 299_792.458;
 
 /**
  * The picture used when the site is shared as a link. It is a fixed 1200 by 630 composition of the
@@ -77,6 +78,11 @@ export default function SharePreviewPage() {
           </p>
           <p className={styles.figure}>{formatDuration(best.latencyMs.now / 1000)}</p>
           <p className={styles.caption}>one way, on the fastest plan</p>
+          {quote.data && (
+            <p className={styles.contrast}>
+              Light alone would take {formatDuration(quote.data.route.distanceKm / LIGHT_KM_PER_SECOND)}
+            </p>
+          )}
         </div>
       )}
     </div>
