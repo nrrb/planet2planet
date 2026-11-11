@@ -172,6 +172,49 @@ describe('ComparePage', () => {
     expect(await screen.findByText('2 plans from Jupiter to Saturn')).toBeInTheDocument();
   });
 
+  it('shows loading, not the previous pair’s plans, while a new pair loads', async () => {
+    let release: (() => void) | undefined;
+    quoteHandler = (url) => {
+      if (!url.includes('to=earth')) return json(QUOTE);
+      return json({ ...QUOTE, offers: [offer('z', 'Earth Special', 111)] });
+    };
+    renderAt('/?from=jupiter&to=saturn');
+    await screen.findByText('2 plans from Jupiter to Saturn');
+    const original = vi.mocked(fetch).getMockImplementation();
+    vi.mocked(fetch).mockImplementation(((input: string) => {
+      if (input.includes('to=earth'))
+        return new Promise((resolve) => {
+          release = () => resolve(json({ ...QUOTE, offers: [offer('z', 'Earth Special', 111)] }));
+        });
+      return original?.(input) ?? Promise.resolve(json({}, 404));
+    }) as typeof fetch);
+    await userEvent.selectOptions(screen.getByLabelText('To'), 'earth');
+    expect(await screen.findByText('Loading plans…')).toBeInTheDocument();
+    expect(screen.queryByText('Transit Shared')).not.toBeInTheDocument();
+    release?.();
+    expect(await screen.findByText('Earth Special')).toBeInTheDocument();
+  });
+
+  it('keeps the current plans on screen while only the filters change', async () => {
+    renderAt('/?from=jupiter&to=saturn');
+    await screen.findByText('2 plans from Jupiter to Saturn');
+    let release: (() => void) | undefined;
+    const original = vi.mocked(fetch).getMockImplementation();
+    vi.mocked(fetch).mockImplementation(((input: string) => {
+      if (input.includes('class=dedicated'))
+        return new Promise((resolve) => {
+          release = () => resolve(json({ ...QUOTE, offers: [offer('b', 'Transit Dedicated', 1316)] }));
+        });
+      return original?.(input) ?? Promise.resolve(json({}, 404));
+    }) as typeof fetch);
+    await userEvent.click(screen.getByRole('button', { name: /^Filters/ }));
+    await userEvent.click(screen.getByRole('checkbox', { name: 'Dedicated' }));
+    expect(screen.getByText('Transit Shared')).toBeInTheDocument(); // still showing the last result
+    expect(screen.queryByText('Loading plans…')).not.toBeInTheDocument();
+    release?.();
+    expect(await screen.findByText('1 plan from Jupiter to Saturn')).toBeInTheDocument();
+  });
+
   it('keeps at most three plans for comparison', async () => {
     quoteHandler = () =>
       json({ ...QUOTE, offers: ['a', 'b', 'c', 'd'].map((id, i) => offer(id, `Plan ${id}`, 100 + i)) });
