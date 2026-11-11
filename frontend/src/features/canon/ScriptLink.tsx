@@ -1,6 +1,6 @@
-import { REPO_URL, repoLink } from '../../config';
+import { REPO_FILES, REPO_URL, repoLink } from '../../config';
 
-const SCRIPT = 'tools/colonization-sim.js';
+const SCRIPT = REPO_FILES.script;
 
 /** Links to the simulation script at the exact commit that made the data, so page and code match. */
 export function ScriptLink({

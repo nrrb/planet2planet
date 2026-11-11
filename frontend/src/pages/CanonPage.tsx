@@ -2,11 +2,12 @@ import { useMeta, useSimulation } from '../api/hooks';
 import { CANON_FIXES, INTRO, INVENTED, MONTE_CARLO, SIMULATION, SOURCES, WATCH, WORLDS } from '../content/canon';
 import { CanonLabel } from '../features/canon/CanonLabel';
 import { Deadlines, SetAside, StartingConditions } from '../features/canon/FactTables';
+import { RepoFileLink } from '../features/canon/RepoFile';
 import { ScriptLink } from '../features/canon/ScriptLink';
 import { MarketFigures, PopulationChart, SettlementChart } from '../features/monte-carlo/ResultCharts';
 import { StripPlot } from '../features/monte-carlo/StripPlot';
 import { HistoryMap } from '../features/history-map/HistoryMap';
-import { repoLink } from '../config';
+import { REPO_FILES } from '../config';
 import styles from '../ui/Section.module.css';
 
 const SECTIONS = [
@@ -159,13 +160,9 @@ export default function CanonPage() {
         </pre>
         <p className={styles.prose}>
           The derivation document explains every part of the dataset in detail:{' '}
-          {repoLink('docs/sol-telecom-2380-derivation.md', commit) ? (
-            <External href={repoLink('docs/sol-telecom-2380-derivation.md', commit) ?? ''}>
-              docs/sol-telecom-2380-derivation.md
-            </External>
-          ) : (
-            <span className="figure">docs/sol-telecom-2380-derivation.md</span>
-          )}
+          <RepoFileLink path={REPO_FILES.derivation}>
+            <span className="figure">{REPO_FILES.derivation}</span>
+          </RepoFileLink>
           .
         </p>
       </section>
@@ -248,19 +245,17 @@ export default function CanonPage() {
         </ul>
         <h3 className={styles.sub}>Downloads</h3>
         <ul className={styles.list} aria-label="Downloads">
-          {[
-            ['The dataset (one run, seed 1701)', 'backend/data/sol-telecom-2380.json'],
-            ['The Monte Carlo summary (400 runs)', 'backend/data/sol-montecarlo-2380.json'],
-            ['The derivation document', 'docs/sol-telecom-2380-derivation.md'],
-          ].map(([label, path]) => {
-            const url = repoLink(path, commit);
-            return (
-              <li key={path}>
-                {url ? <External href={url}>{label}</External> : label}{' '}
-                <span className={`${styles.note} figure`}>{path}</span>
-              </li>
-            );
-          })}
+          {(
+            [
+              ['The dataset (one run, seed 1701)', REPO_FILES.dataset],
+              ['The Monte Carlo summary (400 runs)', REPO_FILES.monteCarlo],
+              ['The derivation document', REPO_FILES.derivation],
+            ] as const
+          ).map(([label, path]) => (
+            <li key={path}>
+              <RepoFileLink path={path}>{label}</RepoFileLink> <span className={`${styles.note} figure`}>{path}</span>
+            </li>
+          ))}
         </ul>
         <p className={styles.prose}>{SOURCES.disclaimer}</p>
       </section>
