@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
-import { noSidewaysScroll } from './helpers';
+import { chooseTheme, noSidewaysScroll } from './helpers';
 
 const PAGES = [
   ['compare', '/?from=earth&to=mars'],
@@ -20,12 +20,13 @@ async function scan(page: Page) {
 
 for (const theme of ['light', 'dark'] as const) {
   test.describe(`accessibility (${theme})`, () => {
-    test.use({ colorScheme: theme });
+    test.beforeEach(({ page }) => chooseTheme(page, theme));
     for (const [name, url] of PAGES) {
       test(`${name} page has no WCAG 2.2 AA violations`, async ({ page }) => {
         test.slow();
         await page.goto(url);
         await page.waitForLoadState('networkidle');
+        await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
         await scan(page);
         await noSidewaysScroll(page);
       });

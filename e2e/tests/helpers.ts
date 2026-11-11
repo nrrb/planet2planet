@@ -93,3 +93,11 @@ export async function cornerColour(locator: Locator): Promise<[number, number, n
 
 export const homeMap = (page: Page) => page.getByRole('region', { name: 'Map of the Sol system' }).locator('canvas');
 export const dialogMap = (page: Page) => page.getByRole('dialog').locator('canvas');
+
+/**
+ * Choose the site's theme the way a visitor does: the site stores the choice and ignores the system setting,
+ * so emulating prefers-color-scheme changes nothing. Call before the first navigation.
+ */
+export async function chooseTheme(page: Page, theme: 'light' | 'dark') {
+  await page.addInitScript((value) => window.localStorage.setItem('p2p-theme', value), theme);
+}
