@@ -12,7 +12,7 @@ describe('Layout footer', () => {
     );
     const footer = screen.getByRole('contentinfo');
     expect(footer).toHaveTextContent(/Built with love/);
-    expect(within(footer).getByRole('img', { name: 'Vulcan salute' })).toBeInTheDocument();
+    expect(within(footer).getByRole('img', { name: 'Live long, and prosper.' })).toBeInTheDocument();
 
     const author = within(footer).getByRole('link', { name: /Nicholas Bennett/ });
     expect(author).toHaveAttribute('href', 'https://nicholasbennett.work/');

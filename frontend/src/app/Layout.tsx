@@ -69,7 +69,7 @@ export function Layout() {
           </p>
           <p>
             Built with love{' '}
-            <span role="img" aria-label="Vulcan salute">
+            <span role="img" aria-label="Live long, and prosper.">
               🖖🏻
             </span>{' '}
             by{' '}
