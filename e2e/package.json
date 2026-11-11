@@ -1,0 +1,20 @@
+{
+  "name": "planet2planet-e2e",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:chromium": "playwright test --project=desktop --project=phone --project=tablet",
+    "update-snapshots": "playwright test --grep @visual --update-snapshots",
+    "install-browsers": "playwright install chromium webkit"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.0",
+    "@playwright/test": "^1.50.0",
+    "@types/node": "^22.0.0",
+    "@types/pngjs": "^6.0.5",
+    "pngjs": "^7.0.0",
+    "typescript": "^5.9.0"
+  }
+}

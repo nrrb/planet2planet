@@ -1,0 +1,231 @@
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 16px;
+  margin: 0 0 8px;
+  padding: 4px 8px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface-2);
+}
+.controls legend {
+  padding: 0 4px;
+  font-weight: 650;
+  font-size: var(--step--1);
+}
+.option {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: var(--tap);
+  cursor: pointer;
+}
+.option input {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+}
+.count {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: var(--step--1);
+}
+
+.jump {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  font-size: var(--step--1);
+  color: var(--muted);
+}
+.jumpButton {
+  min-height: var(--tap);
+  padding: 0 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: var(--step--1);
+  font-weight: 600;
+}
+.jumpButton:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.track {
+  overflow-x: auto;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+}
+.eras {
+  display: block;
+}
+
+.era {
+  border-bottom: 1px solid var(--line-strong);
+}
+.era:last-child {
+  border-bottom: 0;
+}
+.eraHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 10px;
+  padding: 4px 8px;
+  background: var(--surface-3);
+  border-bottom: 1px solid var(--line-strong);
+  position: sticky;
+  left: 0;
+}
+.eraHead h3 {
+  font-size: var(--step-1);
+}
+.eraHead span {
+  color: var(--muted);
+  font-size: var(--step--1);
+}
+
+.years {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.year {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  gap: 8px;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--line);
+}
+.year:last-child {
+  border-bottom: 0;
+}
+.yearLabel {
+  font-weight: 650;
+}
+
+.items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 5px;
+}
+.item {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr);
+  gap: 6px;
+  align-items: start;
+}
+.glyph {
+  text-align: center;
+  line-height: 1.35;
+}
+.kind {
+  display: inline-block;
+  margin-right: 6px;
+  font-size: 10.5px;
+  font-weight: 650;
+  text-transform: none;
+  color: var(--tone);
+}
+.title {
+  font-weight: 550;
+}
+.milestone .title {
+  font-weight: 700;
+}
+.key {
+  margin-left: 6px;
+  padding: 0 4px;
+  border: 1px solid var(--text);
+  border-radius: 3px;
+  font-size: 10.5px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+.detail {
+  color: var(--muted);
+  font-size: var(--step--1);
+}
+.more {
+  min-height: var(--tap);
+  padding: 0 8px;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: var(--step--1);
+  font-weight: 600;
+  justify-self: start;
+}
+.more:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.constellation {
+  --tone: var(--ev-constellation);
+}
+.convert {
+  --tone: var(--ev-convert);
+}
+.colony {
+  --tone: var(--ev-colony);
+}
+.million {
+  --tone: var(--ev-million);
+}
+.founded {
+  --tone: var(--ev-founded);
+}
+.acquired {
+  --tone: var(--ev-acquired);
+}
+.canon {
+  --tone: var(--ev-canon);
+}
+.item .glyph {
+  color: var(--tone);
+}
+
+.empty {
+  padding: 16px;
+  color: var(--muted);
+}
+
+/* On a wide screen the eras become bands along a horizontal timeline. */
+@media (min-width: 1024px) {
+  .eras {
+    display: flex;
+    width: max-content;
+    min-width: 100%;
+  }
+  .era {
+    display: flex;
+    flex-direction: column;
+    flex: none;
+    border-bottom: 0;
+    border-right: 1px solid var(--line-strong);
+  }
+  .years {
+    display: flex;
+    align-items: flex-start;
+    flex: 1;
+  }
+  .year {
+    display: block;
+    width: 176px;
+    flex: none;
+    border-bottom: 0;
+    border-right: 1px solid var(--line);
+  }
+  .yearLabel {
+    display: block;
+    margin-bottom: 4px;
+    padding-bottom: 2px;
+    border-bottom: 1px solid var(--line-strong);
+  }
+}

@@ -1,0 +1,48 @@
+.page {
+  display: grid;
+  /* minmax(0, 1fr) lets the table scroll inside its frame instead of widening the page */
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+}
+
+.titleRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2px 16px;
+}
+.stardate {
+  color: var(--muted);
+  font-size: var(--step--1);
+}
+
+.skip {
+  position: absolute;
+  left: -9999px;
+}
+.skip:focus {
+  position: static;
+  display: inline-block;
+}
+
+.button {
+  min-height: var(--tap);
+  padding: 0 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-weight: 600;
+}
+.button:hover {
+  border-color: var(--accent);
+}
+.accent {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+.hint {
+  color: var(--muted);
+  font-size: var(--step--1);
+}

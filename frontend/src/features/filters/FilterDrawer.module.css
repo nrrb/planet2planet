@@ -1,0 +1,66 @@
+.drawer {
+  border: 1px solid var(--line-strong);
+  background: var(--surface-2);
+}
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+}
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: var(--tap);
+  padding: 0 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-weight: 650;
+}
+.toggle:hover {
+  border-color: var(--accent);
+}
+.caret {
+  font-size: 10px;
+}
+.chips {
+  display: contents;
+  list-style: none;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: calc(var(--tap) - 4px);
+  padding: 0 8px;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--accent);
+  font-size: var(--step--1);
+  font-weight: 600;
+}
+.chip:hover {
+  background: var(--selected);
+}
+.reset {
+  min-height: calc(var(--tap) - 4px);
+  padding: 0 6px;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font-size: var(--step--1);
+  text-decoration: underline;
+}
+.none {
+  color: var(--muted);
+  font-size: var(--step--1);
+}
+.panel {
+  padding: 8px 10px 10px;
+  border-top: 1px solid var(--line-strong);
+  background: var(--surface);
+}

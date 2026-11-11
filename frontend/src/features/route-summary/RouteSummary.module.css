@@ -1,0 +1,30 @@
+/* One compact strip of labelled readings, like the header of a spreadsheet. */
+.readout {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  border: 1px solid var(--line-strong);
+  background: var(--surface-2);
+}
+.cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 3px 12px 4px 8px;
+  border-right: 1px solid var(--line);
+  min-width: 0;
+}
+.cell dt {
+  color: var(--muted);
+  font-size: var(--step--1);
+}
+.cell dd {
+  margin: 0;
+  font-weight: 600;
+}
+.cell small {
+  margin-left: 6px;
+  color: var(--muted);
+  font-size: var(--step--1);
+  font-weight: 400;
+}

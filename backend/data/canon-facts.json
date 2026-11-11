@@ -1,0 +1,381 @@
+{
+  "schemaVersion": "1.0.0",
+  "sources": [
+    {
+      "id": "ma-asteroid-belt",
+      "title": "Memory Alpha: Asteroid belt",
+      "url": "https://memory-alpha.fandom.com/wiki/Asteroid_belt_(Sol_system)"
+    },
+    {
+      "id": "ma-io",
+      "title": "Memory Alpha: Io",
+      "url": "https://memory-alpha.fandom.com/wiki/Io"
+    },
+    {
+      "id": "ma-pluto",
+      "title": "Memory Alpha: Pluto",
+      "url": "https://memory-alpha.fandom.com/wiki/Pluto"
+    }
+  ],
+  "facts": [
+    {
+      "slug": "first-warp-flight",
+      "category": "starting-condition",
+      "topic": "First warp flight, 2063",
+      "world": null,
+      "statement": "Zefram Cochrane flies the Phoenix on 5 April 2063.",
+      "episodes": [
+        "Star Trek: First Contact"
+      ],
+      "howUsed": "Background: why settlement accelerates.",
+      "standing": "on-screen",
+      "source": "ma-warp-drive",
+      "deadline": null,
+      "order": 1
+    },
+    {
+      "slug": "ships-get-faster",
+      "category": "starting-condition",
+      "topic": "Ships keep getting faster",
+      "world": null,
+      "statement": "Earth passes warp 2 in the 2140s, launches a warp 5 ship in 2151 and reaches warp 7 by 2161. Ships cruise at warp 6 in the 2260s and exceed warp 9 in the 24th century.",
+      "episodes": [],
+      "howUsed": "A \"reach\" score that rises every year from 2151.",
+      "standing": "on-screen",
+      "source": "ma-warp-drive",
+      "deadline": null,
+      "order": 2
+    },
+    {
+      "slug": "subspace-radio-2151",
+      "category": "starting-condition",
+      "topic": "Subspace radio, 2151",
+      "world": null,
+      "statement": "Earth has subspace communication by 2151 and needs amplifiers to reach distant ships. Enterprise deploys the first, Echo One, in August 2151. Relay networks replace amplifiers by the 24th century.",
+      "episodes": [
+        "ENT: Fortunate Son",
+        "ENT: Silent Enemy",
+        "TNG: Aquiel"
+      ],
+      "howUsed": "Constellations are subspace from 2151; older ones convert.",
+      "standing": "on-screen",
+      "source": "ma-subspace",
+      "deadline": null,
+      "order": 3
+    },
+    {
+      "slug": "subspace-speed",
+      "category": "starting-condition",
+      "topic": "Subspace speed",
+      "world": null,
+      "statement": "\"Approximately 52,000 times the speed of light.\" Data's figure in \"Where No One Has Gone Before\" works out to about 52,090.",
+      "episodes": [
+        "SNW: All Those Who Wander",
+        "TNG: Where No One Has Gone Before"
+      ],
+      "howUsed": "Latency figures, at 52,000 times light speed.",
+      "standing": "on-screen",
+      "source": "ma-subspace",
+      "deadline": null,
+      "order": 4
+    },
+    {
+      "slug": "moon-by-2069",
+      "category": "starting-condition",
+      "topic": "The Moon, by 2069",
+      "world": "moon",
+      "statement": "New Berlin is built between 2063 and 2069. The Orpheus Mining Complex is built in 2090.",
+      "episodes": [
+        "ENT: Terra Nova",
+        "ENT: Demons"
+      ],
+      "howUsed": "Settled before the start, dated 2069.",
+      "standing": "on-screen",
+      "source": "ma-luna",
+      "deadline": null,
+      "order": 5
+    },
+    {
+      "slug": "mars-2103",
+      "category": "starting-condition",
+      "topic": "Mars, 2103",
+      "world": "mars",
+      "statement": "Settlements exist by 2069, tied to Utopia Planitia. Mars is colonized in 2103. Terraforming is under way by 2155.",
+      "episodes": [
+        "ENT: Terra Nova",
+        "VOY: The 37's",
+        "ENT: Demons",
+        "ENT: Terra Prime"
+      ],
+      "howUsed": "Settled before the start, dated 2103; first relay 2069.",
+      "standing": "on-screen",
+      "source": "ma-mars",
+      "deadline": null,
+      "order": 6
+    },
+    {
+      "slug": "utopia-planitia",
+      "category": "starting-condition",
+      "topic": "Utopia Planitia",
+      "world": null,
+      "statement": "Named with New Berlin as built before 2069. Builds starships in the 24th century.",
+      "episodes": [
+        "ENT: Terra Nova",
+        "TNG: Booby Trap",
+        "VOY: Relativity"
+      ],
+      "howUsed": "The single shipyard all expeditions leave from.",
+      "standing": "on-screen",
+      "source": "ma-utopia",
+      "deadline": null,
+      "order": 7
+    },
+    {
+      "slug": "jupiter-station-2151",
+      "category": "starting-condition",
+      "topic": "Jupiter Station, 2151",
+      "world": "jupiter",
+      "statement": "A station in orbit of Jupiter repairs and loads ships in 2151.",
+      "episodes": [
+        "ENT: Fortunate Son"
+      ],
+      "howUsed": "Jupiter starts with an orbital station.",
+      "standing": "on-screen",
+      "source": "ma-jupiter-station",
+      "deadline": null,
+      "order": 8
+    },
+    {
+      "slug": "deuterium-fuel",
+      "category": "starting-condition",
+      "topic": "Deuterium is fuel",
+      "world": null,
+      "statement": "Deuterium fuels matter-antimatter reactors, and 22nd-century colonies extract it.",
+      "episodes": [
+        "ENT: Marauders"
+      ],
+      "howUsed": "Hydrogen-bearing worlds count as fuel sources.",
+      "standing": "on-screen",
+      "source": "ma-deuterium",
+      "deadline": null,
+      "order": 9
+    },
+    {
+      "slug": "terraforming-30-years",
+      "category": "starting-condition",
+      "topic": "Terraforming takes about 30 years by 2364",
+      "world": "venus",
+      "statement": "By 2364 terraforming a world takes about 30 years.",
+      "episodes": [
+        "TNG: Home Soil"
+      ],
+      "howUsed": "Caps how fast Venus can be finished.",
+      "standing": "on-screen",
+      "source": "ma-terraform",
+      "deadline": null,
+      "order": 10
+    },
+    {
+      "slug": "ganymede-inhabited",
+      "category": "deadline",
+      "topic": "Ganymede, inhabited by 2268",
+      "world": "ganymede",
+      "statement": "Inhabited by 2268: Scott has a drink he found there.",
+      "episodes": [
+        "TOS: By Any Other Name"
+      ],
+      "howUsed": "Not steered toward: the simulation is checked against it across 400 runs.",
+      "standing": "on-screen",
+      "source": "ma-ganymede",
+      "deadline": {
+        "event": "colonized",
+        "year": 2268,
+        "threshold": null
+      },
+      "order": 11
+    },
+    {
+      "slug": "titan-mine",
+      "category": "deadline",
+      "topic": "Titan, mine by 2259",
+      "world": "titan",
+      "statement": "A mine is operating by 2259; a research colony exists, undated.",
+      "episodes": [
+        "SNW: Memento Mori",
+        "DIS: People of Earth"
+      ],
+      "howUsed": "Not steered toward: the simulation is checked against it across 400 runs.",
+      "standing": "on-screen",
+      "source": "ma-titan",
+      "deadline": {
+        "event": "colonized",
+        "year": 2259,
+        "threshold": null
+      },
+      "order": 12
+    },
+    {
+      "slug": "venus-pilot-training",
+      "category": "deadline",
+      "topic": "Venus, settled by the 2340s",
+      "world": "venus",
+      "statement": "Chakotay trains in its storms in the 2340s; terraforming stations by 2371.",
+      "episodes": [
+        "VOY: Future's End, Part II",
+        "DS9: Past Tense, Part I"
+      ],
+      "howUsed": "Not steered toward: the simulation is checked against it across 400 runs.",
+      "standing": "on-screen",
+      "source": "ma-venus",
+      "deadline": {
+        "event": "colonized",
+        "year": 2340,
+        "threshold": null
+      },
+      "order": 13
+    },
+    {
+      "slug": "mimas-evacuation",
+      "category": "deadline",
+      "topic": "Mimas, evacuation station by 2368",
+      "world": "mimas",
+      "statement": "An emergency evacuation station by 2368.",
+      "episodes": [
+        "TNG: The First Duty"
+      ],
+      "howUsed": "Not steered toward: the simulation is checked against it across 400 runs.",
+      "standing": "on-screen",
+      "source": "ma-first-duty",
+      "deadline": {
+        "event": "colonized",
+        "year": 2368,
+        "threshold": null
+      },
+      "order": 14
+    },
+    {
+      "slug": "saturn-navigation",
+      "category": "deadline",
+      "topic": "Saturn, navigation satellites by 2368",
+      "world": "saturn",
+      "statement": "Navigational control satellites in orbit by 2368.",
+      "episodes": [
+        "TNG: The First Duty"
+      ],
+      "howUsed": "Not steered toward: the simulation is checked against it across 400 runs.",
+      "standing": "on-screen",
+      "source": "ma-saturn",
+      "deadline": {
+        "event": "constellation",
+        "year": 2368,
+        "threshold": null
+      },
+      "order": 15
+    },
+    {
+      "slug": "moon-fifty-million",
+      "category": "deadline",
+      "topic": "The Moon, over 50 million in 2373",
+      "world": "moon",
+      "statement": "Over 50 million people on the Moon in 2373.",
+      "episodes": [
+        "Star Trek: First Contact"
+      ],
+      "howUsed": "Not steered toward: the simulation is checked against it across 400 runs.",
+      "standing": "on-screen",
+      "source": "ma-luna",
+      "deadline": {
+        "event": "population",
+        "year": 2373,
+        "threshold": 50000000
+      },
+      "order": 16
+    },
+    {
+      "slug": "lunar-government-2039",
+      "category": "set-aside",
+      "topic": "A lunar government in 2039",
+      "world": null,
+      "statement": "A lunar government exists in 2039.",
+      "episodes": [],
+      "howUsed": "From the reference book Star Trek: Star Charts, not an episode.",
+      "standing": "reference-book",
+      "source": "ma-luna",
+      "deadline": null,
+      "order": 17
+    },
+    {
+      "slug": "jovian-research-outposts",
+      "category": "set-aside",
+      "topic": "Research outposts on Ganymede and Europa in the early 2100s",
+      "world": null,
+      "statement": "Research outposts on Ganymede and Europa in the early 2100s.",
+      "episodes": [
+        "DIS: Coming Home",
+        "TNG: Chain of Command, Part II"
+      ],
+      "howUsed": "Not found on screen. Europa has no settlement recorded before an emergency centre in 3190. The Jovian Run is a 24th-century shuttle route with no founding date.",
+      "standing": "not-found",
+      "source": "ma-ganymede",
+      "deadline": null,
+      "order": 18
+    },
+    {
+      "slug": "belt-mining-shipyards",
+      "category": "set-aside",
+      "topic": "Asteroid-belt mining for shipyards",
+      "world": null,
+      "statement": "Asteroid-belt mining supplies the shipyards.",
+      "episodes": [
+        "VOY: Future's End, Part II"
+      ],
+      "howUsed": "Not found. Canon mentions the belt for pilot training.",
+      "standing": "not-found",
+      "source": "ma-asteroid-belt",
+      "deadline": null,
+      "order": 19
+    },
+    {
+      "slug": "io-dilithium-2049",
+      "category": "set-aside",
+      "topic": "Dilithium mining on Io, 2049",
+      "world": null,
+      "statement": "Dilithium is mined on Io from 2049.",
+      "episodes": [],
+      "howUsed": "From a reference book.",
+      "standing": "reference-book",
+      "source": "ma-io",
+      "deadline": null,
+      "order": 20
+    },
+    {
+      "slug": "pluto-base-2039",
+      "category": "set-aside",
+      "topic": "Pluto Base, 2039",
+      "world": null,
+      "statement": "A base is established on Pluto in 2039.",
+      "episodes": [],
+      "howUsed": "From a reference book.",
+      "standing": "reference-book",
+      "source": "ma-pluto",
+      "deadline": null,
+      "order": 21
+    },
+    {
+      "slug": "pre-subspace-networks",
+      "category": "set-aside",
+      "topic": "Communication networks before 2151",
+      "world": null,
+      "statement": "Relay networks serve the Sol system before subspace.",
+      "episodes": [
+        "TNG: Loud as a Whisper",
+        "PIC: Assimilation"
+      ],
+      "howUsed": "Canon dates no relay network in the Sol system before subspace, only exploration: Pioneer 11 at Saturn in 1979 and the crewed Europa Mission in 2024. The pre-subspace constellations in the dataset are inferred.",
+      "standing": "not-found",
+      "source": "ma-relay-station",
+      "deadline": null,
+      "order": 22
+    }
+  ]
+}

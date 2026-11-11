@@ -1,0 +1,124 @@
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.count {
+  font-weight: 650;
+  font-size: var(--step-1);
+}
+
+.state {
+  padding: 20px 12px;
+  border: 1px dashed var(--line-strong);
+  text-align: center;
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+}
+.stateError {
+  border-color: var(--danger);
+}
+
+.button {
+  min-height: var(--tap);
+  padding: 0 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-weight: 550;
+}
+.button:hover {
+  border-color: var(--accent);
+}
+.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+/* Offer details, opened under a row. */
+.details {
+  display: grid;
+  gap: 14px 24px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  align-items: start;
+}
+.details section {
+  min-width: 0;
+}
+.details h3 {
+  margin-bottom: 4px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--line-strong);
+}
+.details ul,
+.details ol {
+  margin: 0;
+  padding-left: 18px;
+}
+.details table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--step--1);
+}
+.details td,
+.details th {
+  padding: 2px 0;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+.details td:last-child,
+.details th:last-child {
+  text-align: right;
+}
+.note {
+  color: var(--muted);
+  font-size: var(--step--1);
+}
+.provider {
+  color: var(--muted);
+}
+.setup {
+  color: var(--muted);
+  font-size: var(--step--1);
+}
+
+/* The side-by-side compare sheet. */
+.tableWrap {
+  overflow-x: auto;
+  border: 1px solid var(--line-strong);
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--step-0);
+}
+.table th,
+.table td {
+  padding: 4px 8px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+}
+.table thead th {
+  background: var(--surface-3);
+}
+.table tbody th {
+  background: var(--surface-2);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.sortButton {
+  border: 0;
+  background: none;
+  padding: 0;
+  min-height: 24px;
+  font-weight: 550;
+  color: var(--accent);
+  text-decoration: underline;
+}

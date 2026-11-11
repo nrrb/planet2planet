@@ -1,0 +1,89 @@
+/* Design tokens. A dense, spreadsheet-like light theme by default; dark on request. */
+:root {
+  color-scheme: light;
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #f3f4f6;
+  --surface-3: #e9ecf1;
+  --line: #d3d7de;
+  --line-strong: #9097a3;
+  --text: #111111;
+  --muted: #4b5260;
+  --accent: #0b4fd1;
+  --accent-ink: #ffffff;
+  --selected: #e8f0fe;
+  --focus: #0b4fd1;
+  --danger: #b00020;
+  --ok: #0a6b3d;
+
+  --ev-constellation: #2457d6;
+  --ev-convert: #6a3fd1;
+  --ev-colony: #0a6b3d;
+  --ev-million: #94570a;
+  --ev-founded: #0c7f72;
+  --ev-acquired: #b82a66;
+  --ev-canon: #111111;
+
+  --label-screen: #0a6b3d;
+  --label-book: #94570a;
+  --label-invented: #5b2fc0;
+  --label-real: #2457d6;
+
+  --badge-price: #7a4a00;
+  --badge-latency: #00665a;
+  --badge-resilient: #5b2fc0;
+
+  --font-sans: 'Instrument Sans Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-figures: 'Martian Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --step--1: 0.75rem;
+  --step-0: 0.8125rem;
+  --step-1: 0.875rem;
+  --step-2: 1rem;
+  --step-3: 1.25rem;
+  --step-4: 1.5rem;
+
+  --gutter: 12px;
+  --radius: 4px;
+  --radius-lg: 6px;
+  /* Control height: compact for a mouse, a full touch target for a finger. */
+  --tap: 28px;
+}
+
+@media (pointer: coarse) {
+  :root {
+    --tap: 44px;
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #0b1322;
+  --surface: #121c30;
+  --surface-2: #182640;
+  --surface-3: #22324f;
+  --line: #2a3a58;
+  --line-strong: #5b6d90;
+  --text: #e8eef9;
+  --muted: #a3b2cc;
+  --accent: #8aa0ff;
+  --accent-ink: #0b1322;
+  --selected: #1b2c4d;
+  --focus: #ffd27a;
+  --danger: #ff8d8d;
+  --ok: #5fdcb5;
+  --ev-constellation: #6ea0ff;
+  --ev-convert: #b18cff;
+  --ev-colony: #5fdcb5;
+  --ev-million: #ffbf55;
+  --ev-founded: #3fd0bd;
+  --ev-acquired: #ff86b4;
+  --ev-canon: #e8eef9;
+  --label-screen: #5fdcb5;
+  --label-book: #ffbf55;
+  --label-invented: #b18cff;
+  --label-real: #6ea0ff;
+  --badge-price: #ffbf55;
+  --badge-latency: #3fd0bd;
+  --badge-resilient: #b18cff;
+}

@@ -1,0 +1,27 @@
+.band {
+  display: grid;
+  gap: 4px;
+}
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.title {
+  font-size: var(--step--1);
+  color: var(--muted);
+  font-weight: 600;
+}
+.toggle {
+  min-height: var(--tap);
+  padding: 0 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: var(--step--1);
+  font-weight: 550;
+}
+.toggle:hover {
+  border-color: var(--accent);
+}

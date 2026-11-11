@@ -1,0 +1,241 @@
+.wrap {
+  /* Sideways scrolling stays inside the frame. There is no height limit, so the page does the
+     vertical scrolling and the table never competes with it. */
+  overflow-x: auto;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+}
+
+.table {
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 100%;
+  font-size: var(--step-0);
+  white-space: nowrap;
+}
+
+.table th,
+.table td {
+  padding: 2px 8px;
+  border-bottom: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  text-align: left;
+  vertical-align: middle;
+  background: var(--row-bg, var(--surface));
+}
+.table tr {
+  --row-bg: var(--surface);
+}
+.table tbody tr:hover {
+  --row-bg: var(--surface-2);
+}
+.table tbody tr.compared {
+  --row-bg: var(--selected);
+}
+.table tbody tr.open {
+  --row-bg: var(--surface-2);
+}
+
+.table thead th {
+  background: var(--surface-3);
+  border-bottom: 1px solid var(--line-strong);
+  font-weight: 650;
+  font-size: var(--step--1);
+  padding: 0;
+}
+
+.headButton,
+.headStatic {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  min-height: 26px;
+  padding: 2px 8px;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+}
+.headButton {
+  cursor: pointer;
+}
+.headButton:hover {
+  background: var(--surface-2);
+}
+.right .headButton,
+.right .headStatic {
+  justify-content: flex-end;
+}
+.arrow {
+  font-size: 10px;
+  color: var(--accent);
+}
+
+/* The first two columns and the actions stay put while the rest scroll sideways. */
+.stick1,
+.stick2,
+.stickR {
+  position: sticky;
+  z-index: 2;
+}
+.stickR {
+  right: 0;
+  box-shadow: -1px 0 0 var(--line-strong);
+  border-right: 0 !important;
+}
+.stick1 {
+  left: 0;
+  width: 30px;
+  min-width: 30px;
+  text-align: center !important;
+}
+.stick2 {
+  left: 30px;
+  min-width: 190px;
+  box-shadow: 1px 0 0 var(--line-strong);
+}
+thead .stick1,
+thead .stick2,
+thead .stickR {
+  z-index: 4;
+}
+
+.num {
+  text-align: right !important;
+  font-family: var(--font-figures);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.92em;
+  letter-spacing: -0.03em;
+}
+
+.plan {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.plan strong {
+  font-weight: 650;
+}
+.kind {
+  color: var(--muted);
+  font-size: var(--step--1);
+}
+.provider {
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.range {
+  width: 90px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 5px;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  font-size: 10.5px;
+  font-weight: 650;
+  line-height: 16px;
+}
+.tagPrice {
+  color: var(--badge-price);
+}
+.tagLatency {
+  color: var(--badge-latency);
+}
+.tagResilient {
+  color: var(--badge-resilient);
+}
+
+.actions {
+  display: flex;
+  gap: 4px;
+}
+.mini {
+  min-height: calc(var(--tap) - 6px);
+  padding: 0 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: var(--step--1);
+  font-weight: 550;
+}
+.mini:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.request {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+.request:hover {
+  color: var(--accent-ink);
+  opacity: 0.9;
+}
+
+.check {
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  vertical-align: middle;
+}
+
+.detailsCell {
+  white-space: normal;
+  padding: 0 !important;
+}
+.detailsInner {
+  position: sticky;
+  left: 0;
+  box-sizing: border-box;
+  width: min(1100px, calc(100vw - 2 * var(--gutter) - 4px));
+  padding: 10px 12px 12px;
+}
+
+.units {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: var(--step--1);
+  max-width: 120ch;
+}
+
+@media (pointer: coarse) {
+  .table th,
+  .table td {
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+  .check {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+/* On a phone the frozen columns must leave room for the data between them. */
+@media (max-width: 767px) {
+  .stick2 {
+    min-width: 0;
+    max-width: 108px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .stickR,
+  .table thead th.stickR {
+    right: auto;
+    box-shadow: none;
+  }
+  .stickR {
+    position: static;
+  }
+  .table .stickR {
+    border-right: 1px solid var(--line) !important;
+  }
+}

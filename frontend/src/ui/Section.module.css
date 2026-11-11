@@ -1,0 +1,90 @@
+.section {
+  display: grid;
+  /* minmax(0, 1fr): wide content (the timeline, tables) scrolls in its own frame, not the page */
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+  padding-top: 16px;
+  border-top: 2px solid var(--text);
+}
+.section h2 {
+  font-size: var(--step-3);
+}
+.prose {
+  display: grid;
+  gap: 8px;
+  max-width: 78ch;
+}
+.sub {
+  margin-top: 4px;
+}
+.table {
+  border-collapse: collapse;
+  font-size: var(--step-0);
+  width: 100%;
+}
+.table th,
+.table td {
+  padding: 4px 8px;
+  border: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+.table thead th {
+  background: var(--surface-3);
+  border-color: var(--line-strong);
+}
+.table tbody th {
+  background: var(--surface-2);
+  font-weight: 600;
+}
+.tableWrap {
+  overflow-x: auto;
+  border: 1px solid var(--line-strong);
+}
+.note {
+  color: var(--muted);
+  font-size: var(--step--1);
+  max-width: 78ch;
+}
+.toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin: 0;
+  padding: 4px 8px;
+  list-style: none;
+  border: 1px solid var(--line-strong);
+  background: var(--surface-2);
+  font-size: var(--step-0);
+}
+.toc a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+}
+.list {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 4px;
+  max-width: 78ch;
+}
+/* WCAG 2.2 target size: each link in a list is at least 24 px tall */
+.list li {
+  min-height: 24px;
+}
+.list a {
+  display: inline-block;
+  padding-block: 2px;
+}
+
+.code {
+  margin: 0;
+  padding: 8px 10px;
+  overflow-x: auto;
+  border: 1px solid var(--line-strong);
+  background: var(--surface-2);
+  font-family: var(--font-figures);
+  font-size: var(--step--1);
+  max-width: 100%;
+}

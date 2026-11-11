@@ -95,7 +95,7 @@ The header has three links (Compare, About, Canon), collapsing into a menu on ph
 - **Two native `<select>` inputs,** labelled "From" and "To".
   - **Contents:** every world with a subspace constellation by 2380, grouped by system with `<optgroup>`: Sun-orbiting worlds first, then each planet with its moons.
   - **Mutual exclusion:** the world chosen in one select is `disabled` in the other, both ways. The URL and state can never hold the same world twice, and the backend rejects it anyway.
-- **A swap button** between the two selects.
+- **No swap button.** The order of the two worlds doesn't matter for plans, so there's nothing to swap.
 - **Route summary,** shown under the selects:
   - distance today
   - one-way latency today, with the year's range
@@ -104,7 +104,7 @@ The header has three links (Compare, About, Canon), collapsing into a menu on ph
   - which regions the route crosses
 - **A "Show route map" button** opens the map dialog (3.3).
 
-**Filters** (a bottom sheet on mobile, a sidebar on desktop):
+**Filters** (a drawer directly under the world selects, closed by default; active filters show as removable chips beside its toggle):
 
 - service class: shared, dedicated, synchronized
 - maximum latency
@@ -117,9 +117,9 @@ The header has three links (Compare, About, Canon), collapsing into a menu on ph
 
 **Results**
 
-- **Sort** by monthly price, latency today, worst-case latency, or redundancy tier.
+- **Sort** by clicking any column header; the choice is kept in the URL (`sort` and `dir`). Sorting happens in the browser, so it never refetches.
 - **Badges** on the best offer in each category: "Lowest price", "Lowest latency", "Most resilient".
-- **Offer cards on mobile; a sortable comparison table from the `lg` breakpoint.** Each offer shows:
+- **One dense, spreadsheet-style comparison table at every width.** Every column sorts in the browser, the first two columns and the actions stay frozen while the rest scroll sideways inside the table, and a units line explains the abbreviations. On a phone only the checkbox and a narrow plan column stay frozen. Each offer shows:
   - plan name and lead provider (with "a division of …" where it applies)
   - monthly price and setup fee
   - latency today and its range
@@ -288,10 +288,9 @@ Sections, in order:
 
 - **Built mobile first,** with single-column layouts at 360 px and up.
 - **Breakpoints:**
-  - `md` at 768 px: filters become a sidebar and offers show two per row
-  - `lg` at 1024 px: results switch to a comparison table
+  - `md` at 768 px: on narrower screens the actions column scrolls with the table instead of staying frozen
   - `xl` at 1280 px: the map dialog and About map get a side panel
-- **Touch targets** are at least 44 px. Nothing scrolls sideways except the timeline and wide tables, inside their own containers.
+- **Touch targets** are at least 44 px on touch devices (`pointer: coarse`) and 28 px with a mouse, so the interface can be dense. Nothing scrolls sideways except the timeline and wide tables, inside their own containers.
 
 ### 3.10 Accessibility
 
@@ -304,8 +303,8 @@ Sections, in order:
 ### 3.11 Visual identity
 
 - **An original look.** Not a copy of LCARS or any Star Trek interface, logo or insignia, so the design is its own.
-- **Direction:** a dark space theme with a light theme, a crisp sans-serif with a monospace face for figures, and one colour per network layer.
-- **Implementation:** design tokens as CSS custom properties, respecting `prefers-color-scheme` with a manual toggle.
+- **Direction:** built for telecom engineers and procurement staff who live in spreadsheets: high information density, a white background and black text, thin grid lines, small type, and a monospace face for figures. Colour is rare and meaningful: layer colours on the maps (drawn on a dark canvas), and one colour for the three "best in category" tags.
+- **Implementation:** design tokens as CSS custom properties. Light is the default whatever the system setting; a manual toggle switches to a dark theme.
 
 ## 4. What plans are compared on
 
@@ -335,12 +334,12 @@ Each tier is a plan feature or an add-on. The About page explains each with the 
 | Tier | What it adds | Canon motivation |
 |---|---|---|
 | Standard | Single route, the carrier's normal repair commitments | — |
-| Diverse path | Two routes over different backbones that share no relay hub except the two endpoints; automatic failover | The Borg reached Earth in 2367 (TNG "The Best of Both Worlds, Part II") and again in 2373 (*Star Trek: First Contact*) |
-| Hardened | Shielded, environment-hardened relays and power, with independent power at the endpoints | A Changeling sabotaged Earth's planetary power grid in 2372 (DS9 "Homefront", "Paradise Lost") |
+| Diverse path | Two routes over different backbones that share no relay hub except the two endpoints; automatic failover | A Borg cube came within reach of Earth in 2367, after Wolf 359, and was stopped in Earth orbit (TNG "The Best of Both Worlds, Part II"); the Borg attacked Earth again in 2373 (*Star Trek: First Contact*) |
+| Hardened | Shielded, environment-hardened relays and power, with independent power at the endpoints | Earth's planetary power relay system went down and the Dominion was blamed (DS9 "Homefront", "Paradise Lost"); the sabotage was in fact Admiral Leyton's Red Squad. No year is given here because it was not confirmed |
 | Contingency | Diverse path, plus store-and-forward buffering so no message is lost during an outage, plus a priority lane on the system-wide emergency network | The Breen attacked Earth in 2375 during the Dominion War (DS9 "The Changing Face of Evil") |
 | Terraforming-zone protection | Routing that avoids relays near active terraforming operations on Mars and Venus, with compensation for disruption | Canon has terraforming under way on Mars by 2155 (ENT "Terra Prime") and stations on Venus by 2371 (DS9 "Past Tense, Part I"). The accident risk itself is invented for the product |
 
-The canon references in this table are well known but weren't re-checked against Memory Alpha while writing this plan; confirm each one when writing the About copy (milestone 7).
+The Homefront and Borg references were checked for the About page (M7) against search results, because Memory Alpha blocks automated fetches. The Breen, terraforming and Venus references come from the derivation document.
 
 ## 5. Network and routing model
 
@@ -587,7 +586,7 @@ Django REST Framework, with an OpenAPI schema from drf-spectacular. The frontend
 | `GET /api/worlds/{id}/` | Full world detail including canon notes |
 | `GET /api/regions/` | Regions and their worlds |
 | `GET /api/companies/?kind=&sector=&world=&status=` | Providers, with lineage |
-| `GET /api/network/?layer=&company=&region=` | Nodes with positions at the site date, and links, for the maps |
+| `GET /api/network/?layer=&company=&region=` | Nodes, links (with a degraded flag at the site date) and orbit data for the maps; nodes carry no positions except the fixed conjunction relays |
 | `GET /api/history/?type=` | Timeline events |
 | `GET /api/canon/facts/?category=` | Canon facts with episodes, sources and, for deadlines, the simulated result |
 | `GET /api/simulation/` | Run metadata (seeds, run count, script commit), market statistics and deadline results |
@@ -708,7 +707,7 @@ The animated maps use the code already in `frontend/`. Before any UI work, miles
 
 **Gaps:** any missing capabilities (layer styles, dimming, flow animation along a link, text alternatives) are added to the map code in small, separately committed steps.
 
-**Data placement:** the frontend keeps only display configuration: colours per layer, scale, label offsets and sprites. Positions, links and routes come from the API.
+**Data placement:** the frontend keeps display configuration and aesthetic body positions (its own clock and orbit model). Links and routes come from the API. Animation never depends on continuous backend data: the client animates on its own, and the API supplies orbital elements (`/api/network/`) and the site date (`/api/meta/`), and the client solves Kepler's equation itself, so it matches the backend. Its logarithmic radial scaling is a display transform only and keeps the true angle. Positions used for latency and conjunction are computed in the backend (section 5).
 
 ## 12. Local development
 
@@ -795,7 +794,7 @@ Target: at least 90% coverage on `network` and `pricing`.
 
 **Frontend unit tests (Vitest with React Testing Library)**
 
-- the selects disable the world chosen in the other, both ways, and the swap button works
+- the selects disable the world chosen in the other, both ways
 - URL parameters round-trip to state and back
 - filters, sorting and badges render from fixture API data
 - number, latency and credit formatting
@@ -886,7 +885,7 @@ Each milestone ends with a working, tested state. Indicative commit sequences ar
 **M5. Compare page**
 
 - App shell, routing, theme tokens
-- Route picker with mutual exclusion and swap
+- Route picker with mutual exclusion
 - Route summary
 - Offer cards, comparison table and sorting
 - Filters with URL state
@@ -1011,7 +1010,7 @@ The Compose files and environment-based settings make each of these a configurat
 
 **Accuracy notes**
 
-- The resilience tiers cite canon events from memory (section 4). Confirm each against Memory Alpha when writing the About copy.
+- The resilience tiers' canon events were checked in M7 (section 4). The Changeling-sabotage claim was wrong and is corrected.
 - The solar conjunction rule and all pricing are inventions; the docs and code comments must say so.
 - Stardate to calendar conversion follows a fan convention. Only the stardate is shown on the site.
 
