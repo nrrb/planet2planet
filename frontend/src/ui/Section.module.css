@@ -69,6 +69,14 @@
   gap: 4px;
   max-width: 78ch;
 }
+/* WCAG 2.2 target size: each link in a list is at least 24 px tall */
+.list li {
+  min-height: 24px;
+}
+.list a {
+  display: inline-block;
+  padding-block: 2px;
+}
 
 .code {
   margin: 0;

@@ -10,6 +10,30 @@ interface Props {
   sheet?: boolean;
 }
 
+/**
+ * Safari does not focus a button when it is clicked, so document.activeElement is the body when a dialog
+ * opens from a mouse or touch press. Remember the last pressed control so focus can still be handed back.
+ */
+let lastPressed: HTMLElement | null = null;
+if (typeof document !== 'undefined') {
+  document.addEventListener(
+    'pointerdown',
+    (event) => {
+      lastPressed = event.target instanceof Element ? event.target.closest<HTMLElement>('button, a') : null;
+    },
+    true,
+  );
+  // A keyboard press means the focused element is the real opener again.
+  document.addEventListener('keydown', () => (lastPressed = null), true);
+}
+
+function currentOpener(): HTMLElement | null {
+  // Safari may focus a scroll container around the button instead, so a pressed control wins over focus.
+  if (lastPressed?.isConnected) return lastPressed;
+  const active = document.activeElement;
+  return active instanceof HTMLElement && active !== document.body ? active : null;
+}
+
 /** A modal dialog: traps focus, closes with Escape, and returns focus to whatever opened it. */
 export function Dialog({ open, onClose, title, children, sheet = false }: Props) {
   const ref = useRef<HTMLDialogElement>(null);
@@ -23,7 +47,7 @@ export function Dialog({ open, onClose, title, children, sheet = false }: Props)
     const dialog = ref.current;
     if (!dialog) return;
     if (open && !dialog.open) {
-      opener.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+      opener.current = currentOpener();
       if (typeof dialog.showModal === 'function') dialog.showModal();
       else dialog.setAttribute('open', '');
     }

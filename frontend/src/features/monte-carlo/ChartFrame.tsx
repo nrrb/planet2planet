@@ -31,7 +31,15 @@ export function ChartFrame({ title, summary, chart, table, controls }: Props) {
       <p className={styles.summary}>{summary}</p>
       {controls}
       <div id={bodyId}>
-        {asTable ? <div className={styles.tableWrap}>{table}</div> : <div className={styles.chart}>{chart}</div>}
+        {asTable ? (
+          <div className={styles.tableWrap} role="group" aria-label={`${title}, table`} tabIndex={0}>
+            {table}
+          </div>
+        ) : (
+          <div className={styles.chart} role="group" aria-label={`${title}, chart`} tabIndex={0}>
+            {chart}
+          </div>
+        )}
       </div>
     </div>
   );

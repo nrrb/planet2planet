@@ -24,9 +24,17 @@ export default tseslint.config(
       ...react.configs['jsx-runtime'].rules,
       ...reactHooks.configs.recommended.rules,
       ...jsxA11y.flatConfigs.recommended.rules,
+      // Scrollable regions must be keyboard focusable (WCAG 2.1.1), so labelled groups and code blocks may take focus.
+      'jsx-a11y/no-noninteractive-tabindex': ['error', { roles: ['group'], tags: ['pre'] }],
       'import/no-duplicates': 'error',
       '@typescript-eslint/no-explicit-any': 'error',
     },
+  },
+  {
+    // Plain Node scripts are outside the TypeScript project, so they get no type-aware rules.
+    files: ['**/*.mjs'],
+    extends: [tseslint.configs.disableTypeChecked],
+    languageOptions: { globals: { ...globals.node } },
   },
   {
     // node:test returns promises that the runner collects, so floating test() calls are correct.

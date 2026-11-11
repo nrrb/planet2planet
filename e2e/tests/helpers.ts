@@ -32,8 +32,8 @@ export async function inkShare(locator: Locator): Promise<number> {
 
 /** Wait for a map canvas to start, then for it to have drawn something. */
 export async function expectMapDrawn(canvas: Locator) {
-  await expect(canvas).toBeVisible({ timeout: 20_000 });
-  await expect.poll(async () => inkShare(canvas), { timeout: 15_000, message: 'the map canvas stayed blank' }).toBeGreaterThan(0.002);
+  await expect(canvas).toBeVisible({ timeout: 30_000 });
+  await expect.poll(async () => inkShare(canvas), { timeout: 30_000, message: 'the map canvas stayed blank' }).toBeGreaterThan(0.002);
 }
 
 export async function noSidewaysScroll(page: Page) {
@@ -45,3 +45,12 @@ export async function noSidewaysScroll(page: Page) {
 export async function mapUnavailable(page: Page): Promise<boolean> {
   return page.getByText('The map could not start in this browser').first().isVisible();
 }
+
+/** The top-left pixel of an element's screenshot: for a map canvas, its background colour. */
+export async function cornerColour(locator: Locator): Promise<[number, number, number]> {
+  const png = PNG.sync.read(await locator.screenshot());
+  return [png.data[0], png.data[1], png.data[2]];
+}
+
+export const homeMap = (page: Page) => page.getByRole('region', { name: 'Map of the Sol system' }).locator('canvas');
+export const dialogMap = (page: Page) => page.getByRole('dialog').locator('canvas');

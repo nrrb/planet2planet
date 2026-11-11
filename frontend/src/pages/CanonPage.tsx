@@ -154,7 +154,7 @@ export default function CanonPage() {
         <p className={styles.prose}>
           {commit ? <ScriptLink commit={commit} /> : <span>The simulation script is tools/colonization-sim.js.</span>}
         </p>
-        <pre className={styles.code} aria-label="Command to run the simulation">
+        <pre className={styles.code} aria-label="Command to run the simulation" tabIndex={0}>
           <code>{SIMULATION.runIt}</code>
         </pre>
         <p className={styles.prose}>

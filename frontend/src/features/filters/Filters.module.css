@@ -24,13 +24,14 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  min-height: max(20px, calc(var(--tap) - 8px));
+  min-height: max(24px, calc(var(--tap) - 8px));
   flex: none;
   cursor: pointer;
 }
 .option input {
-  width: 14px;
-  height: 14px;
+  /* 24 px target (WCAG 2.2 AA) */
+  width: 24px;
+  height: 24px;
   flex: none;
   margin: 0;
 }
