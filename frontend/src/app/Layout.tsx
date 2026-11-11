@@ -1,4 +1,5 @@
 import { Link, NavLink, Outlet } from 'react-router-dom';
+import { AUTHOR, SOURCE_URL } from '../config';
 import { useTheme } from './theme';
 import styles from './Layout.module.css';
 
@@ -65,6 +66,23 @@ export function Layout() {
           </p>
           <p>
             <Link to="/canon">How this setting was built</Link>
+          </p>
+          <p>
+            Built with love{' '}
+            <span role="img" aria-label="Live long, and prosper.">
+              🖖🏻
+            </span>{' '}
+            by{' '}
+            <a href={AUTHOR.url} target="_blank" rel="noreferrer">
+              {AUTHOR.name}
+              <span className="visually-hidden"> (author&rsquo;s website, opens in a new tab)</span>
+            </a>
+            .{' '}
+            <a href={SOURCE_URL} target="_blank" rel="noreferrer">
+              Source on GitHub
+              <span className="visually-hidden"> (opens in a new tab)</span>
+            </a>
+            .
           </p>
         </div>
       </footer>

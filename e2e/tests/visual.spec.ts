@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { offerRows } from './helpers';
+import { chooseTheme, offerRows } from './helpers';
 
 // Pixel snapshots depend on the platform's font rendering and GPU stack, so baselines are per platform
 // (see ADR 0005). Run `npm run update-snapshots` on the machine whose baselines you want to refresh.
@@ -12,7 +12,7 @@ test.describe('@visual', () => {
 
   for (const scheme of ['light', 'dark'] as const) {
     test(`the Compare page, ${scheme}`, async ({ page }) => {
-      await page.emulateMedia({ colorScheme: scheme });
+      await chooseTheme(page, scheme);
       await page.goto('/?from=earth&to=mars');
       await expect(offerRows(page).first()).toBeVisible();
       await page.waitForLoadState('networkidle');
@@ -23,7 +23,7 @@ test.describe('@visual', () => {
     });
 
     test(`the route map dialog, ${scheme}`, async ({ page }) => {
-      await page.emulateMedia({ colorScheme: scheme });
+      await chooseTheme(page, scheme);
       await page.goto('/?from=earth&to=mars');
       await offerRows(page).first().getByRole('button', { name: 'Route' }).click();
       const dialog = page.getByRole('dialog', { name: /^Route:/ });
