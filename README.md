@@ -76,6 +76,21 @@ flowchart LR
 | `make size` | Build, then check the first-page bundle budgets and that the map renderer stays lazy |
 | `make e2e` | Browser tests in Chromium and WebKit (needs `make up && make seed`) |
 | `make e2e-update` | Refresh this machine's pixel baselines |
+| `make deploy` / `make destroy` | Create or delete the AWS deployment |
+
+## Deploying to AWS
+
+One command puts the site on a single Lightsail instance (about $7 a month) with HTTPS:
+
+```sh
+make deploy          # uses the AWS profile "planet2planet", region us-east-1, domain planet2planet.com
+make deploy-status   # instance, DNS and HTTPS
+make destroy         # delete everything it created (asks first)
+```
+
+It needs the AWS CLI, `ssh`, `rsync`, `npm` and `dig` on your machine. On the first run it prints the two DNS
+records to add at your registrar. Override `AWS_PROFILE`, `AWS_REGION` or `DOMAIN` as environment variables.
+See [ADR 0006](docs/adr/0006-aws-deployment.md) for the design and what it costs.
 
 ## Testing
 
