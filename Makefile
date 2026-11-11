@@ -1,4 +1,4 @@
-.PHONY: up down test test-backend lint-backend lint seed schema e2e e2e-update size
+.PHONY: up down test test-backend lint-backend lint seed schema e2e e2e-update size deploy deploy-status deploy-ssh destroy
 
 up:
 	docker compose up -d --wait
@@ -40,3 +40,16 @@ e2e-update:
 # First-page bundle budgets and the lazy-loading check.
 size:
 	cd frontend && npm run build && npm run size
+
+# AWS (Lightsail). See docs/adr/0006-aws-deployment.md. Uses the AWS profile "planet2planet".
+deploy:
+	deploy/deploy.sh deploy
+
+deploy-status:
+	deploy/deploy.sh status
+
+deploy-ssh:
+	deploy/deploy.sh ssh
+
+destroy:
+	deploy/deploy.sh destroy

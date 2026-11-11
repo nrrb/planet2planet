@@ -9,6 +9,7 @@ dependencies = [
   "djangorestframework-camel-case>=1.4",
   "psycopg[binary]>=3.2",
   "gunicorn>=23",
+  "whitenoise>=6.7",
 ]
 
 [project.optional-dependencies]
