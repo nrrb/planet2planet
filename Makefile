@@ -1,4 +1,4 @@
-.PHONY: up down test test-backend lint-backend lint seed schema e2e e2e-update size deploy deploy-status deploy-ssh destroy
+.PHONY: up down test test-backend lint-backend lint seed schema e2e e2e-update size deploy deploy-status deploy-ssh destroy og
 
 up:
 	docker compose up -d --wait
@@ -53,3 +53,7 @@ deploy-ssh:
 
 destroy:
 	deploy/deploy.sh destroy
+
+# Regenerate the link-preview picture, frontend/public/og.png. Needs `make up && make seed`.
+og:
+	cd e2e && npm ci --silent && npx playwright install chromium && npm run og

@@ -4,6 +4,11 @@
   gap: 8px;
 }
 
+.frameBare {
+  position: absolute;
+  inset: 0;
+}
+
 .canvasWrap {
   position: relative;
   height: min(62vh, 520px);
@@ -12,6 +17,14 @@
   border-radius: var(--radius-lg);
   overflow: hidden;
   touch-action: none;
+}
+.canvasWrap.bare {
+  position: absolute;
+  inset: 0;
+  height: auto;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
 }
 .canvasWrap.compact {
   height: clamp(180px, 28vh, 280px);

@@ -1,0 +1,56 @@
+/* A fixed composition for a 1200 by 630 screenshot. Dark, whatever the visitor's theme. */
+.stage {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: #05070f;
+  color: #f4f6fb;
+}
+.panel {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 320px;
+  display: grid;
+  gap: 10px;
+}
+.left {
+  left: 44px;
+}
+.right {
+  right: 44px;
+  text-align: right;
+}
+.name {
+  margin: 0;
+  font-size: 44px;
+  line-height: 1.05;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+}
+.tag {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.35;
+  color: #b9c3d9;
+}
+.route {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  color: #b9c3d9;
+}
+.figure {
+  margin: 0;
+  font-size: 54px;
+  line-height: 1.05;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+.caption {
+  margin: 0;
+  font-size: 18px;
+  color: #b9c3d9;
+}

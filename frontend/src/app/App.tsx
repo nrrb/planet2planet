@@ -7,10 +7,20 @@ import { Layout } from './Layout';
 
 const AboutPage = lazy(() => import('../pages/AboutPage'));
 const CanonPage = lazy(() => import('../pages/CanonPage'));
+const SharePreviewPage = lazy(() => import('../pages/SharePreviewPage'));
 
 export function App() {
   return (
     <Routes>
+      {/* The share image is photographed full-bleed, so it sits outside the page layout. */}
+      <Route
+        path="share-preview"
+        element={
+          <Suspense fallback={null}>
+            <SharePreviewPage />
+          </Suspense>
+        }
+      />
       <Route element={<Layout />}>
         <Route
           index
