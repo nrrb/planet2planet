@@ -1,5 +1,10 @@
 # Planet2Planet
 
+> **Reference snapshot.** This branch (`full-stack-aws`) preserves Planet2Planet as a full-stack
+> app (Django REST Framework, PostgreSQL, React, Docker, AWS) as of commit `96456a8` on `main`.
+> It is frozen as an example of that architecture and is not kept in sync. `main` has moved on to
+> a static, client-only build. See `docs/adr/0007-static-hosting.md` on `main`.
+
 A telecom comparison-shopping site set in the Sol system in 2380, in the Star Trek universe.
 Pick two worlds and compare the interplanetary subspace plans that connect them on price,
 latency, route and resilience.
