@@ -109,9 +109,6 @@ function Card(props: OfferItemProps) {
         <button type="button" className={tableStyles.mini} aria-expanded={detailsOpen} onClick={props.onToggleDetails}>
           {detailsOpen ? 'Hide' : 'Details'}
         </button>
-        <button type="button" className={`${tableStyles.mini} ${tableStyles.request}`} onClick={props.onRequest}>
-          Request
-        </button>
       </div>
       {detailsOpen && (
         <div className={styles.details}>

@@ -9,7 +9,6 @@ interface Props {
   onToggleCompare: () => void;
   onToggleDetails: () => void;
   onShowRoute: () => void;
-  onRequest: () => void;
 }
 
 export function OfferActions({
@@ -20,13 +19,9 @@ export function OfferActions({
   onToggleCompare,
   onToggleDetails,
   onShowRoute,
-  onRequest,
 }: Props) {
   return (
     <div className={styles.actions}>
-      <button type="button" className={`${styles.button} ${styles.primary}`} onClick={onRequest}>
-        Request this plan
-      </button>
       <button type="button" className={styles.button} onClick={onShowRoute}>
         Show route
       </button>

@@ -47,7 +47,6 @@ function renderResults() {
       onToggleCompare={vi.fn()}
       onToggleDetails={vi.fn()}
       onShowRoute={vi.fn()}
-      onRequest={vi.fn()}
     />,
   );
 }

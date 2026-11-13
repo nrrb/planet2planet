@@ -30,7 +30,6 @@ interface Props {
   onToggleCompare: (id: string) => void;
   onToggleDetails: (id: string) => void;
   onShowRoute: (offer: Offer) => void;
-  onRequest: (offer: Offer) => void;
   /** Shown beside the count, e.g. the compare button. */
   toolbar?: React.ReactNode;
 }
@@ -84,7 +83,6 @@ export function Results(props: Props) {
     onToggleCompare: () => props.onToggleCompare(offer.id),
     onToggleDetails: () => props.onToggleDetails(offer.id),
     onShowRoute: () => props.onShowRoute(offer),
-    onRequest: () => props.onRequest(offer),
   });
 
   return (

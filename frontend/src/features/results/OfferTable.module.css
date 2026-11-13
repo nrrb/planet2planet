@@ -171,15 +171,6 @@ thead .stickR {
   border-color: var(--accent);
   color: var(--accent);
 }
-.request {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--accent-ink);
-}
-.request:hover {
-  color: var(--accent-ink);
-  opacity: 0.9;
-}
 
 .check {
   width: 15px;

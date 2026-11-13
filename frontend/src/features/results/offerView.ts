@@ -14,7 +14,6 @@ export interface OfferItemProps {
   onToggleCompare: () => void;
   onToggleDetails: () => void;
   onShowRoute: () => void;
-  onRequest: () => void;
 }
 
 export const classLabel = (offer: Offer): string => SERVICE_CLASS_LABELS[offer.serviceClass];

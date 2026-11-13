@@ -219,9 +219,6 @@ function Row(props: OfferItemProps) {
             <button type="button" className={styles.mini} aria-expanded={detailsOpen} onClick={props.onToggleDetails}>
               {detailsOpen ? 'Hide' : 'Details'}
             </button>
-            <button type="button" className={`${styles.mini} ${styles.request}`} onClick={props.onRequest}>
-              Request
-            </button>
           </span>
         </td>
       </tr>
