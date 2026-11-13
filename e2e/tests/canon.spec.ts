@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
 import { cornerColour, expectMapDrawn, mapUnavailable, noSidewaysScroll } from './helpers';
 
@@ -27,8 +28,11 @@ test.describe('Canon page', () => {
     await expect(aside.getByText('Reference book').first()).toBeVisible();
   });
 
-  test('the script link points at tools/colonization-sim.js at the commit recorded with the data', async ({ page, request }) => {
-    const { run } = (await (await request.get('/api/simulation/')).json()) as { run: { scriptCommit: string } };
+  test('the script link points at tools/colonization-sim.js at the commit recorded with the data', async ({ page }) => {
+    const summary = JSON.parse(readFileSync(new URL('../../data/sol-montecarlo-2380.json', import.meta.url), 'utf8')) as {
+      run: { scriptCommit: string };
+    };
+    const { run } = summary;
     expect(run.scriptCommit).toMatch(/^[0-9a-f]{40}$/);
     const link = page.getByRole('link', { name: /Read the simulation script/ });
     await expect(link).toHaveAttribute('href', `https://github.com/example/planet2planet/blob/${run.scriptCommit}/tools/colonization-sim.js`);

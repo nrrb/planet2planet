@@ -1,6 +1,6 @@
 // Generates the README screenshots in docs/images.
 //
-//   make screenshots     (needs `make up && make seed` first)
+//   make screenshots     
 //
 // The maps are held still (reduced motion) so the same data gives the same pictures. Set BASE_URL to
 // photograph a running site instead of starting the dev server.
@@ -61,7 +61,7 @@ async function mapDrawn(canvas) {
 const server = process.env.BASE_URL ? null : await startDevServer();
 let browser;
 try {
-  if (!(await reachable(`${base}/api/worlds/`))) throw new Error('The API is not answering. Start it with: make up && make seed');
+  if (!(await reachable(`${base}/`))) throw new Error(`The site is not answering at ${base}.`);
   browser = await chromium.launch({
     args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'],
   });

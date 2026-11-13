@@ -59,7 +59,7 @@ export const WORLDS = {
   which:
     'The 33 are the 8 planets, 5 dwarf planets (Ceres, Pluto, Haumea, Makemake, Eris) and 20 moons: the Moon; Io, Europa, Ganymede and Callisto; Mimas, Enceladus, Tethys, Dione, Rhea, Titan and Iapetus; Miranda, Ariel, Umbriel, Titania and Oberon; Triton; Charon; and Dysnomia.',
   sources:
-    'Sizes and orbits come from NASA’s Jet Propulsion Laboratory. The positions on the maps come from JPL’s approximate orbital elements, solved in the browser and in the backend alike.',
+    'Sizes and orbits come from NASA’s Jet Propulsion Laboratory. The positions on the maps come from JPL’s approximate orbital elements, solved in your browser.',
   links: [
     { label: 'JPL Planetary Physical Parameters', url: 'https://ssd.jpl.nasa.gov/planets/phys_par.html' },
     { label: 'JPL Planetary Satellite Mean Elements', url: 'https://ssd.jpl.nasa.gov/sats/elem/sep.html' },

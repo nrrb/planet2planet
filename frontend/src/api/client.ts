@@ -1,8 +1,7 @@
+import { ApiError } from './errors';
 import type {
   CanonFact,
   Company,
-  InquiryConfirmation,
-  InquiryRequest,
   HistoryEvent,
   Meta,
   Network,
@@ -14,16 +13,24 @@ import type {
   WorldStatistic,
 } from './types';
 
-/** An API error, with field messages when the server sent them (HTTP 400). */
-export class ApiError extends Error {
-  constructor(
-    message: string,
-    readonly status: number,
-    readonly fields: Record<string, string> = {},
-  ) {
-    super(message);
-    this.name = 'ApiError';
-  }
+export { ApiError };
+
+/** What the client needs back from a request: the shape of a fetch Response, or a computed reply. */
+export interface Reply {
+  ok: boolean;
+  status: number;
+  json: () => Promise<unknown>;
+}
+export type Transport = (path: string, init?: RequestInit) => Promise<Reply>;
+
+/**
+ * Where requests go. In the browser the site answers them itself: the engine builds the network
+ * and prices plans from the data files, on demand. Tests point this at a stubbed fetch instead.
+ */
+let transport: Transport = async (path) => (await import('../engine/router')).handle(path);
+
+export function setTransport(next: Transport): void {
+  transport = next;
 }
 
 function fieldMessages(body: unknown): Record<string, string> {
@@ -36,11 +43,11 @@ function fieldMessages(body: unknown): Record<string, string> {
 }
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  let response: Response;
+  let response: Reply;
   try {
-    response = await fetch(path, { headers: { Accept: 'application/json' }, ...init });
+    response = await transport(path, { headers: { Accept: 'application/json' }, ...init });
   } catch {
-    throw new ApiError('The server could not be reached.', 0);
+    throw new ApiError('The data could not be loaded.', 0);
   }
   if (!response.ok) {
     let body: unknown = null;
@@ -49,12 +56,8 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     } catch {
       /* not JSON */
     }
-    const fields = response.status === 400 || response.status === 429 ? fieldMessages(body) : {};
-    const message =
-      response.status === 429
-        ? 'Too many requests. Wait a minute and try again.'
-        : `The request failed (${response.status}).`;
-    throw new ApiError(message, response.status, fields);
+    const fields = response.status === 400 ? fieldMessages(body) : {};
+    throw new ApiError(`The request failed (${response.status}).`, response.status, fields);
   }
   return (await response.json()) as T;
 }
@@ -101,10 +104,4 @@ export const api = {
   regions: () => request<Region[]>('/api/regions/'),
   companies: () => request<Company[]>('/api/companies/'),
   quote: (params: QuoteParams) => request<QuoteResponse>(`/api/quotes/?${quoteQuery(params)}`),
-  inquire: (body: InquiryRequest) =>
-    request<InquiryConfirmation>('/api/inquiries/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify(body),
-    }),
 };

@@ -1,4 +1,4 @@
-/** Display configuration. Business rules stay in the API. */
+/** Display configuration. The pricing and routing rules live in the engine (src/engine). */
 export const DEFAULT_FROM = 'jupiter';
 export const DEFAULT_TO = 'saturn';
 /** The GitHub repository, set with VITE_REPO_URL. Without it, links to the code are shown as plain paths. */
@@ -19,8 +19,8 @@ export function repoLink(path: string, commit?: string, base: string | null = RE
  */
 export const REPO_FILES = {
   script: 'tools/colonization-sim.js',
-  dataset: 'backend/data/sol-telecom-2380.json',
-  monteCarlo: 'backend/data/sol-montecarlo-2380.json',
+  dataset: 'data/sol-telecom-2380.json',
+  monteCarlo: 'data/sol-montecarlo-2380.json',
   derivation: 'docs/sol-telecom-2380-derivation.md',
 } as const;
 
