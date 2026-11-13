@@ -135,29 +135,6 @@ test.describe('Compare page', () => {
     await expect(opener).toBeFocused();
   });
 
-  test('the inquiry form validates and submits', async ({ page }, info) => {
-    test.skip(info.project.name !== 'desktop', 'The API limits inquiries to 5 a minute, so one project submits.');
-    await openCompare(page);
-    await offerRows(page).first().getByRole('button', { name: 'Request' }).click();
-    const dialog = page.getByRole('dialog', { name: 'Request this plan' });
-    await expect(dialog).toContainText('nothing is sent to a provider');
-
-    await dialog.getByRole('button', { name: 'Request this plan' }).click();
-    await expect(dialog.getByLabel('Company name')).toBeFocused(); // blocked by validation, nothing sent
-    await dialog.getByLabel('Company name').fill('Callisto Ore Partners');
-    await dialog.getByLabel('Contact email').fill('not-an-email');
-    await dialog.getByRole('button', { name: 'Request this plan' }).click();
-    expect(await dialog.getByLabel('Contact email').evaluate((el: HTMLInputElement) => el.validity.typeMismatch)).toBe(true);
-
-    await dialog.getByLabel('Contact email').fill('ops@example.com');
-    await dialog.getByLabel('Expected traffic').fill('About 20 gigaquads a second at peak');
-    await dialog.getByRole('button', { name: 'Request this plan' }).click();
-    await expect(dialog.getByText('Request saved.')).toBeVisible();
-    await expect(dialog).toContainText('This is a demo, so nothing is sent to any provider');
-    await dialog.getByRole('button', { name: 'Done' }).click();
-    await expect(dialog).toBeHidden();
-  });
-
   test('does not scroll sideways, and the table scrolls only sideways inside its frame', async ({ page }) => {
     await openCompare(page);
     await noSidewaysScroll(page);
@@ -175,7 +152,7 @@ test.describe('Compare page', () => {
     expect(await list.getByRole('listitem').count()).toBeGreaterThan(20);
     const first = list.getByRole('listitem').first();
     await expect(first.getByRole('heading')).toBeVisible();
-    for (const button of ['Route', 'Details', 'Request']) await expect(first.getByRole('button', { name: button })).toBeVisible();
+    for (const button of ['Route', 'Details']) await expect(first.getByRole('button', { name: button })).toBeVisible();
     await noSidewaysScroll(page);
 
     const select = page.getByRole('combobox', { name: 'Sort by' });

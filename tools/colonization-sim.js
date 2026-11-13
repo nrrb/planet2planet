@@ -932,7 +932,7 @@ if (typeof require !== "undefined" && typeof module !== "undefined" && require.m
   //   node tools/colonization-sim.js 1701 400 --export [--out dir] [--allow-dirty]
   if (flags.includes("--export")) {
     const fs = require("fs"), path = require("path");
-    const outDir = outIndex >= 0 ? process.argv[outIndex + 1] : path.join(__dirname, "..", "backend", "data");
+    const outDir = outIndex >= 0 ? process.argv[outIndex + 1] : path.join(__dirname, "..", "data");
     if (!(runs > 0)) throw new Error("--export needs a run count, e.g. node tools/colonization-sim.js 1701 400 --export");
     const commit = scriptCommit(flags.includes("--allow-dirty"));
     const dataset = exportDataset(simulate({ seed }), { scriptCommit: commit });

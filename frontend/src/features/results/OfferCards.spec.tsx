@@ -34,7 +34,7 @@ const offer = (id: string, patch: Record<string, unknown> = {}): Offer =>
 const companies = new Map([['co', { id: 'co', name: 'Jovian Subspace' } as Company]]);
 
 function setup(over: Partial<OfferItemProps> = {}, sort: SortKey = 'price', dir: SortDir = 'asc') {
-  const calls = { sort: vi.fn(), route: vi.fn(), request: vi.fn(), details: vi.fn(), compare: vi.fn() };
+  const calls = { sort: vi.fn(), route: vi.fn(), details: vi.fn(), compare: vi.fn() };
   const rowProps = (o: Offer): OfferItemProps => ({
     offer: o,
     companies,
@@ -47,7 +47,6 @@ function setup(over: Partial<OfferItemProps> = {}, sort: SortKey = 'price', dir:
     onToggleCompare: calls.compare,
     onToggleDetails: calls.details,
     onShowRoute: calls.route,
-    onRequest: calls.request,
     ...over,
   });
   const offers = [
@@ -98,16 +97,14 @@ describe('OfferCards', () => {
     expect(screen.getByRole('button', { name: /highest first|descending/i })).toBeInTheDocument();
   });
 
-  it('puts Route, Details, Request and Compare on every card', async () => {
+  it('puts Route, Details and Compare on every card', async () => {
     const c = setup();
     const card = within(screen.getAllByRole('listitem')[0]);
     await userEvent.click(card.getByRole('button', { name: 'Route' }));
     await userEvent.click(card.getByRole('button', { name: 'Details' }));
-    await userEvent.click(card.getByRole('button', { name: 'Request' }));
     await userEvent.click(card.getByRole('checkbox', { name: 'Compare Plan a' }));
     expect(c.route).toHaveBeenCalledOnce();
     expect(c.details).toHaveBeenCalledOnce();
-    expect(c.request).toHaveBeenCalledOnce();
     expect(c.compare).toHaveBeenCalledOnce();
   });
 

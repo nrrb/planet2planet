@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { api, type QuoteParams } from './client';
 
 const CATALOG = { staleTime: Infinity, gcTime: Infinity } as const;
@@ -37,5 +37,3 @@ export const useQuote = (params: QuoteParams | null) =>
     staleTime: 5 * 60 * 1000,
     retry: 1,
   });
-
-export const useInquiry = () => useMutation({ mutationFn: api.inquire });

@@ -1,0 +1,459 @@
+{
+ "note": "Invented pricing inputs for Planet2Planet (not canon). Parameters, plan templates and per-company price positioning (seed 2380) were exported from the Django backend at commit 96456a8 on main, kept on the full-stack-aws branch. See docs/adr/0007-static-hosting.md.",
+ "parameters": {
+  "class.shared": 1.0,
+  "class.dedicated": 1.8,
+  "class.synchronized": 2.6,
+  "throughput.reference": 10,
+  "throughput.exponent": 0.5,
+  "transit.per_hop_rate": 120,
+  "transit.length_coefficient": 0.15,
+  "handoff.fee": 150,
+  "competition.max": 1.35,
+  "competition.min": 0.85,
+  "competition.floor_at": 5,
+  "market.tiny_population": 10000,
+  "market.small_population": 100000,
+  "market.mid_population": 1000000,
+  "market.tiny_factor": 1.15,
+  "market.small_factor": 1.08,
+  "market.mid_factor": 1.0,
+  "market.large_factor": 0.95,
+  "environment.radiation": 0.2,
+  "environment.cryogenic": 0.15,
+  "environment.solar": 0.15,
+  "environment.gas-giant-orbit": 0.1,
+  "resilience.standard": 1.0,
+  "resilience.diverse-path": 1.45,
+  "resilience.hardened": 1.3,
+  "resilience.contingency": 1.9,
+  "resilience.terraforming-zone": 1.25,
+  "resilience.reroute_fee": 0.12,
+  "family.discount": 0.05,
+  "addon.hardening_pct": 0.18,
+  "packages.per_transit": 3
+ },
+ "termDiscounts": {
+  "monthly": 1.0,
+  "1-year": 0.92,
+  "3-year": 0.82
+ },
+ "templates": {
+  "backbone": [
+   {
+    "code": "transit-shared",
+    "name": "Transit Shared",
+    "serviceClass": "shared",
+    "throughput": 10,
+    "monthlyBase": 400,
+    "setupFee": 300,
+    "resilienceTier": "standard",
+    "conjunctionReroute": false,
+    "standalone": true,
+    "role": "transit"
+   },
+   {
+    "code": "transit-dedicated",
+    "name": "Transit Dedicated",
+    "serviceClass": "dedicated",
+    "throughput": 20,
+    "monthlyBase": 400,
+    "setupFee": 600,
+    "resilienceTier": "standard",
+    "conjunctionReroute": false,
+    "standalone": true,
+    "role": "transit"
+   },
+   {
+    "code": "synchronized-trunk",
+    "name": "Synchronized Trunk",
+    "serviceClass": "synchronized",
+    "throughput": 40,
+    "monthlyBase": 420,
+    "setupFee": 900,
+    "resilienceTier": "standard",
+    "conjunctionReroute": false,
+    "standalone": true,
+    "role": "transit"
+   },
+   {
+    "code": "diverse-path",
+    "name": "Diverse Path",
+    "serviceClass": "dedicated",
+    "throughput": 20,
+    "monthlyBase": 400,
+    "setupFee": 800,
+    "resilienceTier": "diverse-path",
+    "conjunctionReroute": true,
+    "standalone": true,
+    "role": "transit"
+   },
+   {
+    "code": "contingency",
+    "name": "Contingency",
+    "serviceClass": "dedicated",
+    "throughput": 20,
+    "monthlyBase": 400,
+    "setupFee": 1200,
+    "resilienceTier": "contingency",
+    "conjunctionReroute": true,
+    "standalone": true,
+    "role": "transit"
+   }
+  ],
+  "regional": [
+   {
+    "code": "regional-shared",
+    "name": "Regional Shared",
+    "serviceClass": "shared",
+    "throughput": 8,
+    "monthlyBase": 300,
+    "setupFee": 200,
+    "resilienceTier": "standard",
+    "conjunctionReroute": false,
+    "standalone": true,
+    "role": "regional"
+   },
+   {
+    "code": "regional-dedicated",
+    "name": "Regional Dedicated",
+    "serviceClass": "dedicated",
+    "throughput": 16,
+    "monthlyBase": 300,
+    "setupFee": 450,
+    "resilienceTier": "standard",
+    "conjunctionReroute": false,
+    "standalone": true,
+    "role": "regional"
+   }
+  ],
+  "gateway": [
+   {
+    "code": "access-basic",
+    "name": "Access Basic",
+    "serviceClass": "shared",
+    "throughput": 4,
+    "monthlyBase": 120,
+    "setupFee": 100,
+    "resilienceTier": "standard",
+    "conjunctionReroute": false,
+    "standalone": false,
+    "role": "access"
+   },
+   {
+    "code": "access-pro",
+    "name": "Access Pro",
+    "serviceClass": "dedicated",
+    "throughput": 10,
+    "monthlyBase": 120,
+    "setupFee": 200,
+    "resilienceTier": "standard",
+    "conjunctionReroute": false,
+    "standalone": false,
+    "role": "access"
+   }
+  ]
+ },
+ "specialistPlans": {
+  "arcadia-terraforming-control": [
+   {
+    "code": "terraforming-shield",
+    "name": "Terraforming Shield",
+    "serviceClass": "dedicated",
+    "throughput": 12,
+    "monthlyBase": 380,
+    "setupFee": 700,
+    "resilienceTier": "terraforming-zone",
+    "role": "specialist"
+   }
+  ],
+  "valles-yard-logistics": [
+   {
+    "code": "yard-logistics",
+    "name": "Yard Logistics Link",
+    "serviceClass": "dedicated",
+    "throughput": 12,
+    "monthlyBase": 340,
+    "setupFee": 500,
+    "resilienceTier": "standard",
+    "role": "specialist"
+   }
+  ],
+  "himalia-hardened-relay": [
+   {
+    "code": "hardened-relay",
+    "name": "Hardened Relay",
+    "serviceClass": "dedicated",
+    "throughput": 14,
+    "monthlyBase": 380,
+    "setupFee": 650,
+    "resilienceTier": "hardened",
+    "role": "specialist"
+   }
+  ],
+  "loki-mining-telemetry": [
+   {
+    "code": "mining-telemetry-ops",
+    "name": "Mining Telemetry Ops",
+    "serviceClass": "shared",
+    "throughput": 3,
+    "monthlyBase": 260,
+    "setupFee": 300,
+    "resilienceTier": "hardened",
+    "role": "specialist"
+   }
+  ],
+  "ceres-mining-telemetry": [
+   {
+    "code": "mining-telemetry-ops",
+    "name": "Mining Telemetry Ops",
+    "serviceClass": "shared",
+    "throughput": 3,
+    "monthlyBase": 260,
+    "setupFee": 300,
+    "resilienceTier": "hardened",
+    "role": "specialist"
+   }
+  ],
+  "kraken-mining-telemetry": [
+   {
+    "code": "mining-telemetry-ops",
+    "name": "Mining Telemetry Ops",
+    "serviceClass": "shared",
+    "throughput": 3,
+    "monthlyBase": 260,
+    "setupFee": 300,
+    "resilienceTier": "hardened",
+    "role": "specialist"
+   }
+  ],
+  "sycorax-mining-telemetry": [
+   {
+    "code": "mining-telemetry-ops",
+    "name": "Mining Telemetry Ops",
+    "serviceClass": "shared",
+    "throughput": 3,
+    "monthlyBase": 260,
+    "setupFee": 300,
+    "resilienceTier": "hardened",
+    "role": "specialist"
+   }
+  ],
+  "pele-traffic-control": [
+   {
+    "code": "traffic-control-sync",
+    "name": "Traffic Control Sync",
+    "serviceClass": "synchronized",
+    "throughput": 10,
+    "monthlyBase": 340,
+    "setupFee": 600,
+    "resilienceTier": "standard",
+    "role": "specialist"
+   }
+  ],
+  "prospero-traffic-control": [
+   {
+    "code": "traffic-control-sync",
+    "name": "Traffic Control Sync",
+    "serviceClass": "synchronized",
+    "throughput": 10,
+    "monthlyBase": 340,
+    "setupFee": 600,
+    "resilienceTier": "standard",
+    "role": "specialist"
+   }
+  ],
+  "xanadu-navigation": [
+   {
+    "code": "navigation-feed",
+    "name": "Navigation Feed",
+    "serviceClass": "shared",
+    "throughput": 6,
+    "monthlyBase": 280,
+    "setupFee": 250,
+    "resilienceTier": "standard",
+    "role": "specialist"
+   }
+  ],
+  "conamara-ocean-research": [
+   {
+    "code": "research-bulk",
+    "name": "Research Bulk",
+    "serviceClass": "shared",
+    "throughput": 60,
+    "monthlyBase": 300,
+    "setupFee": 400,
+    "resilienceTier": "standard",
+    "role": "specialist"
+   }
+  ],
+  "ontario-research-network": [
+   {
+    "code": "research-bulk",
+    "name": "Research Bulk",
+    "serviceClass": "shared",
+    "throughput": 60,
+    "monthlyBase": 300,
+    "setupFee": 400,
+    "resilienceTier": "standard",
+    "role": "specialist"
+   }
+  ],
+  "le-verrier-deep-field": [
+   {
+    "code": "research-bulk",
+    "name": "Research Bulk",
+    "serviceClass": "shared",
+    "throughput": 60,
+    "monthlyBase": 300,
+    "setupFee": 400,
+    "resilienceTier": "standard",
+    "role": "specialist"
+   }
+  ],
+  "caloris-solar-relay": [
+   {
+    "code": "solar-relay",
+    "name": "Solar Relay",
+    "serviceClass": "dedicated",
+    "throughput": 14,
+    "monthlyBase": 360,
+    "setupFee": 600,
+    "resilienceTier": "hardened",
+    "role": "specialist"
+   }
+  ],
+  "maxwell-solar-observatory": [
+   {
+    "code": "research-bulk",
+    "name": "Research Bulk",
+    "serviceClass": "shared",
+    "throughput": 60,
+    "monthlyBase": 300,
+    "setupFee": 400,
+    "resilienceTier": "standard",
+    "role": "specialist"
+   }
+  ],
+  "nereid-cryo-relay": [
+   {
+    "code": "cryo-relay",
+    "name": "Cryo Relay",
+    "serviceClass": "dedicated",
+    "throughput": 14,
+    "monthlyBase": 360,
+    "setupFee": 600,
+    "resilienceTier": "hardened",
+    "role": "specialist"
+   }
+  ],
+  "selene-clearing": [
+   {
+    "code": "clearing-sync",
+    "name": "Clearing Sync",
+    "serviceClass": "synchronized",
+    "throughput": 20,
+    "monthlyBase": 360,
+    "setupFee": 800,
+    "resilienceTier": "standard",
+    "role": "specialist"
+   }
+  ],
+  "uruk-clearing": [
+   {
+    "code": "clearing-sync",
+    "name": "Clearing Sync",
+    "serviceClass": "synchronized",
+    "throughput": 20,
+    "monthlyBase": 360,
+    "setupFee": 800,
+    "resilienceTier": "standard",
+    "role": "specialist"
+   }
+  ],
+  "amalthea-fuel-logistics": [
+   {
+    "code": "fuel-logistics",
+    "name": "Fuel Logistics Link",
+    "serviceClass": "dedicated",
+    "throughput": 12,
+    "monthlyBase": 340,
+    "setupFee": 500,
+    "resilienceTier": "standard",
+    "role": "specialist"
+   }
+  ],
+  "galilean-station-link": [
+   {
+    "code": "station-link",
+    "name": "Station Link",
+    "serviceClass": "dedicated",
+    "throughput": 12,
+    "monthlyBase": 340,
+    "setupFee": 500,
+    "resilienceTier": "standard",
+    "role": "specialist"
+   }
+  ],
+  "equatorial-emergency-net": [
+   {
+    "code": "emergency-priority",
+    "name": "Emergency Priority",
+    "serviceClass": "dedicated",
+    "throughput": 8,
+    "monthlyBase": 220,
+    "setupFee": 0,
+    "resilienceTier": "contingency",
+    "role": "addon"
+   }
+  ]
+ },
+ "positioning": {
+  "amalthea-fuel-logistics": 1.029,
+  "arcadia-terraforming-control": 1.068,
+  "ares-interplanetary": 1.151,
+  "boreal-uplink": 1.028,
+  "caloris-solar-relay": 1.033,
+  "cassini-link": 1.025,
+  "ceres-mining-telemetry": 1.069,
+  "chryse-uplink": 0.931,
+  "cipango-access": 0.887,
+  "clavius-access": 0.886,
+  "conamara-ocean-research": 1.012,
+  "equatorial-emergency-net": 0.979,
+  "eris-gateway": 0.897,
+  "galilean-station-link": 1.05,
+  "galileo-uplink": 0.984,
+  "galle-relay": 1.009,
+  "heimdall-gateway": 0.892,
+  "hellas-access": 0.899,
+  "himalia-hardened-relay": 1.105,
+  "jovian-subspace": 1.108,
+  "kraken-mining-telemetry": 1.024,
+  "lakshmi-link": 0.952,
+  "le-verrier-deep-field": 1.069,
+  "ligeia-access": 0.967,
+  "loki-mining-telemetry": 1.067,
+  "maxwell-solar-observatory": 0.957,
+  "namaka-relay": 0.988,
+  "nereid-cryo-relay": 0.997,
+  "nix-relay": 1.036,
+  "olympus-uplink": 0.867,
+  "ontario-research-network": 1.055,
+  "pacific-access": 1.037,
+  "pele-traffic-control": 1.101,
+  "prospero-traffic-control": 0.966,
+  "pwyll-access": 0.917,
+  "selene-clearing": 1.014,
+  "sycorax-mining-telemetry": 1.036,
+  "terran-transit": 1.25,
+  "tranquility-uplink": 1.003,
+  "tvashtar-access": 0.907,
+  "tycho-transit": 1.188,
+  "uruk-clearing": 0.941,
+  "valles-yard-logistics": 1.045,
+  "vesta-relay": 1.004,
+  "wright-gateway": 0.954,
+  "xanadu-navigation": 1.059
+ }
+}

@@ -15,7 +15,6 @@ import {
 } from '../features/compare/params';
 import { useCompareParams } from '../features/compare/useCompareParams';
 import { FilterDrawer } from '../features/filters/FilterDrawer';
-import { InquiryForm } from '../features/inquiry/InquiryForm';
 import { RouteDialogContent } from '../features/route-dialog/RouteDialogContent';
 import { RoutePicker } from '../features/route-picker/RoutePicker';
 import { WorldsMap } from '../features/worlds-map/WorldsMap';
@@ -33,7 +32,6 @@ export function ComparePage() {
   const quote = useQuote(quoteParamsFrom(state));
 
   const [routeOffer, setRouteOffer] = useState<Offer | null>(null);
-  const [inquiryOffer, setInquiryOffer] = useState<Offer | null>(null);
   const [compareOpen, setCompareOpen] = useState(false);
 
   const companyById = useMemo(() => companyMap(companies.data), [companies.data]);
@@ -125,7 +123,6 @@ export function ComparePage() {
             onToggleCompare={(id) => update((s) => toggleCompare(s, id))}
             onToggleDetails={(id) => update((s) => ({ ...s, offer: s.offer === id ? null : id }))}
             onShowRoute={setRouteOffer}
-            onRequest={setInquiryOffer}
             toolbar={
               comparedOffers.length >= 2 ? (
                 <button
@@ -160,16 +157,6 @@ export function ComparePage() {
           companies={companyById}
           onRemove={(id) => update((s) => toggleCompare(s, id))}
         />
-      </Dialog>
-      <Dialog open={inquiryOffer !== null} onClose={() => setInquiryOffer(null)} title="Request this plan">
-        {inquiryOffer && (
-          <InquiryForm
-            offer={inquiryOffer}
-            from={state.from ?? ''}
-            to={state.to ?? ''}
-            onDone={() => setInquiryOffer(null)}
-          />
-        )}
       </Dialog>
     </div>
   );

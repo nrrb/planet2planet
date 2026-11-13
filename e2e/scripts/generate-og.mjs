@@ -1,6 +1,6 @@
 // Generates frontend/public/og.png, the picture shown when the site is shared as a link.
 //
-//   make og            (needs `make up && make seed` first)
+//   make og            
 //
 // It photographs the /share-preview page at 1200 x 630 with the map held still, so the same data gives the same
 // picture. Set BASE_URL to photograph a running site instead of starting the dev server.
@@ -53,8 +53,8 @@ function inkShare(buffer) {
 const server = process.env.BASE_URL ? null : await startDevServer();
 let browser;
 try {
-  if (!(await reachable(`${base}/api/worlds/`))) {
-    throw new Error('The API is not answering. Start it with: make up && make seed');
+  if (!(await reachable(`${base}/`))) {
+    throw new Error(`The site is not answering at ${base}.`);
   }
   browser = await chromium.launch({
     args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'],

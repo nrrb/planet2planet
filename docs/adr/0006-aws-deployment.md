@@ -1,6 +1,6 @@
 # ADR 0006: AWS deployment on one Lightsail instance
 
-Status: accepted (M10)
+Status: superseded by [ADR 0007](0007-static-hosting.md). The deployment scripts and compose files now live only on the `full-stack-aws` branch.
 
 ## Decision
 

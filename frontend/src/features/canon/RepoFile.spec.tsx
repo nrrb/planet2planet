@@ -22,7 +22,7 @@ describe('files the site links to in the repository', () => {
       </RepoFileLink>,
     );
     const link = screen.getByRole('link', { name: /The Monte Carlo summary/ });
-    expect(link).toHaveAttribute('href', `${BASE}/blob/main/backend/data/sol-montecarlo-2380.json`);
+    expect(link).toHaveAttribute('href', `${BASE}/blob/main/data/sol-montecarlo-2380.json`);
     expect(link).toHaveAttribute('target', '_blank');
     expect(link).toHaveAttribute('rel', expect.stringContaining('noreferrer'));
   });
