@@ -1,4 +1,4 @@
-.PHONY: dev test lint build size e2e e2e-update og screenshots deploy
+.PHONY: dev test lint build size e2e e2e-update og screenshots
 
 dev:
 	cd frontend && npm run dev
@@ -33,7 +33,3 @@ og:
 # Regenerate the README screenshots in docs/images.
 screenshots:
 	cd e2e && npm ci --silent && npx playwright install chromium && npm run screenshots
-
-# Build and publish to surge.sh. Set SURGE_DOMAIN, e.g. SURGE_DOMAIN=planet2planet.surge.sh make deploy
-deploy:
-	cd frontend && npm run deploy

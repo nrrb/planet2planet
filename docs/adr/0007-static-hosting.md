@@ -11,8 +11,9 @@ application had served its purpose, the AWS bill was the only reason left to kee
 
 ## Decision
 
-1. **The site is a static build.** `vite build` produces files that any static host can serve. The target is
-   surge.sh (`make deploy`, with `SURGE_DOMAIN` set). There is no server, database or container.
+1. **The site is a static build.** `vite build` produces files that any static host can serve. It is hosted on
+   Vercel at planet2planet.com, configured by `vercel.json`, and deploys when `main` is pushed. There is no server, database
+   or container.
 2. **The full-stack version is kept, frozen, on the `full-stack-aws` branch.** It is a reference example of that
    architecture (Django, DRF, PostgreSQL, Docker Compose, Caddy, Lightsail, OpenAPI-generated types). It is not kept
    in sync with `main`. Do not port changes into it, and do not "fix" it to match `main`.
@@ -64,8 +65,8 @@ run `GOLDEN_FULL_DIR=<dump> npm test`. `frontend/scripts/make-golden.mjs` rebuil
 
 ## Consequences
 
-- Hosting costs nothing, there is nothing to patch, and the AWS resources can be deleted. `make deploy` publishes the
-  built site.
+- Hosting is on Vercel's free tier, there is nothing to patch, and the AWS resources can be deleted. Deployment needs
+  no command: Vercel builds on every push.
 - `frontend/src/api/schema.d.ts` was generated from the backend's OpenAPI document. It is now the hand-maintained
   description of the data shapes. The OpenAPI file lives on `full-stack-aws`.
 - To change the dataset, run `node tools/colonization-sim.js 1701 400 --export` (it writes to `data/`), then run the

@@ -5,15 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build && node scripts/spa-fallback.mjs",
+    "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1",
     "test": "vitest run",
     "lint": "eslint .",
     "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"scripts/*.mjs\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\" \"scripts/*.mjs\"",
     "test:unit": "vitest run",
-    "size": "node scripts/check-bundle.mjs",
-    "deploy": "npm run build && npx --yes surge dist \"${SURGE_DOMAIN:?Set SURGE_DOMAIN, e.g. planet2planet.surge.sh}\""
+    "size": "node scripts/check-bundle.mjs"
   },
   "dependencies": {
     "@fontsource-variable/instrument-sans": "^5.3.0",

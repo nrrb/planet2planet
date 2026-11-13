@@ -12,7 +12,7 @@ work. It is a **static site**: React + TypeScript + Vite, with all data and logi
 
 ## The two versions of this project
 
-- `main` (this branch): static, deployed to surge.sh.
+- `main` (this branch): static, deployed on Vercel (planet2planet.com).
 - `full-stack-aws`: the original Django + PostgreSQL + Docker + AWS version, **frozen** as a reference
   example. Do not merge `main` into it, do not update it to match `main`, and do not copy its backend back into
   `main` without being asked.
@@ -36,7 +36,6 @@ npm test               # unit and component tests, including the engine
 npm run lint && npm run format:check && npx tsc --noEmit
 npm run build && npm run size    # production build, then the bundle budgets
 make e2e               # browser tests (Chromium and WebKit)
-make deploy            # needs SURGE_DOMAIN; builds and publishes to surge.sh. Ask before running it.
 ```
 
 ## Rules that are easy to break

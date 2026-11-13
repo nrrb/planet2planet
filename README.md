@@ -4,7 +4,7 @@ A telecom comparison-shopping site set in the Sol system in 2380, in the Star Tr
 Pick two worlds and compare the interplanetary subspace plans that connect them on price,
 latency, route and resilience.
 
-A static site built with React, TypeScript and Vite. The pricing, routing and orbital maths run in the
+Live at [planet2planet.com](https://planet2planet.com). A static site built with React, TypeScript and Vite. The pricing, routing and orbital maths run in the
 browser from data files in this repository, so it can be hosted anywhere that serves files. See
 [PLAN.md](PLAN.md) for the original build plan.
 
@@ -112,7 +112,6 @@ The export writes to `data/`. Prices, plan templates and each company's price po
 | `make e2e-update` | Refresh this machine's pixel baselines |
 | `make screenshots` | Regenerate the README screenshots in `docs/images` |
 | `make og` | Regenerate the link-preview picture, `frontend/public/og.png` |
-| `make deploy` | Build and publish to surge.sh (needs `SURGE_DOMAIN`) |
 
 ## Testing
 
@@ -131,14 +130,16 @@ without the `@visual` snapshots).
 
 ## Deploying
 
-The build is a folder of static files. To publish it to [surge.sh](https://surge.sh):
+The site is deployed on [Vercel](https://vercel.com) at planet2planet.com. `vercel.json` at the repository root holds
+everything Vercel needs, so import the repository and keep the defaults, with the root directory left at the repository
+root (the build reads `data/`, which sits outside `frontend/`):
 
-```sh
-SURGE_DOMAIN=your-name.surge.sh make deploy     # the first run asks you to log in or create an account
-```
+- the build runs `npm ci` and `npm run build` in `frontend/`, and publishes `frontend/dist`
+- every path that is not a file is rewritten to `index.html`, because routes such as `/about` and `/canon` exist only in the browser
+- files under `/assets` are cached for a year, as their names change with their content
 
-`npm run build` also writes `dist/200.html`, a copy of the app shell. surge serves it for routes such as `/about`
-and `/canon`, which exist only in the browser. Other static hosts need the equivalent rewrite rule to `index.html`.
+Pushing to `main` deploys to production, and each pull request gets a preview URL. Any other static host works too, as long as
+it serves `index.html` for unknown paths.
 
 ## Layout
 
