@@ -5,7 +5,7 @@ Status: accepted (M9)
 ## Layers
 
 1. **Unit and component** (Vitest, pytest, `node --test`): fast, run on every push.
-2. **End to end** (Playwright): the real API and the real Vite server, in four projects: a Pixel 7, an
+2. **End to end** (Playwright): the Vite dev server (originally against the real API; the engine now answers in the browser), in four projects: a Pixel 7, an
    820 px tablet, a 1440 px desktop and an iPhone 14 in WebKit. Headless WebKit may have no WebGL, so the
    map specs tolerate that and the app must still work without a map.
 3. **Accessibility** (axe, WCAG 2.2 AA): every page, in both colour schemes, plus no sideways page scroll.

@@ -1,3 +1,7 @@
+> **Historical.** This is the original full-stack build plan. The backend, Docker and AWS parts were
+> later dropped; see [ADR 0007](docs/adr/0007-static-hosting.md). The full-stack version is kept on the
+> `full-stack-aws` branch.
+
 # Planet2Planet: build plan
 
 Planet2Planet is a telecom comparison-shopping site set in the Sol system in 2380, in the Star Trek universe. A business picks two worlds, and the site compares the interplanetary subspace plans that connect them on price, latency, route and resilience.
